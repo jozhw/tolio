@@ -16,6 +16,10 @@ Create a virtual environment and make sure you are in the tolio directory in the
 ```
 # Clone the repository
 git clone https://github.com/jozhw/tolio.git
+# If you do not have rust installed
+# For macos/linux/unix enter this into the command line
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+# For windows go to: https://www.rust-lang.org/tools/install
 # Run only if it is your first time running the application
  ./install_dependencies.sh  
 # To run the program
