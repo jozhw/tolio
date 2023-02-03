@@ -40,10 +40,10 @@ class Database:
 
       self.cur.execute('''CREATE TABLE IF NOT EXISTS all_shares (individual_share_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, transaction_id INT, security_id INTEGER NOT NULL,
       institution_id INTEGER NOT NULL, timestamp DATETIME, amount REAL NOT NULL, price_USD REAL NOT NULL, sold_price REAL, age_transaction INTEGER, long_counter TEXT, date_disposed DATETIME,
-      FOREIGN KEY(institution_id) REFERENCES Institutions(institution_id),
-      FOREIGN KEY(security_id) REFERENCES Securities(security_id),
-      FOREIGN KEY(timestamp) REFERENCES Transactions(timestamp),
-      FOREIGN KEY(transaction_id) REFERENCES Transactions(transaction_id)
+      FOREIGN KEY(institution_id) REFERENCES institutions(institution_id),
+      FOREIGN KEY(security_id) REFERENCES securities(security_id),
+      FOREIGN KEY(timestamp) REFERENCES transactions(timestamp),
+      FOREIGN KEY(transaction_id) REFERENCES transactions(transaction_id)
       );''')
 
       # for those who already have a database for this application, must initialize
@@ -66,7 +66,10 @@ class Database:
               elif transaction_abbreviation == "T":
                   self.transfer_all_shares(transaction_id, security_id, amount, transfer_to, institution_id)
               elif transaction_abbreviation == "SS":
-                  pass 
+                  pass
+                  # there are some major issues with the below - for some reason the rust extension does not work with it
+                  # name, ticker = self.get_specific_value(security_id=security_id)
+                  # self.stock_split(security_id, name, ticker, amount, timestamp)
 
               
 
@@ -493,7 +496,7 @@ class Database:
       get_securities=self.cur.execute("SELECT DISTINCT security_id FROM transactions WHERE transaction_abbreviation IS NOT 'SS';").fetchall()
       
       for security_id in get_securities:
-          
+          security_id = security_id[0]
           age=self.cur.execute("SELECT SUM(amount) FROM all_shares WHERE security_id=? AND age_transaction >= 1 AND long_counter = '+';", (security_id,)).fetchall()[0]
           self.cur.execute("UPDATE securities SET number_long=? WHERE security_id=?;", (age[0], security_id))
           
@@ -513,7 +516,7 @@ class Database:
           try:
               total_price_sold = round(total_price_sold, 2)
           except:
-              pass
+              total_price_sold = 0
 
           self.cur.execute("UPDATE securities SET amount_held=?, total_cost=?, cost_basis=?, total_price_sold=?, average_price_sold=? WHERE security_id=?;", 
           (sum_amount, round(sum_price, 3), round(cost_basis, 3), total_price_sold, average_price_sold, security_id))
@@ -530,6 +533,13 @@ class Database:
       FROM All_shares WHERE institution_id=? AND security_id=? AND long_counter ='+';""", (institution_id, security_id)).fetchall()[0]
       
       (amount_held, total_cost, cost_basis, amount_disposed)=get_data
+      if bool(total_cost) == False:
+        total_cost = 0
+      if bool(cost_basis) == False:
+        cost_basis = 0
+      if bool(amount_disposed) == False:
+        amount_disposed = 0
+
       place_holder = {
         "security_id": security_id,
         "institution_id": institution_id,
@@ -537,15 +547,21 @@ class Database:
         "total_cost": round(total_cost,3),
         "cost_basis": round(cost_basis,3),
         "amount_disposed": round(amount_disposed,3)
+        
       }
 
-      get_data_2=self.cur.execute("SELECT (SELECT SUM(amount) FROM all_shares WHERE long_counter='+' AND age_transaction >= 1 AND institution_id = :institution_id AND security_id= :security_id), SUM(sold_price) FROM all_shares WHERE institution_id = :institution_id AND security_id=:security_id;", place_holder).fetchall()
-      (long, total_price_sold) = get_data_2[0]
+      get_data_2=self.cur.execute("SELECT (SELECT SUM(amount) FROM all_shares WHERE long_counter='+' AND age_transaction >= 1 AND institution_id = :institution_id AND security_id= :security_id), SUM(sold_price), (SELECT SUM(amount) FROM all_shares WHERE long_counter = '-' AND institution_id = :institution_id AND security_id=:security_id) FROM all_shares WHERE institution_id = :institution_id AND security_id=:security_id;", place_holder).fetchall()
+      (long, total_price_sold, total_amount_sold) = get_data_2[0]
 
-      if bool(amount_disposed) == True:
-        place_holder["average_price_sold"] = round(total_price_sold / abs(amount_disposed), 3)
-      else:
-        place_holder["average_price_sold"] = 0
+      place_holder["long"] = long
+      if bool(total_price_sold) == False:
+        total_price_sold = 0
+      if bool(total_amount_sold) == False:
+        average_price_sold = 0
+      elif bool(total_amount_sold) == True:
+        average_price_sold = round(total_price_sold/total_amount_sold, 3)
+      place_holder["total_price_sold"] = total_price_sold
+      place_holder["average_price_sold"] = average_price_sold
       
       self.cur.execute("UPDATE institutions_held SET amount_held=:amount_held, total_cost=:total_cost, cost_basis=:cost_basis, number_long=:long, total_price_sold=:total_price_sold, average_price_sold=:average_price_sold WHERE institution_id=:institution_id AND security_id=:security_id;", place_holder)
     self.connection.commit()
@@ -561,13 +577,11 @@ class Database:
     security_id=self.cur.execute("SELECT security_id FROM securities WHERE security_ticker = ? AND security_name = ?;", (ticker, name)).fetchone()[0]
     institution_id=self.cur.execute("SELECT institution_id FROM institutions WHERE institution_name=?;", (institution,)).fetchone()[0]
 
-    self.cur.execute("""UPDATE transactions SET security_id = :sec_id, name = :name, ticker = :ticker, institution_id = :institution_id,
+    self.cur.execute("""UPDATE transactions SET security_id = :sec_id, institution_id = :institution_id,
     timestamp = :timestamp, transaction_abbreviation = :trans_abb, amount = :amount,
     price_USD = :price, transfer_from = :trans_from ,transfer_to = :trans_to WHERE transaction_id = :trans_id
     """,{
     "sec_id": security_id,
-    "name": name,
-    "ticker": ticker,
     "institution_id": institution_id,
     "timestamp": args[4],
     "trans_abb": args[5],
@@ -579,6 +593,7 @@ class Database:
 
     })
     self.connection.commit()
+    self.refresh_individual_shares()
 
 
   # ================================= get =================================
@@ -587,16 +602,13 @@ class Database:
     return self.cur.execute("SELECT * FROM all_shares;").fetchall()
 
   # get stock_split_history for tree view
-  def get_stock_split_history(self, insert=False) -> None:
+  def get_stock_split_history(self) -> None:
     split_history_list = self.cur.execute("""SELECT ss.security_id, s.security_name, s.security_ticker, ss.split_amount, ss.timestamp FROM stock_split_history AS ss
     INNER JOIN securities AS s ON ss.security_id=s.security_id;
     
     """).fetchall()
-    if insert == True:
-      for security_id, name, ticker, split_amount, timestamp in split_history_list:
-        self.stock_split(security_id, name, ticker, split_amount, timestamp)
-    else:
-      return split_history_list
+  
+    return split_history_list
       
 
   # get transactions table for tree view
@@ -657,6 +669,7 @@ class Database:
     elif bool(security_id) == True:
       return self.cur.execute("SELECT security_name, security_ticker FROM securities WHERE security_id =?;",(int(security_id),)).fetchone()
     elif bool(security_name) == True and bool(security_ticker) == True:
+      print(security_name, security_ticker)
       return self.cur.execute("SELECT security_id FROM securities WHERE security_name = ? AND security_ticker = ?;", (security_name, security_ticker)).fetchone()[0]
     
 
@@ -671,6 +684,7 @@ class Database:
   def delete_row(self,id:int) -> None:
     self.cur.execute(f"DELETE FROM transactions WHERE transaction_id=?;", (id,))
     self.connection.commit()
+    self.refresh_individual_shares()
 
 
   # delete all transactions records
@@ -701,7 +715,7 @@ class Database:
     }
 
     self.cur.execute("""
-    UPDATE all_shares SET amount=amount*:split_amount, price_USD=price_USD/:split_amount WHERE long_counter = '+' AND security_id = :security_id
+    UPDATE all_shares SET amount=amount*:split_amount WHERE long_counter = '+' AND security_id = :security_id
     AND (timestamp IS NULL OR timestamp > :timestamp);
     """, place_holder
   )
@@ -710,8 +724,6 @@ class Database:
 
   # insert from all_shares into all_shares_split and back to all_shares and delete all_shares_split
   def update_split_all_shares(self, target_dir) -> None:
-    
-    
     tolio.insert_into_all_shares(target_dir)
 
   # divide the data into 10000 chunks of rows
@@ -723,7 +735,8 @@ class Database:
 
   def refresh_individual_shares(self) -> None:
     self.all_shares_table(reset=True)
-    self.get_stock_split_history(insert=True)
+    
+
 
 
         
@@ -733,10 +746,11 @@ class Database:
 # test
 if __name__ =="__main__":
   data = Database()
-  data.refresh_individual_shares()
-  data.update_transaction_age()
-  data.update_securities()
-  data.update_institutions_held()
-  data.update_split_all_shares()
+  # data.refresh_individual_shares()
+  # data.update_transaction_age()
+  # data.update_securities()
+  # data.update_institutions_held()
+  # data.update_split_all_shares()
+  print(data.get_most_recent_transaction())
 
     

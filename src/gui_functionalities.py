@@ -103,8 +103,8 @@ class GuiFunction:
                     ask_confirm = messagebox.askokcancel(title="Please Confirm", message="The stock split cannot be redone. Are you sure you would like to continue?")
                     if ask_confirm == True:
                         # no  need to add get for entry_dic["name"], entry_dic["ticker"], entry_dic["institution_name"]
-                        security_id = Database().get_security_id(entry_dic["name"], entry_dic["ticker"])
-                        Database().stock_split(security_id, entry_dic["name"], entry_dic["ticker"], entry_dic["amount"].get(), entry_dic["timestamp"].get())
+                        security_id = Database().get_specific_value(security_name = entry_dic["name"].get(), security_ticker =entry_dic["ticker"].get())
+                        Database().stock_split(security_id, entry_dic["name"].get(), entry_dic["ticker"].get(), entry_dic["amount"].get(), entry_dic["timestamp"].get())
                         entry_dic["amount"].delete(0,END)
                         entry_dic["timestamp"].delete(0,END)
                         messagebox.showinfo("Split Submitted","Your shares have been splitted.")
@@ -161,6 +161,7 @@ class GuiFunction:
         if transaction_abbreviation == "A" or transaction_abbreviation == "D":
             if transaction_abbreviation == "A":
                 Database().insert_transaction(security_id, timestamp, transaction_abbreviation, amount, price, institution_id=institution_id)
+                Database().update_transaction_age()
                 transaction_id, security_id, institution_id, timestamp, transaction_abbreviation, amount, price_USD, transfer_from, transfer_to, age_transaction, long = Database().get_most_recent_transaction()
                 Database().insert_all_shares(transaction_id, security_id, institution_id, timestamp, amount, price_USD, age_transaction)
             elif transaction_abbreviation == "D":
@@ -175,8 +176,10 @@ class GuiFunction:
         elif transaction_abbreviation == "T":
             to_institution = str(entry_dic["to_institution_name"].get())
             Database().insert_transaction(security_id, timestamp, transaction_abbreviation, amount, price, institution_id = institution_id, transfer_to = to_institution)
+            Database().update_transaction_age()
             transaction_id, security_id, institution_id, timestamp, transaction_abbreviation, amount, price_USD, transfer_from, transfer_to, age_transaction, long = Database().get_most_recent_transaction()
-
+            Database().transfer_all_shares(transaction_id, security_id, amount, transfer_to, institution_id)
+       
             entry_dic["timestamp"].delete(0,END)
             entry_dic["amount"].delete(0,END)
     
