@@ -1,5 +1,6 @@
 
-import unittest, sqlite3, os
+import unittest, sqlite3, os, sys
+from pathlib import Path
 
 import tolio
 
@@ -27,12 +28,12 @@ class TestRustExtension(unittest.TestCase):
         
   def test_insert_into_all_shares(self):
 
-    target_dir = os.path.expanduser("test/db_test_portfolio.db")
+    target_dir = os.path.expanduser("files/data/test_portfolio.db")
     os.remove(target_dir)
 
     self.connection = sqlite3.connect(target_dir)
     self.cur = self.connection.cursor()
-    self.execute_sql_script(os.path.expanduser("test/test_rs_db_query.sql"))
+    self.execute_sql_script(os.path.expanduser("test/queries/test_rs_db_query.sql"))
 
     self.connection.commit()
 

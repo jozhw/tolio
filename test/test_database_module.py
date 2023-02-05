@@ -1,12 +1,15 @@
+
+
 from pathlib import Path
 import sys, os
 
-path = str(Path(Path("database_module.py").parent.absolute()))
+path = str(Path(".").parent.absolute())
 sys.path.insert(0, path)
+
 
 import unittest
 
-from src import database_module as dm
+from src.database import Database
 
 
 
@@ -14,13 +17,13 @@ class TestDatabaseModule(unittest.TestCase):
 
   def __init__(self, *args, **kwargs):
     super(TestDatabaseModule, self).__init__(*args, **kwargs)
-    target_dir = os.path.expanduser("test/db_test_portfolio.db")
+    target_dir = os.path.expanduser("files/data/test_portfolio.db")
     os.remove(target_dir)
-    self.Database = dm.Database(db_path = "test/db_test_portfolio.db", sql_path="test/test_py_db_query.sql")
+    self.Database = Database(db_path = target_dir, sql_path="test/queries/test_py_db_query.sql")
 
     # perform the stock_split; the rust_extension stock split has already passed all of the tests. Any issues will be due to the parent function
     self.Database.all_shares_table()
-    self.Database.stock_split(1, "S&P500", "SPY", 5, "2023-12-31", target_dir="test/db_test_portfolio.db")
+    self.Database.stock_split(1, "S&P500", "SPY", 5, "2023-12-31", target_dir=target_dir)
 
 # ============================== test: get methods ==============================
   

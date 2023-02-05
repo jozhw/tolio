@@ -71,5 +71,5 @@ docs/_build/
 # Pyenv
 .python-version
 
-# src
-src/portfolio.db
+file:cachedb?mode=memory&cache=shared
+files/

@@ -6,7 +6,7 @@ import tolio
 
 
 class Database:
-  def __init__(self, db_path: str = "src/portfolio.db", sql_path: str = "src/init_db.sql") -> None:
+  def __init__(self, db_path: str = "files/data/portfolio.db", sql_path: str = "src/database/init_db.sql") -> None:
       
     # locate database
     # target_dir = "~/Applications/AppData/Local/Tolio/db"
@@ -669,7 +669,6 @@ class Database:
     elif bool(security_id) == True:
       return self.cur.execute("SELECT security_name, security_ticker FROM securities WHERE security_id =?;",(int(security_id),)).fetchone()
     elif bool(security_name) == True and bool(security_ticker) == True:
-      print(security_name, security_ticker)
       return self.cur.execute("SELECT security_id FROM securities WHERE security_name = ? AND security_ticker = ?;", (security_name, security_ticker)).fetchone()[0]
     
 
@@ -746,11 +745,11 @@ class Database:
 # test
 if __name__ =="__main__":
   data = Database()
-  # data.refresh_individual_shares()
-  # data.update_transaction_age()
-  # data.update_securities()
-  # data.update_institutions_held()
-  # data.update_split_all_shares()
-  print(data.get_most_recent_transaction())
+  data.refresh_individual_shares()
+  data.update_transaction_age()
+  data.update_securities()
+  data.update_institutions_held()
+  data.update_split_all_shares()
+  
 
     
