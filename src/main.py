@@ -138,7 +138,7 @@ class App(customtkinter.CTk):
                                             border_color = "black",
                                             image = self.documentation_icon,
                                             anchor="w",
-                                            command=self.window_filedialog
+                                            command=self.window_import_filedialog
                                             )
     self.import_file_dial_button.grid(row=6, column=0, pady=15, padx=20)
 
@@ -148,7 +148,7 @@ class App(customtkinter.CTk):
                                             border_color = "black",
                                             image = self.documentation_icon,
                                             anchor="w",
-                                            command=self.window_filedialog
+                                            command=self.window_export_filedialog
                                             )
     self.export_file_dial_button.grid(row=7, column=0, pady=15, padx=20)
 
@@ -1070,6 +1070,7 @@ class App(customtkinter.CTk):
   def window_import_filedialog(self) -> None:
    
     self.import_file_name = filedialog.askopenfilename(title="Select A CSV File", filetypes=(("csv files", "*.csv")))
+    self.gb.insert_csv(self.import_file_name)
   
   def window_export_filedialog(self) -> None:
     pass

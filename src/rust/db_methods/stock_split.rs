@@ -2,56 +2,7 @@ use rusqlite::config::DbConfig;
 use rusqlite::{Connection, Result, ToSql, Transaction};
 use std::env;
 
-#[derive(Debug, Clone)]
-pub struct Share {
-    transaction_id: i8,
-    security_id: i8,
-    institution_id: i8,
-    timestamp: String,
-    amount: f32,
-    price_usd: f32,
-    sold_price: Option<f32>,
-    age_transaction: i8,
-    long_counter: String,
-    date_disposed: Option<String>,
-}
-impl Share {
-    fn get_all_from_db(conn: &Connection, query: String) -> Result<Vec<Share>> {
-        let mut non_split_list = conn.prepare(&query)?;
-
-        let share_iter = non_split_list.query_map([], |row| {
-            let transaction_id: i8 = row.get(0)?;
-            let security_id: i8 = row.get(1)?;
-            let institution_id: i8 = row.get(2)?;
-            let timestamp: String = row.get(3)?;
-            let amount: f32 = row.get(4)?;
-            let price_usd: f32 = row.get(5)?;
-            let sold_price: Option<f32> = row.get(6)?;
-            let age_transaction: i8 = row.get(7)?;
-            let long_counter: String = row.get(8)?;
-            let date_disposed: Option<String> = row.get(9)?;
-
-            Ok(Share {
-                transaction_id,
-                security_id,
-                institution_id,
-                timestamp,
-                amount,
-                price_usd,
-                sold_price,
-                age_transaction,
-                long_counter,
-                date_disposed,
-            })
-        })?;
-
-        let mut security = Vec::new();
-        for share in share_iter {
-            security.push(share?);
-        }
-        Ok(security)
-    }
-}
+use crate::data_types::Share;
 
 pub fn batch_insert(mut count: usize, tx: &Transaction, vector_proto: Vec<Share>) {
     let mut vector = vector_proto.clone();
@@ -219,7 +170,7 @@ pub fn insert_wrapper(conn: &mut Connection, split: bool, vector_proto: Vec<Shar
 pub fn main(path: String) -> Result<()> {
     env::set_var("RUST_BACKTRACE", "1");
     {
-        // Create the all_shares_split tabel
+        // Create the all_shares_split table
         let path_ = path.clone();
         let conn = &mut Connection::open(path_).unwrap();
         let _ = conn.set_db_config(DbConfig::SQLITE_DBCONFIG_ENABLE_FKEY, true)?;
@@ -236,14 +187,14 @@ pub fn main(path: String) -> Result<()> {
         let path_ = path.clone();
         let conn = &mut Connection::open(path_).unwrap();
         let non_split_query: String = "SELECT transaction_id, security_id, institution_id, timestamp, amount, price_USD, sold_price, age_transaction, long_counter, date_disposed FROM all_shares WHERE long_counter = '-';".to_string();
-        let non_split_arr = Share::get_all_from_db(&conn, non_split_query).unwrap();
+        let non_split_arr = Share::get_all_shares(&conn, non_split_query).unwrap();
         insert_wrapper(conn, false, non_split_arr);
     }
     {
         let path_ = path.clone();
         let conn = &mut Connection::open(path_).unwrap();
         let split_query = "SELECT transaction_id, security_id, institution_id, timestamp, amount, price_USD, sold_price, age_transaction, long_counter, date_disposed FROM all_shares WHERE long_counter = '+';".to_string();
-        let split_arr = Share::get_all_from_db(&conn, split_query).unwrap();
+        let split_arr = Share::get_all_shares(&conn, split_query).unwrap();
         insert_wrapper(conn, true, split_arr);
     }
 
@@ -287,10 +238,10 @@ mod tests {
             conn.transaction().unwrap().commit();
         }
 
-        {   
+        {
             // test to see if the the insert of sql command worked
             let query = "SELECT transaction_id, security_id, institution_id, timestamp, amount, price_USD, sold_price, age_transaction, long_counter, date_disposed FROM all_shares WHERE long_counter = '-';".to_string();
-            let number_of_shares = (Share::get_all_from_db(conn, query)).unwrap().len();
+            let number_of_shares = (Share::get_all_shares(conn, query)).unwrap().len();
 
             assert_eq!(number_of_shares, 1);
         }
@@ -298,15 +249,12 @@ mod tests {
         {
             // test to see if the splitting worked
             let query = "SELECT transaction_id, security_id, institution_id, timestamp, amount, price_USD, sold_price, age_transaction, long_counter, date_disposed FROM all_shares WHERE long_counter = '+';".to_string();
-            let result_vec = Share::get_all_from_db(conn, query).unwrap();
+            let result_vec = Share::get_all_shares(conn, query).unwrap();
             insert_wrapper(conn, true, result_vec);
-            
 
             let query = "SELECT transaction_id, security_id, institution_id, timestamp, amount, price_USD, sold_price, age_transaction, long_counter, date_disposed FROM all_shares_split;".to_string();
-            let result_vec_new = Share::get_all_from_db(conn, query).unwrap();
+            let result_vec_new = Share::get_all_shares(conn, query).unwrap();
             assert_eq!(result_vec_new.len(), 15);
         }
     }
-
-  
 }
