@@ -71,4 +71,11 @@ docs/_build/
 # Pyenv
 .python-version
 
+# Demo memory
 file:cachedb?mode=memory&cache=shared
+
+# Cargo.lock
+Cargo.lock
+
+# Database
+files/data/portfolio.db

@@ -247,7 +247,7 @@ class Database:
         self.cur.execute("""
         UPDATE all_shares
         SET long_counter = '-', sold_price = :price_USD, date_disposed= :dispose_date
-        WHERE long_counter = '+' AND security_id = '{security_id}' AND
+        WHERE long_counter = '+' AND security_id = :security_id AND
         institution_id = :institution_id AND individual_share_id = (
         SELECT min(individual_share_id)
         FROM All_shares
@@ -490,36 +490,36 @@ class Database:
     self.connection.commit()
 
 
-  # update securities
+  # update securities - this dependent on the all_shares table
   def update_securities(self) -> None:
       # create list of securities
       get_securities=self.cur.execute("SELECT DISTINCT security_id FROM transactions WHERE transaction_abbreviation IS NOT 'SS';").fetchall()
       
       for security_id in get_securities:
-          security_id = security_id[0]
-          age=self.cur.execute("SELECT SUM(amount) FROM all_shares WHERE security_id=? AND age_transaction >= 1 AND long_counter = '+';", (security_id,)).fetchall()[0]
-          self.cur.execute("UPDATE securities SET number_long=? WHERE security_id=?;", (age[0], security_id))
-          
-          amount=self.cur.execute("SELECT SUM(amount), SUM(price_USD), (SUM(price_USD)/SUM(amount)), (SELECT SUM(amount) FROM transactions WHERE transaction_abbreviation='D') FROM all_shares WHERE security_id=? AND long_counter = '+';", (security_id,)).fetchall()[0]
-          
-          (sum_amount, sum_price, cost_basis, amount_disposed) = amount
-
-          get_data_2=self.cur.execute("SELECT (SELECT SUM(amount) FROM all_shares WHERE long_counter='+' AND age_transaction > 0 AND security_id=?), SUM(sold_price) FROM all_shares WHERE security_id=?;", (security_id, security_id)).fetchall()[0]
+        security_id = security_id[0]
+        age=self.cur.execute("SELECT SUM(amount) FROM all_shares WHERE security_id=? AND age_transaction >= 1 AND long_counter = '+';", (security_id,)).fetchall()[0]
+        self.cur.execute("UPDATE securities SET number_long=? WHERE security_id=?;", (age[0], security_id))
         
-          (_, total_price_sold) = get_data_2
-          
-          if amount_disposed == None or amount_disposed == 0 or total_price_sold == None:
-              average_price_sold = 0
-          else:
-              average_price_sold = round(float(total_price_sold) / abs(amount_disposed),3)
-          
-          try:
-              total_price_sold = round(total_price_sold, 2)
-          except:
-              total_price_sold = 0
+        amount=self.cur.execute("SELECT SUM(amount), SUM(price_USD), (SUM(price_USD)/SUM(amount)), (SELECT SUM(amount) FROM transactions WHERE transaction_abbreviation='D') FROM all_shares WHERE security_id=? AND long_counter = '+';", (security_id,)).fetchall()[0]
+        
+        (sum_amount, sum_price, cost_basis, amount_disposed) = amount
 
-          self.cur.execute("UPDATE securities SET amount_held=?, total_cost=?, cost_basis=?, total_price_sold=?, average_price_sold=? WHERE security_id=?;", 
-          (sum_amount, round(sum_price, 3), round(cost_basis, 3), total_price_sold, average_price_sold, security_id))
+        get_data_2=self.cur.execute("SELECT (SELECT SUM(amount) FROM all_shares WHERE long_counter='+' AND age_transaction > 0 AND security_id=?), SUM(sold_price) FROM all_shares WHERE security_id=?;", (security_id, security_id)).fetchall()[0]
+      
+        (_, total_price_sold) = get_data_2
+        
+        if amount_disposed == None or amount_disposed == 0 or total_price_sold == None:
+            average_price_sold = 0
+        else:
+            average_price_sold = round(float(total_price_sold) / abs(amount_disposed),3)
+        
+        try:
+            total_price_sold = round(total_price_sold, 2)
+        except:
+            total_price_sold = 0
+
+        self.cur.execute("UPDATE securities SET amount_held=?, total_cost=?, cost_basis=?, total_price_sold=?, average_price_sold=? WHERE security_id=?;", 
+        (sum_amount, round(sum_price, 3), round(cost_basis, 3), total_price_sold, average_price_sold, security_id))
 
       self.connection.commit()
 
@@ -723,7 +723,7 @@ class Database:
 
   # insert from all_shares into all_shares_split and back to all_shares and delete all_shares_split
   def update_split_all_shares(self, target_dir) -> None:
-    tolio.insert_into_all_shares(target_dir)
+    tolio.split_update_all_shares(target_dir)
 
   # divide the data into 10000 chunks of rows
   def chunk_data_insert(self, data: List[Tuple[Any]], rows: int=10000) -> List[Tuple[Any]]:

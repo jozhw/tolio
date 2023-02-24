@@ -1,6 +1,5 @@
 
-import unittest, sqlite3, os, sys
-from pathlib import Path
+import unittest, sqlite3, os
 
 import tolio
 

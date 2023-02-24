@@ -1,6 +1,6 @@
 
 from tkinter import *
-from tkinter import messagebox, ttk
+from tkinter import messagebox, ttk, filedialog
 from typing import Dict, Any, Callable, List
 
 import customtkinter 
@@ -83,7 +83,7 @@ class App(customtkinter.CTk):
 
     # configure grid layout (1x11)
     self.frame_left.grid_rowconfigure(0, minsize=10)   # empty row with minsize as spacing
-    self.frame_left.grid_rowconfigure(7, weight=1)  # empty row as spacing
+    self.frame_left.grid_rowconfigure(8, weight=1)  # empty row as spacing
     self.frame_left.grid_rowconfigure(9, minsize=20)    # empty row with minsize as spacing
     self.frame_left.grid_rowconfigure(11, minsize=10)  # empty row with minsize as spacing
 
@@ -132,15 +132,26 @@ class App(customtkinter.CTk):
                                             )
     self.stock_split_button.grid(row=5, column=0, pady=15, padx=20)
 
-    # documentation button
-    self.documentation_button = customtkinter.CTkButton(self.frame_left,
-                                            text="Documentation",
+    # upload csv button
+    self.import_file_dial_button = customtkinter.CTkButton(self.frame_left,
+                                            text="Upload CSV",
                                             border_color = "black",
                                             image = self.documentation_icon,
-                                            anchor="w"
+                                            anchor="w",
+                                            command=self.window_filedialog
                                             )
-    # to add for non-beta version
-    # self.documentation_button.grid(row=6, column=0, pady=15, padx=20)
+    self.import_file_dial_button.grid(row=6, column=0, pady=15, padx=20)
+
+    # export csv button
+    self.export_file_dial_button = customtkinter.CTkButton(self.frame_left,
+                                            text="Export to CSV",
+                                            border_color = "black",
+                                            image = self.documentation_icon,
+                                            anchor="w",
+                                            command=self.window_filedialog
+                                            )
+    self.export_file_dial_button.grid(row=7, column=0, pady=15, padx=20)
+
 
     # set color scheme
     self.appearance_mode = customtkinter.CTkLabel(self.frame_left,
@@ -1055,6 +1066,13 @@ class App(customtkinter.CTk):
     return_main_button.place(relx=0,rely=0.919,relwidth=0.2,relheight=0.08)
     exit_button.place(relx=0.8,rely=0.919,relwidth=0.2,relheight=0.08)
 
+
+  def window_import_filedialog(self) -> None:
+   
+    self.import_file_name = filedialog.askopenfilename(title="Select A CSV File", filetypes=(("csv files", "*.csv")))
+  
+  def window_export_filedialog(self) -> None:
+    pass
 
 
   # ================================= data section functionalities =================================
