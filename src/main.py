@@ -1069,7 +1069,7 @@ class App(customtkinter.CTk):
 
   def window_import_filedialog(self) -> None:
    
-    self.import_file_name = filedialog.askopenfilename(title="Select A CSV File", filetypes=(("csv files", "*.csv")))
+    self.import_file_name = filedialog.askopenfilename(title="Select A CSV File", filetypes=(("csv files", "*.csv"),))
     self.gb.insert_csv(self.import_file_name)
   
   def window_export_filedialog(self) -> None:
