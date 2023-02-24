@@ -7,7 +7,6 @@ from tkinter import messagebox
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
-import tolio
 from database import Database
 from utils import StandardizeEntry
 
@@ -194,15 +193,7 @@ class GuiBridge:
     self.db.update_institutions_held()
 
   
-
-  # insert_csv bridge
-  def insert_csv(self, csv_path: str, db_path: str = "files/data/portfolio.db") -> None:
-    tolio.insert_csv_to_db(db_path, csv_path)
-
-  
-
-
-
+ 
 
 
 

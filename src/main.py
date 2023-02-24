@@ -7,7 +7,7 @@ import customtkinter
 import darkdetect
 from PIL import Image
 
-from utils import ResourcePath, get_previous_setting, save_previous_setting
+from utils import ResourcePath, get_previous_setting, save_previous_setting, export_csv, insert_csv
 from database import Database
 from gui_bridge import GuiBridge
 
@@ -1070,11 +1070,16 @@ class App(customtkinter.CTk):
   def window_import_filedialog(self) -> None:
    
     self.import_file_name = filedialog.askopenfilename(title="Select A CSV File", filetypes=(("csv files", "*.csv"),))
-    self.gb.insert_csv(self.import_file_name)
+    insert_csv(self.import_file_name)
   
   def window_export_filedialog(self) -> None:
-    pass
-
+    answer = messagebox.askyesno(title="Export Database",
+                                 message = "Would you like to export the database to a .csv file?")
+    if answer == True:
+      export_csv()
+      messagebox.showinfo(title = "Database Exported", message = "Your database was exported.")
+    else:
+      messagebox.showinfo(title = "Canceled Export", message = "Your database was not exported.")
 
   # ================================= data section functionalities =================================
 
