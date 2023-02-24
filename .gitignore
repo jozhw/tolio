@@ -74,8 +74,5 @@ docs/_build/
 # Demo memory
 file:cachedb?mode=memory&cache=shared
 
-# Cargo.lock
-Cargo.lock
-
 # Database
-files/data/portfolio.db
+/files/data/portfolio.db
