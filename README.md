@@ -1,12 +1,18 @@
-# Tolio - Offline Portfolio Tracker
+<h1 align="center"> Tolio - Offline Portfolio Tracker </h1>
+
+<p align="center"><img
+  src="/src/assets/icons/tolio_icon.png"
+  alt="Alt text"
+  title="Tolio"
+  style="display: inline-block; margin: 0 auto; max-width: 300px"></p>
 
 
-![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/jozhw/tolio?include_prereleases) ![GitHub all releases](https://img.shields.io/github/downloads/jozhw/tolio/total?logo=Github) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/jozhw/tolio) ![GitHub commits since latest release (by date including pre-releases)](https://img.shields.io/github/commits-since/jozhw/tolio/v0.1.0?include_prereleases) ![GitHub](https://img.shields.io/github/license/jozhw/tolio) 
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/jozhw/tolio?include_prereleases) ![GitHub all releases](https://img.shields.io/github/downloads/jozhw/tolio/total?logo=Github) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/jozhw/tolio) ![GitHub commits since latest release (by date including pre-releases)](https://img.shields.io/github/commits-since/jozhw/tolio/v0.1.1) ![GitHub](https://img.shields.io/github/license/jozhw/tolio) 
 
 
 
 ```
-PRE-RELEASE VERSION 0.1.0 
+VERSION 0.2.0 
 Python 3.10.8 | Rust 1.66.0 
 ```
 
