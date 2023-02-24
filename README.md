@@ -21,14 +21,22 @@ Create a virtual environment and make sure you are in the tolio directory in the
 
 ```
 # Clone the repository
+
 git clone https://github.com/jozhw/tolio.git
-# If you do not have rust installed
-# For macos/linux/unix enter this into the command line
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-# For windows go to: https://www.rust-lang.org/tools/install
+
+# Download the .whl file from Tolio releases and in the env
+
+pip install <ADD FILENAME>.whl
+- if the above does not work, it is most likely because the package has been previously installed
+- if this is the case do the following
+pip install --upgrade --force-reinstall {ADD FILENAME}.whl
+
 # Run only if it is your first time running the application
+
  ./install_dependencies.sh  
+ 
 # To run the program
+
  ./run.sh  
 
 ```
