@@ -2,9 +2,32 @@ use std::error::Error;
 
 use rusqlite::{named_params, Connection};
 
-use crate::data_types::{PreparedStatement, RawTransaction, Transaction, EditedRawTransaction};
+use crate::data_types::{EditedRawTransaction, PreparedStatement, RawTransaction, Transaction};
 
 impl RawTransaction {
+    pub fn new_acquire_or_dispose(
+        security_name: String,
+        security_ticker: String,
+        institution_name: String,
+        timestamp: String,
+        transaction_abbreviation: String,
+        amount: f32,
+        price_usd: f32,
+    ) -> Result<RawTransaction, Box<dyn Error>> {
+        Ok(RawTransaction {
+            security_name: (security_name),
+            security_ticker: (security_ticker),
+            institution_name: (institution_name),
+            timestamp: (Some(timestamp)),
+            transaction_abbreviation: (transaction_abbreviation),
+            amount: (amount),
+            price_usd: (Some(price_usd)),
+            transfer_from: (None),
+            transfer_to: (None),
+            age_transaction: (0),
+            long: (0.0),
+        })
+    }
     fn insert_security(&self, db_path: &str) -> Result<(), Box<dyn Error>> {
         let conn = Connection::open(db_path)?;
         let sql = "INSERT INTO securities (security_name, security_ticker) VALUES (?,?);";
@@ -28,7 +51,7 @@ impl RawTransaction {
 
     pub fn get_institution_id(&self, db_path: &str) -> Result<i8, Box<dyn Error>> {
         let conn = Connection::open(db_path)?;
-        let sql = "SELECT institution_id FROM institution WHERE institution_name=?;";
+        let sql = "SELECT institution_id FROM institutions WHERE institution_name=?;";
         let mut prepared_sql = PreparedStatement::new(&conn, sql);
         let mut rows = prepared_sql
             .statement
@@ -70,7 +93,7 @@ impl RawTransaction {
         }
         let security_id = vec[0];
         if security_id == None {
-            self.insert_institution(db_path)?;
+            self.insert_security(db_path)?;
             let mut prepared_sql = PreparedStatement::new(&conn, sql);
             let mut rows = prepared_sql
                 .statement
@@ -110,9 +133,16 @@ impl RawTransaction {
         Ok(())
     }
 
-    pub fn convert_to_edited_rawtransaction(&self, db_path: &str) -> Result<EditedRawTransaction, Box<dyn Error>>{
-        let security_id = self.get_security_id(db_path).expect("Error: Failed to get security id.");
-        let institution_id = self.get_institution_id(db_path).expect("Error: Failed to get institution id.");
+    pub fn convert_to_edited_rawtransaction(
+        &self,
+        db_path: &str,
+    ) -> Result<EditedRawTransaction, Box<dyn Error>> {
+        let security_id = self
+            .get_security_id(db_path)
+            .expect("Error: Failed to get security id.");
+        let institution_id = self
+            .get_institution_id(db_path)
+            .expect("Error: Failed to get institution id.");
         let timestamp = self.timestamp.clone();
         let transaction_abbreviation = self.transaction_abbreviation.clone();
         let amount = self.amount;
@@ -121,11 +151,10 @@ impl RawTransaction {
         let transfer_to = self.transfer_to.clone();
         let age_transaction = self.age_transaction;
         let long = self.long;
-        
 
         Ok(EditedRawTransaction {
             security_id,
-            institution_id, 
+            institution_id,
             timestamp,
             transaction_abbreviation,
             amount,
@@ -133,14 +162,9 @@ impl RawTransaction {
             transfer_from,
             transfer_to,
             age_transaction,
-            long
+            long,
         })
     }
-
-    
 }
 
-
-impl EditedRawTransaction {
-
-}
+impl EditedRawTransaction {}

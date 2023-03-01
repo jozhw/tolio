@@ -1,12 +1,12 @@
 use csv;
-use std::{collections::HashMap, os::raw};
 use std::error::Error;
+use std::{collections::HashMap, os::raw};
 
 use rusqlite::Connection;
 
 use crate::{
-    data_types::{RawTransaction, Transaction, EditedRawTransaction},
-    db_methods::{bulk_insert_transactions},
+    data_types::{EditedRawTransaction, RawTransaction, Transaction},
+    db_methods::bulk_insert_transactions,
 };
 
 fn read_from_file(path: &str) -> Result<Vec<RawTransaction>, Box<dyn Error>> {
@@ -83,15 +83,19 @@ fn csvtransaction_to_transaction(
 }
 
 pub fn main(db_path: &str, path_to_csv: &str) {
-    let conn = Connection::open(db_path);
-    let csvtransaction = read_from_file(path_to_csv).expect("Error: Unable to convert csv file to intital rawtransaction.");
-    let insert_bulk = csvtransaction_to_transaction(csvtransaction, db_path).expect("Error: Unable to convert csv transaction to edited transaction.");
-    bulk_insert_transactions::main(String::from(db_path), insert_bulk).expect("Error: Failed to bulk insert transactions.");
-    let all_transactions = Transaction::get_all_transactions(db_path).expect("Error: Failed to get all transactions from database.");
+    let csvtransaction = read_from_file(path_to_csv)
+        .expect("Error: Unable to convert csv file to intital rawtransaction.");
+    let insert_bulk = csvtransaction_to_transaction(csvtransaction, db_path)
+        .expect("Error: Unable to convert csv transaction to edited transaction.");
+    bulk_insert_transactions::main(String::from(db_path), insert_bulk)
+        .expect("Error: Failed to bulk insert transactions.");
+    let all_transactions = Transaction::get_all_transactions(db_path)
+        .expect("Error: Failed to get all transactions from database.");
     for transaction in all_transactions {
-        transaction.insert_into_all_shares(db_path).expect("Error: Failed to insert into all shares from transaction.")
+        transaction
+            .insert_into_all_shares(db_path)
+            .expect("Error: Failed to insert into all shares from transaction.")
     }
-
 
     /*
     This rust functionality does not contain the update_all_shares, update_institutions_held, update_securities,

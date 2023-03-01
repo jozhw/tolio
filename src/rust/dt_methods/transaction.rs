@@ -1,10 +1,10 @@
-use std::collections::HashMap;
 use std::error::Error;
+use std::{collections::HashMap, time};
 
 use rusqlite::{named_params, Connection};
 
 use crate::{
-    data_types::{PreparedStatement, Share, Transaction, UpdatedShare},
+    data_types::{PreparedStatement, Transaction, UpdatedShare},
     db_methods::stock_split,
 };
 
@@ -15,6 +15,44 @@ pub trait Get {
 }
 
 impl Transaction {
+    pub fn get_recent_transaction(db_path: &str) -> Result<Transaction, Box<dyn Error>> {
+        let conn = Connection::open(db_path)?;
+        let sql = "SELECT transaction_id, security_id, institution_id, timestamp, transaction_abbreviation,
+        amount, price_USD, transfer_from, transfer_to, age_transaction, long FROM transactions WHERE transaction_id=(SELECT MAX(transaction_id) FROM transactions);";
+        let mut prepared_sql = PreparedStatement::new(&conn, sql);
+        let mut rows = prepared_sql.statement.query([])?;
+
+        let mut vec: Vec<Transaction> = Vec::new();
+        while let Some(row) = rows.next()? {
+            let transaction_id: Option<i8> = row.get(0)?;
+            let security_id: i8 = row.get(1)?;
+            let institution_id: i8 = row.get(2)?;
+            let timestamp: String = row.get(3)?;
+            let transaction_abbreviation: String = row.get(4)?;
+            let amount: f32 = row.get(5)?;
+            let price_usd: Option<f32> = row.get(6)?;
+            let transfer_from: Option<String> = row.get(7)?;
+            let transfer_to: Option<String> = row.get(8)?;
+            let age_transaction: i8 = row.get(9)?;
+            let long: f32 = row.get(10)?;
+
+            vec.push(Transaction {
+                transaction_id: (transaction_id),
+                security_id: (security_id),
+                institution_id: (institution_id),
+                timestamp: (timestamp),
+                transaction_abbreviation: (transaction_abbreviation),
+                amount: (amount),
+                price_usd: (price_usd),
+                transfer_from: (transfer_from),
+                transfer_to: (transfer_to),
+                age_transaction: (age_transaction),
+                long: (long),
+            })
+        }
+        Ok(vec[0].clone())
+    }
+
     fn get_specific_all_shares(&self, db_path: &str) -> Result<Vec<UpdatedShare>, Box<dyn Error>> {
         let conn = Connection::open(db_path)?;
         let sql = "SELECT individual_security_id, transaction_id, security_id, institution_id, timestamp, amount, price_USD, sold_price, age_transaction, long_counter, date_disposed FROM all_shares WHERE long_counter = '+' AND security_id=:security_id ORDER BY transaction_id;";
@@ -94,7 +132,7 @@ impl Transaction {
         }
         Ok(transactions)
     }
-    
+
     pub fn insert_into_all_shares(&self, db_path: &str) -> Result<(), Box<dyn Error>> {
         let conn = Connection::open(db_path)?;
         let acquire = String::from("A");

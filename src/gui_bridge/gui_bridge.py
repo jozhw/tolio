@@ -7,6 +7,7 @@ from tkinter import messagebox
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
+import tolio
 from database import Database
 from utils import StandardizeEntry
 
@@ -35,7 +36,12 @@ def insert_wrapper(method: Callable) -> None:
     else:
       messagebox.showinfo("Submission Canceled","Submission was canceled.")
   return _impl
-         
+
+
+
+
+
+
 class GuiBridge:
   db = Database()
 
@@ -66,8 +72,11 @@ class GuiBridge:
 
     edit_entry_dic = edit_entry_dic(entry_dic)
     self.check_correct_values(edit_entry_dic)
-    self.modify_insert_transaction_into_database(edit_entry_dic)
-                    
+
+    # tolio equivalent
+    final_entry_dic = self.modify_insert_transaction_into_database(edit_entry_dic)
+    self.db.insert_acquire_or_dispose(final_entry_dic)
+     
     entry_dic["amount"].delete(0,END)
     entry_dic["timestamp"].delete(0,END)
     entry_dic["price_USD"].delete(0,END)
@@ -77,6 +86,7 @@ class GuiBridge:
     edit_entry_dic = edit_entry_dic(entry_dic)
     self.check_correct_values(edit_entry_dic, transfer = True)
     self.modify_insert_transaction_into_database(edit_entry_dic)
+    # need to add function to insert
     entry_dic["amount"].delete(0,END)
     entry_dic["timestamp"].delete(0,END)
     entry_dic["to_institution_name"].delete(0,END)
@@ -84,50 +94,14 @@ class GuiBridge:
 
   # ================================= define methods for insert adjustments =================================
   # tailored inserts
-  def modify_insert_transaction_into_database(self, entry_dic: Dict) -> None:
+  def modify_insert_transaction_into_database(self, entry_dic: Dict) -> Dict:
     # remove the customtkinter obj
     entry_dic = edit_entry_dic()
     # Standardize the entries
-    entry_dic = StandardizeEntry(entry_dic).return_entry_dic()
-
-    # check if new security and institution
-    if bool(self.db.check_security(entry_dic["name"], entry_dic["ticker"])) == False:
-      # insert new security
-      self.db.insert_security(entry_dic["name"], entry_dic["ticker"])
-        
-    if bool(self.db.check_institution(entry_dic["institution_name"])) == False:
-      # insert new institution
-      self.db.insert_institution(entry_dic["institution_name"])
-    
-    # define variables for all of the necessary arguments for methods
-    security_id = self.db.get_specific_value(security_name=entry_dic["name"], security_ticker=entry_dic["ticker"])
-    institution_id = self.db.get_specific_value(institution_name=entry_dic["institution_name"])
-    timestamp = entry_dic["timestamp"]
-    transaction_abbreviation = entry_dic["transaction_abbreviation"]
-    amount = entry_dic["amount"]
-    price = entry_dic["price_USD"]
+    return StandardizeEntry(entry_dic).return_entry_dic()
 
     
-    # no  need to add get for entry_dic["name"], entry_dic["ticker"], entry_dic["institution_name"]
-    if transaction_abbreviation == "A" or transaction_abbreviation == "D":
-      if transaction_abbreviation == "A":
-        self.db.insert_transaction(security_id, timestamp, transaction_abbreviation, amount, price, institution_id=institution_id)
-        self.db.update_transaction_age()
-        transaction_id, security_id, institution_id, timestamp, transaction_abbreviation, amount, price_USD, transfer_from, transfer_to, age_transaction, long = Database().get_most_recent_transaction()
-        self.db.insert_all_shares(transaction_id, security_id, institution_id, timestamp, amount, price_USD, age_transaction)
-      elif transaction_abbreviation == "D":
-        self.db.insert_transaction(security_id, timestamp, transaction_abbreviation, amount, price, institution_id=institution_id)
-        self.db.update_transaction_age()
-        transaction_id, security_id, institution_id, timestamp, transaction_abbreviation, amount, price_USD, transfer_from, transfer_to, age_transaction, long = Database().get_most_recent_transaction()            
-        self.db.dispose_all_shares(security_id, institution_id, amount, price_USD, timestamp)
-
-    elif transaction_abbreviation == "T":
-      to_institution = entry_dic["to_institution_name"]
-      self.db.insert_transaction(security_id, timestamp, transaction_abbreviation, amount, price, institution_id = institution_id, transfer_to = to_institution)
-      self.db.update_transaction_age()
-      transaction_id, security_id, institution_id, timestamp, transaction_abbreviation, amount, price_USD, transfer_from, transfer_to, age_transaction, long = Database().get_most_recent_transaction()
-      self.db.transfer_all_shares(transaction_id, security_id, amount, transfer_to, institution_id)
-    
+   
   # verify if the date and time syntax is correct
   def check_correct_values(self, entry_dic: Dict, transfer: bool = False, split: bool = False) -> bool:
     success = True

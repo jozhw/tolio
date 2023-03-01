@@ -1,6 +1,6 @@
 import sqlite3, os, copy
 
-from typing import List, Tuple, Any 
+from typing import List, Tuple, Any
 
 import tolio
 
@@ -9,8 +9,8 @@ class Database:
   def __init__(self, db_path: str = "files/data/portfolio.db", sql_path: str = "src/database/init_db.sql") -> None:
       
     # locate database
-    # target_dir = "~/Applications/AppData/Local/Tolio/db"
-    self.connection = sqlite3.connect(os.path.expanduser(db_path))
+    self.db_path = os.path.expanduser(db_path)
+    self.connection = sqlite3.connect(os.path.expanduser(self.db_path))
     self.cur = self.connection.cursor()
 
     # ============================== create tables ==============================
@@ -385,6 +385,10 @@ class Database:
 
   # ============================== insert ==============================
 
+  # rust extension
+  def insert_acquire_or_dispose(self, value_dic: dict[Any]):
+    tolio.insert_acquire_or_dispose(self.db_path, value_dic)
+
   # define insert into all_shares function
   def insert_into_all_shares(self,transaction_id:int, security_id:int, institution_id:int, timestamp:str, amount:float, price_USD:float, age_transaction: int, sold_price: float=0) -> None:
     self.cur.execute("""
@@ -403,27 +407,6 @@ class Database:
         INSERT INTO stock_split_history (security_id, security_name, ticker, split_amount, timestamp) VALUES (?,?,?,?, datetime(CURRENT_TIMESTAMP, 'localtime') );
           """, (security_id, name, ticker, split_amount))
       
-
-  # insert a new security in database: all is needed is name and ticker
-  def insert_security(self,name:str, ticker:str) -> None:
-    self.cur.execute("INSERT INTO securities (security_name, security_ticker) VALUES (?,?)", (name, ticker))
-    self.connection.commit()
-      
-
-  # insert a new institution in database, all is needed is the name
-  def insert_institution(self,institution_name:str) -> None:
-    institution_name=institution_name.capitalize()
-    self.cur.execute("INSERT INTO institutions (institution_name) VALUES (?)", (institution_name,))
-    self.connection.commit()
-      
-      
-  # insert a new transaction type
-  # most likely will never use
-  def insert_transaction_type(self,new_transaction_type:str, new_transaction_abb:str) -> None:
-    self.cur.execute('''INSERT INTO transaction_names (transaction_type, transaction_abbreviation)
-      VALUES (?,?)''', (new_transaction_type, new_transaction_abb))
-
-    self.connection.commit()
       
 
   # insert a new transaction: security_id, name, ticker, institution_id, timestamp, transaction_abbreviation, amount, price_USD, transfer-to
@@ -723,7 +706,7 @@ class Database:
 
   # insert from all_shares into all_shares_split and back to all_shares and delete all_shares_split
   def update_split_all_shares(self, target_dir) -> None:
-    tolio.split_update_all_shares(target_dir)
+    tolio.stock_split(target_dir)
 
   # divide the data into 10000 chunks of rows
   def chunk_data_insert(self, data: List[Tuple[Any]], rows: int=10000) -> List[Tuple[Any]]:
@@ -734,6 +717,8 @@ class Database:
 
   def refresh_individual_shares(self) -> None:
     self.all_shares_table(reset=True)
+  
+
     
 
 

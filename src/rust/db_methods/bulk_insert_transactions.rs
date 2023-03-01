@@ -1,11 +1,13 @@
-use rusqlite::config::DbConfig;
 use rusqlite::{Connection, Result, ToSql, Transaction};
-use std::env;
+use std::error::Error;
 
-use crate::{data_types::EditedRawTransaction,
-};
+use crate::data_types::EditedRawTransaction;
 
-pub fn batch_insert(mut count: usize, tx: &Transaction, vector_proto: Vec<EditedRawTransaction>) {
+pub fn batch_insert(
+    mut count: usize,
+    tx: &Transaction,
+    vector_proto: Vec<EditedRawTransaction>,
+) -> Result<(), Box<dyn Error>> {
     let mut vector = vector_proto.clone();
     // Determine the batch size
     let mut min_batch_size = 50;
@@ -79,28 +81,26 @@ pub fn batch_insert(mut count: usize, tx: &Transaction, vector_proto: Vec<Edited
             sql_statement.execute(&*param_values).unwrap();
         }
     }
+    Ok(())
 }
 
 pub fn insert(tx: &Transaction, vector: Vec<EditedRawTransaction>) {
-    
     let count: usize = vector.len();
 
-    batch_insert(count, tx, vector);
-    }
-
+    batch_insert(count, tx, vector).expect("Error: batch insert error.");
+}
 
 pub fn insert_wrapper(conn: &mut Connection, vector: Vec<EditedRawTransaction>) {
     let tx = conn.transaction().unwrap();
 
-    insert(&tx,  vector);
+    insert(&tx, vector);
     tx.commit().unwrap();
 }
 
 pub fn main(path: String, vec_transactions: Vec<EditedRawTransaction>) -> Result<()> {
-   
     let path_ = path.clone();
     let conn = &mut Connection::open(path_).unwrap();
-   
+
     insert_wrapper(conn, vec_transactions);
 
     let tx = conn.transaction()?;

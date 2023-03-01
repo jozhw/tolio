@@ -84,3 +84,12 @@ pub struct UpdatedShare {
     pub long_counter: String,
     pub date_disposed: Option<String>,
 }
+
+use pyo3::prelude::*;
+#[derive(FromPyObject)]
+pub enum Value {
+    #[pyo3(transparent, annotation = "float")]
+    Float(f32),
+    #[pyo3(transparent, annotation = "str")]
+    String(String),
+}

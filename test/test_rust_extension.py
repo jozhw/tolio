@@ -25,7 +25,7 @@ class TestRustExtension(unittest.TestCase):
       except sqlite3.OperationalError as msg:
         print("Command skipped: ", msg)
         
-  def test_insert_into_all_shares(self):
+  def test_stock_split(self):
 
     target_dir = os.path.expanduser("files/data/test_portfolio.db")
     os.remove(target_dir)
@@ -36,7 +36,7 @@ class TestRustExtension(unittest.TestCase):
 
     self.connection.commit()
 
-    tolio.insert_into_all_shares(target_dir)
+    tolio.stock_split(target_dir)
 
     after_split_total = self.cur.execute("SELECT COUNT(amount) FROM all_shares WHERE security_id = ?;", '1').fetchone()[0]
     after_split_total_price = self.cur.execute("SELECT SUM(price_USD) FROM all_shares WHERE security_id =?;", '1').fetchone()[0]
@@ -54,4 +54,5 @@ class TestRustExtension(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+  unittest.main()
+  

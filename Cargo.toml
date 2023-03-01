@@ -10,7 +10,9 @@ path = "src/rust/lib.rs"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.17.3", features = ["extension-module"] }
+hashbrown = "*"
+pyo3 = { version = "0.18.1", features = ["extension-module", "hashbrown"] }
 rusqlite = { version = "0.28.0", features = ["bundled"] }
 csv = "1.1"
 serde = {version = "1", features = ["derive"]}
+either = "1.8.1"
