@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS all_shares (individual_share_id INTEGER PRIMARY KEY A
         );
 
 CREATE TABLE IF NOT EXISTS stock_split_history (history_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-        security_id INTEGER NOT NULL, security_name TEXT NOT NULL, ticker TEXT NOT NULL, split_amount INT NOT NULL, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+        security_id INTEGER NOT NULL, split_amount INT NOT NULL, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (security_id) REFERENCES all_shares(security_id));
 
 
