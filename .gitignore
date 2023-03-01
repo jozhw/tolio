@@ -76,3 +76,7 @@ file:cachedb?mode=memory&cache=shared
 
 # Database
 /files/data/portfolio.db
+/files/data/test_portfolio.db
+
+# Cargo.lock
+Cargo.lock
