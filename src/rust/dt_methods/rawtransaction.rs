@@ -114,21 +114,42 @@ impl RawTransaction {
         let conn = Connection::open(db_path)?;
         let security_id = self.get_security_id(db_path).unwrap();
         let institution_id = self.get_institution_id(db_path).unwrap();
-        let sql = "INSERT INTO transactions(security_id, institution_id, timestamp, transaction_abbreviation, amount, price_USD, transfer_from, transfer_to, age_transaction, long) VALUES (:security_id,:institution_id,:timestamp,:transaction_abbreviation,:amount,:price_USD,:transfer_from,:transfer_to,:age_transaction,:long);";
-        let mut prepare_sql = PreparedStatement::new(&conn, sql);
+        let timestamp = self.timestamp.clone();
+        match timestamp {
+            None => {
+                let sql = "INSERT INTO transactions(security_id, institution_id, timestamp, transaction_abbreviation, amount, price_USD, transfer_from, transfer_to, age_transaction, long) VALUES (:security_id,:institution_id, datetime(CURRENT_TIMESTAMP, 'localtime'),:transaction_abbreviation,:amount,:price_USD,:transfer_from,:transfer_to,:age_transaction,:long);";
+                let mut prepare_sql = PreparedStatement::new(&conn, sql);
 
-        prepare_sql.statement.execute(named_params! {
-            ":security_id": security_id,
-            ":institution_id": institution_id,
-            ":timestamp": self.timestamp,
-            ":transaction_abbreviation": self.transaction_abbreviation,
-            ":amount": self.amount,
-            ":price_USD": self.price_usd,
-            ":transfer_from": self.transfer_from,
-            ":transfer_to": self.transfer_to,
-            ":age_transaction": self.age_transaction,
-            ":long": self.long
-        })?;
+                prepare_sql.statement.execute(named_params! {
+                    ":security_id": security_id,
+                    ":institution_id": institution_id,
+                    ":transaction_abbreviation": self.transaction_abbreviation,
+                    ":amount": self.amount,
+                    ":price_USD": self.price_usd,
+                    ":transfer_from": self.transfer_from,
+                    ":transfer_to": self.transfer_to,
+                    ":age_transaction": self.age_transaction,
+                    ":long": self.long
+                })?;
+            }
+            _ => {
+                let sql = "INSERT INTO transactions(security_id, institution_id, timestamp, transaction_abbreviation, amount, price_USD, transfer_from, transfer_to, age_transaction, long) VALUES (:security_id,:institution_id,:timestamp,:transaction_abbreviation,:amount,:price_USD,:transfer_from,:transfer_to,:age_transaction,:long);";
+                let mut prepare_sql = PreparedStatement::new(&conn, sql);
+
+                prepare_sql.statement.execute(named_params! {
+                    ":security_id": security_id,
+                    ":institution_id": institution_id,
+                    ":timestamp": self.timestamp,
+                    ":transaction_abbreviation": self.transaction_abbreviation,
+                    ":amount": self.amount,
+                    ":price_USD": self.price_usd,
+                    ":transfer_from": self.transfer_from,
+                    ":transfer_to": self.transfer_to,
+                    ":age_transaction": self.age_transaction,
+                    ":long": self.long
+                })?;
+            }
+        }
 
         Ok(())
     }

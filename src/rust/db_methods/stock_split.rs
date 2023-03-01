@@ -167,7 +167,7 @@ pub fn insert_wrapper(conn: &mut Connection, split: bool, vector_proto: Vec<Shar
     tx.commit().unwrap();
 }
 
-pub fn main(path: String) -> Result<()> {
+pub fn main(path: &str) -> Result<()> {
     env::set_var("RUST_BACKTRACE", "1");
     {
         // Create the all_shares_split table

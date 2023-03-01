@@ -278,8 +278,16 @@ impl Transaction {
 
             stock_split => {
                 self.split_all_shares(db_path).unwrap();
-                let path = String::from(db_path);
-                stock_split::main(path).unwrap();
+                let conn = Connection::open(db_path)?;
+                let sql = "INSERT INTO stock_split_history (security_id, split_amount, timestamp) VALUES (:security_id,:split_amount,:timestamp);";
+                let mut prepare_sql = PreparedStatement::new(&conn, sql);
+                prepare_sql.statement.execute(named_params! {
+                    ":security_id": self.security_id,
+                    ":split_amount": self.amount,
+                    ":timestamp": self.timestamp
+
+                })?;
+                stock_split::main(db_path).unwrap();
             }
 
             transfer => {

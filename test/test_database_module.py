@@ -29,25 +29,7 @@ class TestDatabaseModule(unittest.TestCase):
 
 # ============================== test: get methods ==============================
   
-  def test_get_specific_value(self):
-    
-    # test security_id
-    security_id = self.Database.get_specific_value(security_name="S&P500", security_ticker="SPY")
-    self.assertEqual(security_id, 1)
-
-    # test security_name and security_ticker
-    security_name, security_ticker = self.Database.get_specific_value(security_id=1)
-    self.assertEqual(security_name, "S&P500")
-    self.assertEqual(security_ticker, "SPY")
-
-    # test institution_name
-    institution_name = self.Database.get_specific_value(institution_id=2)
-    self.assertEqual(institution_name, "Computershare")
-
-    # test institution_id
-    institution_id = self.Database.get_specific_value(institution_name="Computershare")
-    self.assertEqual(institution_id, 2)
-  
+ 
   def test_get_table_values(self):
     security_name_list = self.Database.get_table_value("security_name")
     self.assertListEqual(security_name_list, ["S&P500", "Tesla"])

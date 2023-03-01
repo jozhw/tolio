@@ -38,10 +38,6 @@ def insert_wrapper(method: Callable) -> None:
   return _impl
 
 
-
-
-
-
 class GuiBridge:
   db = Database()
 
@@ -53,40 +49,41 @@ class GuiBridge:
 # ================================= database inserts functionalities =================================
   @insert_wrapper
   def stock_split(self, entry_dic: Dict) -> None:
+    # use get method to convert customtkinter obj to python obj
     edited_entry_dic = edit_entry_dic(entry_dic)
+    # check correct values and modify for final insert
     if self.check_correct_values(edit_entry_dic, split=True) == False:
       raise Exception("There is/are value error(s).") 
-
-    security_id = self.db.get_specific_value(security_name = edited_entry_dic["name"], security_ticker = edited_entry_dic["ticker"])
-    name = edited_entry_dic["name"]
-    ticker = edited_entry_dic["ticker"]
-    split_amount = edited_entry_dic["amount"]
-    timestamp = edited_entry_dic["timestamp"]
-
-    self.db.stock_split(security_id, name, ticker, split_amount, timestamp)
+    # final insert
+    self.db.insert_stock_split(edited_entry_dic)
+    # remove from gui entry_box
     entry_dic["amount"].delete(0,END)
     entry_dic["timestamp"].delete(0,END)
 
   @insert_wrapper
   def insert_transaction_into_database(self, entry_dic: Dict) -> None:
-
+    # use get method to convert customtkinter obj to python obj
     edit_entry_dic = edit_entry_dic(entry_dic)
+    # check correct values and modify for final insert
     self.check_correct_values(edit_entry_dic)
-
-    # tolio equivalent
     final_entry_dic = self.modify_insert_transaction_into_database(edit_entry_dic)
+    # final insert
     self.db.insert_acquire_or_dispose(final_entry_dic)
-     
+    # remove from gui entry_box
     entry_dic["amount"].delete(0,END)
     entry_dic["timestamp"].delete(0,END)
     entry_dic["price_USD"].delete(0,END)
   
   @insert_wrapper
   def transfer_security(self, entry_dic: Dict) -> None:
+    # use get method to convert customtkinter obj to python obj
     edit_entry_dic = edit_entry_dic(entry_dic)
+    # check correct values and modify for final insert
     self.check_correct_values(edit_entry_dic, transfer = True)
     self.modify_insert_transaction_into_database(edit_entry_dic)
-    # need to add function to insert
+    # final insert
+    self.db.insert_transfer(entry_dic)
+    # remove from gui entry_dox
     entry_dic["amount"].delete(0,END)
     entry_dic["timestamp"].delete(0,END)
     entry_dic["to_institution_name"].delete(0,END)
@@ -100,8 +97,6 @@ class GuiBridge:
     # Standardize the entries
     return StandardizeEntry(entry_dic).return_entry_dic()
 
-    
-   
   # verify if the date and time syntax is correct
   def check_correct_values(self, entry_dic: Dict, transfer: bool = False, split: bool = False) -> bool:
     success = True
