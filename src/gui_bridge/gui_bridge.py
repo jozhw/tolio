@@ -1,8 +1,10 @@
 
-import re, sys, os
+import re
+import sys
+import os
 from functools import wraps
 from typing import Dict, Callable
-from tkinter import *
+import tkinter as tk
 from tkinter import messagebox
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
@@ -56,8 +58,8 @@ class GuiBridge:
         # final insert
         self.db.insert_stock_split(edited_entry_dic)
         # remove from gui entry_box
-        entry_dic["amount"].delete(0,END)
-        entry_dic["timestamp"].delete(0,END)
+        entry_dic["amount"].delete(0, tk.END)
+        entry_dic["timestamp"].delete(0, tk.END)
 
     @insert_wrapper
     def insert_transaction_into_database(self, entry_dic: Dict) -> None:
@@ -69,9 +71,9 @@ class GuiBridge:
         # final insert
         self.db.insert_acquire_or_dispose(final_entry_dic)
         # remove from gui entry_box
-        entry_dic["amount"].delete(0,END)
-        entry_dic["timestamp"].delete(0,END)
-        entry_dic["price_USD"].delete(0,END)
+        entry_dic["amount"].delete(0, tk.END)
+        entry_dic["timestamp"].delete(0, tk.END)
+        entry_dic["price_USD"].delete(0, tk.END)
     
     @insert_wrapper
     def transfer_security(self, entry_dic: Dict) -> None:
@@ -83,9 +85,9 @@ class GuiBridge:
         # final insert
         self.db.insert_transfer(entry_dic)
         # remove from gui entry_dox
-        entry_dic["amount"].delete(0,END)
-        entry_dic["timestamp"].delete(0,END)
-        entry_dic["to_institution_name"].delete(0,END)
+        entry_dic["amount"].delete(0, tk.END)
+        entry_dic["timestamp"].delete(0, tk.END)
+        entry_dic["to_institution_name"].delete(0, tk.END)
 
 
     # ================================= define methods for insert adjustments =================================

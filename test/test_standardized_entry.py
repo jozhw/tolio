@@ -90,6 +90,5 @@ class TestStandardizedEntries(unittest.TestCase):
         self.assertEqual(self.acquire_standardize.change_value_sign(), self.correct_acquire_entry_dic)
         self.assertEqual(self.dispose_standardize.change_value_sign(), self.correct_dispose_entry_dic)
 
-
 if __name__ == "__main__":
     unittest.main()

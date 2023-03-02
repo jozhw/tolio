@@ -1,5 +1,5 @@
 
-from tkinter import *
+import tkinter as tk
 from tkinter import messagebox, ttk, filedialog
 from typing import Dict, Any, Callable, List
 
@@ -19,7 +19,7 @@ class App(customtkinter.CTk):
     style_resource_path = ResourcePath("src/assets/styling/")
     icon_resource_path = ResourcePath("src/assets/icons/")
     set_settings_resource_path = style_resource_path.resource_path("set_settings.json")
-    customtkinter.set_appearance_mode(get_previous_setting(set_settings_resource_path, appearance_option=True))
+    customtkinter.set_appearance_mode(get_previous_setting(set_settings_resource_path, appearance_option = True))
     customtkinter.set_default_color_theme(style_resource_path.resource_path("style.json"))
 
     WIDTH = 1300
@@ -35,7 +35,7 @@ class App(customtkinter.CTk):
 
         self.title("Tolio - Portfolio Tracker")
 
-        logo_path = PhotoImage(file=self.icon_resource_path.resource_path("tolio_icon.png"))
+        logo_path = tk.PhotoImage(file = self.icon_resource_path.resource_path("tolio_icon.png"))
         self.iconphoto(False,logo_path)
 
         self.geometry(f"{App.WIDTH}x{App.HEIGHT}")
@@ -48,13 +48,13 @@ class App(customtkinter.CTk):
 
         # ================================= create two frames (menu bar & activity bar) ===============================
 
-        self.grid_columnconfigure(1, weight=1)
-        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight = 1)
+        self.grid_rowconfigure(0, weight = 1)
         
         self.frame_left = customtkinter.CTkFrame(self,
-                                                width=180,
-                                                corner_radius =0)
-        self.frame_left.grid(row=0, column =0, sticky="nswe")
+                                                width = 180,
+                                                corner_radius = 0)
+        self.frame_left.grid(row = 0, column = 0, sticky = "nswe")
         
         self.frame_right = customtkinter.CTkFrame(self,
                                                 corner_radius = 10
@@ -247,65 +247,65 @@ class App(customtkinter.CTk):
         id_entry.place(relx=0.085,rely=0.1,relwidth=0.145,anchor='nw')
 
         date_label=customtkinter.CTkLabel(self.data_frame,text="Date", anchor='w')
-        date_label.place(relx=0.005,rely=0.3,relheight=0.4,relwidth=0.06,anchor=NW)
+        date_label.place(relx=0.005,rely=0.3,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         date_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        date_entry.place(relx=0.085,rely=0.4,relwidth=0.145,anchor=NW)
+        date_entry.place(relx=0.085,rely=0.4,relwidth=0.145,anchor=tk.NW)
 
         price_label=customtkinter.CTkLabel(self.data_frame,text="Price", anchor='w')
-        price_label.place(relx=0.005,rely=0.6,relheight=0.4,relwidth=0.06,anchor=NW)
+        price_label.place(relx=0.005,rely=0.6,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         price_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        price_entry.place(relx=0.085,rely=0.7,relwidth=0.145,anchor=NW)
+        price_entry.place(relx=0.085,rely=0.7,relwidth=0.145,anchor=tk.NW)
 
         # column 2
 
         n_label=customtkinter.CTkLabel(self.data_frame,text="Name", anchor='w')
-        n_label.place(relx=0.262,rely=0,relheight=0.4,relwidth=0.06,anchor=NW)
+        n_label.place(relx=0.262,rely=0,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         n_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        n_entry.place(relx=0.342,rely=0.1,relwidth=0.145,anchor=NW)
+        n_entry.place(relx=0.342,rely=0.1,relwidth=0.145,anchor=tk.NW)
 
         type_label=customtkinter.CTkLabel(self.data_frame,text="Type", anchor='w')
-        type_label.place(relx=0.262,rely=0.3,relheight=0.4,relwidth=0.06,anchor=NW)
+        type_label.place(relx=0.262,rely=0.3,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         type_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        type_entry.place(relx=0.342,rely=0.4,relwidth=0.145,anchor=NW)
+        type_entry.place(relx=0.342,rely=0.4,relwidth=0.145,anchor=tk.NW)
 
         amount_label=customtkinter.CTkLabel(self.data_frame,text="Amount", anchor='w')
         amount_label.place(relx=0.262,rely=0.6,relheight=0.4,relwidth=0.06,anchor='nw')
         amount_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        amount_entry.place(relx=0.342,rely=0.7,relwidth=0.145,anchor=NW)
+        amount_entry.place(relx=0.342,rely=0.7,relwidth=0.145,anchor=tk.NW)
 
         # column 3
 
         ticker_label=customtkinter.CTkLabel(self.data_frame,text="Ticker", anchor='w')
-        ticker_label.place(relx=0.519,rely=0,relheight=0.4,relwidth=0.06,anchor=NW)
+        ticker_label.place(relx=0.519,rely=0,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         ticker_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        ticker_entry.place(relx=0.599,rely=0.1,relwidth=0.145,anchor=NW)
+        ticker_entry.place(relx=0.599,rely=0.1,relwidth=0.145,anchor=tk.NW)
 
         from_label=customtkinter.CTkLabel(self.data_frame,text="From", anchor='w')
-        from_label.place(relx=0.519,rely=0.3,relheight=0.4,relwidth=0.06,anchor=NW)
+        from_label.place(relx=0.519,rely=0.3,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         from_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        from_entry.place(relx=0.599,rely=0.4,relwidth=0.145,anchor=NW)
+        from_entry.place(relx=0.599,rely=0.4,relwidth=0.145,anchor=tk.NW)
 
         age_label=customtkinter.CTkLabel(self.data_frame,text="Age", anchor='w')
-        age_label.place(relx=0.519,rely=0.6,relheight=0.4,relwidth=0.06,anchor=NW)
+        age_label.place(relx=0.519,rely=0.6,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         age_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        age_entry.place(relx=0.599,rely=0.7,relwidth=0.145,anchor=NW)
+        age_entry.place(relx=0.599,rely=0.7,relwidth=0.145,anchor=tk.NW)
 
         # column 4
 
         institution_label=customtkinter.CTkLabel(self.data_frame,text="Institution", anchor='w')
-        institution_label.place(relx=0.77,rely=0,relheight=0.4,relwidth=0.06,anchor=NW)
+        institution_label.place(relx=0.77,rely=0,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         institution_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        institution_entry.place(relx=0.85,rely=0.1,relwidth=0.145,anchor=NW)
+        institution_entry.place(relx=0.85,rely=0.1,relwidth=0.145,anchor=tk.NW)
 
         to_label=customtkinter.CTkLabel(self.data_frame,text="To", anchor='w')
-        to_label.place(relx=0.77,rely=0.3,relheight=0.4,relwidth=0.06,anchor=NW)
+        to_label.place(relx=0.77,rely=0.3,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         to_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        to_entry.place(relx=0.85,rely=0.4,relwidth=0.145,anchor=NW)
+        to_entry.place(relx=0.85,rely=0.4,relwidth=0.145,anchor=tk.NW)
 
         long_label=customtkinter.CTkLabel(self.data_frame,text="Long", anchor='w')
-        long_label.place(relx=0.77,rely=0.6,relheight=0.4,relwidth=0.06,anchor=NW)
+        long_label.place(relx=0.77,rely=0.6,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         long_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        long_entry.place(relx=0.85,rely=0.7,relwidth=0.145,anchor=NW)
+        long_entry.place(relx=0.85,rely=0.7,relwidth=0.145,anchor=tk.NW)
         
 
         # dictionary of entries
@@ -317,7 +317,7 @@ class App(customtkinter.CTk):
         
         # add buttons
         self.button_frame=customtkinter.CTkFrame(self.frame_right)
-        self.button_frame.place(relx=0,rely=0.9,relheight=0.1,relwidth=1,anchor=NW)
+        self.button_frame.place(relx=0,rely=0.9,relheight=0.1,relwidth=1,anchor=tk.NW)
 
         update_button=customtkinter.CTkButton(self.button_frame,text="Update Record",command=lambda:self.update_record(transaction_entries))
         update_button.place(relx=0.005, rely=0.25, relwidth=0.225)
@@ -349,7 +349,7 @@ class App(customtkinter.CTk):
         self.my_tree.place(relx=0,rely=0,relheight=1,relwidth=1, anchor="nw")
         # scrollbar
         self.tree_scroll=ttk.Scrollbar(self.main_view,orient="vertical",command=self.my_tree.yview, style='arrowless.Vertical.TScrollbar')
-        self.tree_scroll.pack(side=RIGHT,fill=Y)
+        self.tree_scroll.pack(side=tk.RIGHT,fill=tk.Y)
         # configure scrollbar
         self.my_tree.configure(yscrollcommand=self.tree_scroll.set)
         
@@ -368,12 +368,12 @@ class App(customtkinter.CTk):
         # add columns for transactions
         self.my_tree['columns']=("Institution", "Security", "Amount", "Total Cost", "Cost Basis", "Number Long", "Total Price Sold", "Average Price Sold" )
         # format columns
-        self.my_tree.column("#0", width=0,stretch=NO)
+        self.my_tree.column("#0", width=0,stretch=tk.NO)
         columns=["Institution", "Security", "Amount", "Total Cost", "Cost Basis", "Number Long", "Total Price Sold", "Average Price Sold"]
         for i in columns:
             self.my_tree.column(f"{i}", anchor='w' ,width=0)
         # create headings
-        self.my_tree.heading("#0",text="",anchor=W)
+        self.my_tree.heading("#0",text="",anchor=tk.W)
         for i in columns:
             self.my_tree.heading(f"{i}",text=f"{i}",anchor='w')
 
@@ -393,45 +393,45 @@ class App(customtkinter.CTk):
         institution_entry.place(relx=0.085,rely=0.1,relwidth=0.145,anchor='nw')
 
         security_label=customtkinter.CTkLabel(self.data_frame,text="Security", anchor='w')
-        security_label.place(relx=0.005,rely=0.6,relheight=0.4,relwidth=0.06,anchor=NW)
+        security_label.place(relx=0.005,rely=0.6,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         security_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        security_entry.place(relx=0.085,rely=0.7,relwidth=0.145,anchor=NW)
+        security_entry.place(relx=0.085,rely=0.7,relwidth=0.145,anchor=tk.NW)
 
         # column 2
 
         amount_label=customtkinter.CTkLabel(self.data_frame,text="Amount", anchor='w')
         amount_label.place(relx=0.262,rely=0,relheight=0.4,relwidth=0.06,anchor='nw')
         amount_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        amount_entry.place(relx=0.342,rely=0.1,relwidth=0.145,anchor=NW)
+        amount_entry.place(relx=0.342,rely=0.1,relwidth=0.145,anchor=tk.NW)
 
         number_long_label=customtkinter.CTkLabel(self.data_frame,text="Long", anchor='w')
-        number_long_label.place(relx=0.262,rely=0.6,relheight=0.4,relwidth=0.06,anchor=NW)
+        number_long_label.place(relx=0.262,rely=0.6,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         number_long_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        number_long_entry.place(relx=0.342,rely=0.7,relwidth=0.145,anchor=NW)
+        number_long_entry.place(relx=0.342,rely=0.7,relwidth=0.145,anchor=tk.NW)
 
         # column 3
 
         cost_basis_label=customtkinter.CTkLabel(self.data_frame,text="Cost Basis", anchor='w')
-        cost_basis_label.place(relx=0.519,rely=0,relheight=0.4,relwidth=0.06,anchor=NW)
+        cost_basis_label.place(relx=0.519,rely=0,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         cost_basis_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        cost_basis_entry.place(relx=0.599,rely=0.1,relwidth=0.145,anchor=NW)
+        cost_basis_entry.place(relx=0.599,rely=0.1,relwidth=0.145,anchor=tk.NW)
 
         total_cost_label=customtkinter.CTkLabel(self.data_frame,text="Total Cost", anchor='w')
-        total_cost_label.place(relx=0.519,rely=0.6,relheight=0.4,relwidth=0.06,anchor=NW)
+        total_cost_label.place(relx=0.519,rely=0.6,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         total_cost_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        total_cost_entry.place(relx=0.599,rely=0.7,relwidth=0.145,anchor=NW)
+        total_cost_entry.place(relx=0.599,rely=0.7,relwidth=0.145,anchor=tk.NW)
 
         # column 4
 
         average_price_sold_label=customtkinter.CTkLabel(self.data_frame,text="A.P. Sold", anchor='w')
-        average_price_sold_label.place(relx=0.77,rely=0,relheight=0.4,relwidth=0.06,anchor=NW)
+        average_price_sold_label.place(relx=0.77,rely=0,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         average_price_sold_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        average_price_sold_entry.place(relx=0.85,rely=0.1,relwidth=0.145,anchor=NW)
+        average_price_sold_entry.place(relx=0.85,rely=0.1,relwidth=0.145,anchor=tk.NW)
 
         total_price_sold_label=customtkinter.CTkLabel(self.data_frame,text="T.P. Sold", anchor='w')
-        total_price_sold_label.place(relx=0.77,rely=0.6,relheight=0.4,relwidth=0.06,anchor=NW)
+        total_price_sold_label.place(relx=0.77,rely=0.6,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         total_price_sold_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        total_price_sold_entry.place(relx=0.85,rely=0.7,relwidth=0.145,anchor=NW)
+        total_price_sold_entry.place(relx=0.85,rely=0.7,relwidth=0.145,anchor=tk.NW)
 
 
         # dictionary of entries
@@ -442,7 +442,7 @@ class App(customtkinter.CTk):
         
         # add buttons
         self.button_frame=customtkinter.CTkFrame(self.frame_right)
-        self.button_frame.place(relx=0,rely=0.9,relheight=0.1,relwidth=1,anchor=NW)
+        self.button_frame.place(relx=0,rely=0.9,relheight=0.1,relwidth=1,anchor=tk.NW)
 
         # recalculate_button=customtkinter.CTkButton(self.button_frame,text="Recalculate Securities", command = self.db.refresh_individual_shares)
         # recalculate_button.place(relx=0.005, rely=0.25, relwidth=0.225)
@@ -467,7 +467,7 @@ class App(customtkinter.CTk):
         self.my_tree.place(relx=0,rely=0,relheight=1,relwidth=1, anchor="nw")
         # scrollbar
         self.tree_scroll=ttk.Scrollbar(self.main_view,orient="vertical",command=self.my_tree.yview, style='arrowless.Vertical.TScrollbar')
-        self.tree_scroll.pack(side=RIGHT,fill=Y)
+        self.tree_scroll.pack(side=tk.RIGHT,fill=tk.Y)
         # configure scrollbar
         self.my_tree.configure(yscrollcommand=self.tree_scroll.set)
         
@@ -486,12 +486,12 @@ class App(customtkinter.CTk):
         # add columns for transactions
         self.my_tree['columns']=("Security", "Ticker", "Amount", "Total Cost", "Cost Basis", "Number Long", "Total Price Sold", "Average Price Sold" )
         # format columns
-        self.my_tree.column("#0", width=0,stretch=NO)
+        self.my_tree.column("#0", width=0,stretch=tk.NO)
         columns=["Security", "Ticker", "Amount", "Total Cost", "Cost Basis", "Number Long", "Total Price Sold", "Average Price Sold"]
         for i in columns:
             self.my_tree.column(f"{i}", anchor='w' ,width=0)
         # create headings
-        self.my_tree.heading("#0",text="",anchor=W)
+        self.my_tree.heading("#0",text="",anchor=tk.W)
         for i in columns:
             self.my_tree.heading(f"{i}",text=f"{i}",anchor='w')
 
@@ -506,9 +506,9 @@ class App(customtkinter.CTk):
 
         # column 1
         security_label=customtkinter.CTkLabel(self.data_frame,text="Security", anchor='w')
-        security_label.place(relx=0.005,rely=0,relheight=0.4,relwidth=0.06,anchor=NW)
+        security_label.place(relx=0.005,rely=0,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         security_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        security_entry.place(relx=0.085,rely=0.1,relwidth=0.145,anchor=NW)
+        security_entry.place(relx=0.085,rely=0.1,relwidth=0.145,anchor=tk.NW)
 
         ticker_label=customtkinter.CTkLabel(self.data_frame,text="Ticker", anchor='w')
         ticker_label.place(relx=0.005,rely=0.6,relheight=0.4,relwidth=0.06,anchor='nw')
@@ -520,37 +520,37 @@ class App(customtkinter.CTk):
         amount_label=customtkinter.CTkLabel(self.data_frame,text="Amount", anchor='w')
         amount_label.place(relx=0.262,rely=0,relheight=0.4,relwidth=0.06,anchor='nw')
         amount_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        amount_entry.place(relx=0.342,rely=0.1,relwidth=0.145,anchor=NW)
+        amount_entry.place(relx=0.342,rely=0.1,relwidth=0.145,anchor=tk.NW)
 
         number_long_label=customtkinter.CTkLabel(self.data_frame,text="Long", anchor='w')
-        number_long_label.place(relx=0.262,rely=0.6,relheight=0.4,relwidth=0.06,anchor=NW)
+        number_long_label.place(relx=0.262,rely=0.6,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         number_long_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        number_long_entry.place(relx=0.342,rely=0.7,relwidth=0.145,anchor=NW)
+        number_long_entry.place(relx=0.342,rely=0.7,relwidth=0.145,anchor=tk.NW)
 
         # column 3
 
-        total_cost_label=customtkinter.CTkLabel(self.data_frame,text="Total Cost", anchor='w')
-        total_cost_label.place(relx=0.519,rely=0,relheight=0.4,relwidth=0.06,anchor=NW)
-        total_cost_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        total_cost_entry.place(relx=0.599,rely=0.1,relwidth=0.145,anchor=NW)
+        total_cost_label = customtkinter.CTkLabel(self.data_frame,text="Total Cost", anchor='w')
+        total_cost_label.place(relx=0.519,rely=0,relheight=0.4,relwidth=0.06,anchor=tk.NW)
+        total_cost_entry = customtkinter.CTkEntry(self.data_frame, height=25)
+        total_cost_entry.place(relx=0.599,rely=0.1,relwidth=0.145,anchor=tk.NW)
 
-        cost_basis_label=customtkinter.CTkLabel(self.data_frame,text="Cost Basis", anchor='w')
-        cost_basis_label.place(relx=0.519,rely=0.6,relheight=0.4,relwidth=0.06,anchor=NW)
-        cost_basis_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        cost_basis_entry.place(relx=0.599,rely=0.7,relwidth=0.145,anchor=NW)
+        cost_basis_label = customtkinter.CTkLabel(self.data_frame,text="Cost Basis", anchor='w')
+        cost_basis_label.place(relx = 0.519,rely = 0.6, relheight=0.4, relwidth = 0.06, anchor = tk.NW)
+        cost_basis_entry = customtkinter.CTkEntry(self.data_frame, height=25)
+        cost_basis_entry.place(relx = 0.599, rely = 0.7, relwidth = 0.145, anchor = tk.NW)
 
 
         # column 4
 
-        total_price_sold_label=customtkinter.CTkLabel(self.data_frame,text="T.P. Sold", anchor='w')
-        total_price_sold_label.place(relx=0.77,rely=0,relheight=0.4,relwidth=0.06,anchor=NW)
-        total_price_sold_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        total_price_sold_entry.place(relx=0.85,rely=0.1,relwidth=0.145,anchor=NW)
+        total_price_sold_label = customtkinter.CTkLabel(self.data_frame, text="T.P. Sold", anchor='w')
+        total_price_sold_label.place(relx=0.77,rely=0,relheight=0.4,relwidth=0.06,anchor=tk.NW)
+        total_price_sold_entry = customtkinter.CTkEntry(self.data_frame, height=25)
+        total_price_sold_entry.place(relx=0.85,rely=0.1,relwidth=0.145,anchor=tk.NW)
 
-        average_price_sold_label=customtkinter.CTkLabel(self.data_frame,text="A.P. Sold", anchor='w')
-        average_price_sold_label.place(relx=0.77,rely=0.6,relheight=0.4,relwidth=0.06,anchor=NW)
-        average_price_sold_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        average_price_sold_entry.place(relx=0.85,rely=0.7,relwidth=0.145,anchor=NW)
+        average_price_sold_label = customtkinter.CTkLabel(self.data_frame,text="A.P. Sold", anchor='w')
+        average_price_sold_label.place(relx=0.77,rely=0.6,relheight=0.4,relwidth=0.06,anchor=tk.NW)
+        average_price_sold_entry = customtkinter.CTkEntry(self.data_frame, height=25)
+        average_price_sold_entry.place(relx=0.85,rely=0.7,relwidth=0.145,anchor=tk.NW)
 
 
 
@@ -562,8 +562,8 @@ class App(customtkinter.CTk):
         
         
         # add buttons
-        self.button_frame=customtkinter.CTkFrame(self.frame_right)
-        self.button_frame.place(relx=0,rely=0.9,relheight=0.1,relwidth=1,anchor=NW)
+        self.button_frame = customtkinter.CTkFrame(self.frame_right)
+        self.button_frame.place(relx = 0, rely = 0.9, relheight = 0.1, relwidth = 1, anchor = tk.NW)
 
         # recalculate_button=customtkinter.CTkButton(self.button_frame,text="Recalculate Securities", command= Database().refresh_individual_shares)
         # recalculate_button.place(relx=0.005, rely=0.25, relwidth=0.225)
@@ -582,19 +582,19 @@ class App(customtkinter.CTk):
 
         # create treeview
         self.main_view = customtkinter.CTkFrame(self.frame_right)
-        self.main_view.place(relx=0,rely=0.05,relheight=0.65,relwidth=1, anchor="nw")
+        self.main_view.place(relx = 0, rely = 0.05, relheight = 0.65, relwidth = 1, anchor = "nw")
         # create tree
-        self.my_tree=ttk.Treeview(self.main_view, selectmode="extended")
-        self.my_tree.place(relx=0,rely=0,relheight=1,relwidth=1, anchor="nw")
+        self.my_tree = ttk.Treeview(self.main_view, selectmode="extended")
+        self.my_tree.place(relx = 0, rely = 0, relheight = 1, relwidth = 1, anchor = "nw")
         # scrollbar
-        self.tree_scroll=ttk.Scrollbar(self.main_view,orient="vertical",command=self.my_tree.yview, style='arrowless.Vertical.TScrollbar')
-        self.tree_scroll.pack(side=RIGHT,fill=Y)
+        self.tree_scroll = ttk.Scrollbar(self.main_view,orient="vertical",command=self.my_tree.yview, style='arrowless.Vertical.TScrollbar')
+        self.tree_scroll.pack(side = tk.RIGHT, fill = tk.Y)
         # configure scrollbar
         self.my_tree.configure(yscrollcommand=self.tree_scroll.set)
         
 
         # treeview styling 
-        self.style=ttk.Style()
+        self.style = ttk.Style()
         self.style.theme_use('default')
 
         self.style.layout('arrowless.Vertical.TScrollbar', [('Vertical.Scrollbar.trough', 
@@ -605,16 +605,16 @@ class App(customtkinter.CTk):
 
         # data
         # add columns for transactions
-        self.my_tree['columns']=("History ID", "Name", "Ticker", "Split Amount", "Date of Split")
+        self.my_tree['columns'] = ("History ID", "Name", "Ticker", "Split Amount", "Date of Split")
         # format columns
-        self.my_tree.column("#0", width=0,stretch=NO)
-        columns=["History ID", "Name", "Ticker", "Split Amount", "Date of Split"]
+        self.my_tree.column("#0", width=0, stretch = tk.NO)
+        columns = ["History ID", "Name", "Ticker", "Split Amount", "Date of Split"]
         for i in columns:
-          self.my_tree.column(f"{i}", anchor='w' ,width=0)
+          self.my_tree.column(f"{i}", anchor = 'w' , width = 0)
         # create headings
-        self.my_tree.heading("#0",text="",anchor=W)
+        self.my_tree.heading("#0", text = "",anchor = tk.W)
         for i in columns:
-          self.my_tree.heading(f"{i}",text=f"{i}",anchor='w')
+          self.my_tree.heading(f"{i}", text=f"{i}", anchor = 'w')
 
         # insert transactions
         self.query_database(self.db.get_stock_split_history)
@@ -622,58 +622,58 @@ class App(customtkinter.CTk):
         # ================================= Tree View Menu =================================
 
         # add record entry boxes
-        self.data_frame=customtkinter.CTkFrame(master=self.frame_right)
-        self.data_frame.place(relx=0,rely=0.7,relheight=0.20,relwidth=1,anchor='nw')
+        self.data_frame = customtkinter.CTkFrame(master = self.frame_right)
+        self.data_frame.place(relx = 0, rely = 0.7, relheight = 0.20, relwidth = 1, anchor = 'nw')
 
         # column 1
-        history_id_label=customtkinter.CTkLabel(self.data_frame,text="ID", anchor='w')
-        history_id_label.place(relx=0.005,rely=0,relheight=0.4,relwidth=0.08,anchor=NW)
-        history_id_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        history_id_entry.place(relx=0.087,rely=0.1,relwidth=0.145,anchor=NW)
+        history_id_label = customtkinter.CTkLabel(self.data_frame, text = "ID", anchor = 'w')
+        history_id_label.place(relx = 0.005, rely=0, relheight=0.4, relwidth=0.08, anchor = tk.NW)
+        history_id_entry=customtkinter.CTkEntry(self.data_frame, height = 25)
+        history_id_entry.place(relx = 0.087, rely = 0.1, relwidth = 0.145, anchor = tk.NW)
 
-        split_amount_label=customtkinter.CTkLabel(self.data_frame,text="Split Amount", anchor='w')
-        split_amount_label.place(relx=0.005,rely=0.6,relheight=0.4,relwidth=0.08,anchor='nw')
-        split_amount_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        split_amount_entry.place(relx=0.087,rely=0.7,relwidth=0.145,anchor='nw')
+        split_amount_label = customtkinter.CTkLabel(self.data_frame, text = "Split Amount", anchor = 'w')
+        split_amount_label.place(relx = 0.005, rely = 0.6, relheight = 0.4, relwidth = 0.08, anchor ='nw')
+        split_amount_entry = customtkinter.CTkEntry(self.data_frame, height = 25)
+        split_amount_entry.place(relx = 0.087, rely = 0.7, relwidth = 0.145, anchor = 'nw')
 
         # column 2
 
-        security_label=customtkinter.CTkLabel(self.data_frame,text="Name", anchor='w')
-        security_label.place(relx=0.362,rely=0,relheight=0.4,relwidth=0.08,anchor='nw')
-        security_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        security_entry.place(relx=0.462,rely=0.1,relwidth=0.145,anchor=NW)
+        security_label = customtkinter.CTkLabel(self.data_frame, text = "Name", anchor = 'w')
+        security_label.place(relx = 0.362, rely = 0, relheight = 0.4, relwidth = 0.08, anchor = 'nw')
+        security_entry = customtkinter.CTkEntry(self.data_frame, height = 25)
+        security_entry.place(relx = 0.462, rely = 0.1, relwidth = 0.145, anchor = tk.NW)
 
-        ticker_label=customtkinter.CTkLabel(self.data_frame,text="Ticker", anchor='w')
-        ticker_label.place(relx=0.362,rely=0.6,relheight=0.4,relwidth=0.08,anchor=NW)
-        ticker_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        ticker_entry.place(relx=0.462,rely=0.7,relwidth=0.145,anchor=NW)
+        ticker_label = customtkinter.CTkLabel(self.data_frame, text="Ticker", anchor = 'w')
+        ticker_label.place(relx = 0.362, rely = 0.6, relheight = 0.4, relwidth = 0.08, anchor = tk.NW)
+        ticker_entry = customtkinter.CTkEntry(self.data_frame, height=25)
+        ticker_entry.place(relx = 0.462, rely = 0.7, relwidth = 0.145, anchor = tk.NW)
 
         # column 3
 
-        date_label=customtkinter.CTkLabel(self.data_frame,text="Split Date", anchor='w')
-        date_label.place(relx=0.75,rely=0,relheight=0.4,relwidth=0.08,anchor=NW)
-        date_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        date_entry.place(relx=0.85,rely=0.1,relwidth=0.145,anchor=NW)
+        date_label = customtkinter.CTkLabel(self.data_frame, text="Split Date", anchor = 'w')
+        date_label.place(relx=0.75, rely=0, relheight=0.4, relwidth=0.08, anchor=tk.NW)
+        date_entry = customtkinter.CTkEntry(self.data_frame, height = 25)
+        date_entry.place(relx = 0.85, rely = 0.1, relwidth = 0.145, anchor = tk.NW)
 
         # dictionary of entries
         history_entries={"security_entry":security_entry, "ticker_entry":ticker_entry,
         "history_id":history_id_entry, "timestamp": date_entry, "split_amount": split_amount_entry}
         
         # add buttons
-        self.button_frame=customtkinter.CTkFrame(self.frame_right)
-        self.button_frame.place(relx=0,rely=0.9,relheight=0.1,relwidth=1,anchor=NW)
+        self.button_frame = customtkinter.CTkFrame(self.frame_right)
+        self.button_frame.place(relx = 0, rely = 0.9, relheight = 0.1, relwidth = 1, anchor = tk.NW)
 
-        update_button=customtkinter.CTkButton(self.button_frame,text="Update Record",command=lambda:self.update_record(history_entries))
-        update_button.place(relx=0.005, rely=0.25, relwidth=0.225)
+        update_button = customtkinter.CTkButton(self.button_frame,text = "Update Record",command=lambda:self.update_record(history_entries))
+        update_button.place(relx = 0.005, rely = 0.25, relwidth = 0.225)
 
-        rm_rec_button=customtkinter.CTkButton(self.button_frame,text="Remove Record",command=lambda:self.delete_record(history_entries))
-        rm_rec_button.place(relx=0.262, rely=0.25, relwidth=0.225)
+        rm_rec_button = customtkinter.CTkButton(self.button_frame, text = "Remove Record", command=lambda:self.delete_record(history_entries))
+        rm_rec_button.place(relx = 0.262, rely = 0.25, relwidth = 0.225)
 
-        mm_button=customtkinter.CTkButton(self.button_frame,text="Delete All Records", command=self.delete_all_data)
-        mm_button.place(relx=0.519, rely=0.25, relwidth=0.225)
+        mm_button = customtkinter.CTkButton(self.button_frame, text="Delete All Records", command=self.delete_all_data)
+        mm_button.place(relx = 0.519, rely = 0.25, relwidth = 0.225)
 
-        ex_button=customtkinter.CTkButton(self.button_frame,text="Exit Program",command=self.on_closing)
-        ex_button.place(relx=0.77,rely=0.25,relwidth=0.225)
+        ex_button = customtkinter.CTkButton(self.button_frame, text="Exit Program", command=self.on_closing)
+        ex_button.place(relx = 0.77, rely=0.25, relwidth = 0.225)
         # bind the treeview
         self.my_tree.bind("<ButtonRelease-1>", lambda event: self.select_record(event,history_entries))
         self.my_tree.bind("<<TreeviewSelect>>", lambda event: self.select_record(event,history_entries))
@@ -692,51 +692,52 @@ class App(customtkinter.CTk):
         self.transaction_window.minsize(width,height)
         self.transaction_window.maxsize(width,height)
 
-        self.transaction_window.grid_rowconfigure(0,weight=1)
-        window = customtkinter.CTkFrame(master=self.transaction_window, width=960, height=460)
-        window.grid(row=0,column=0, padx=20, pady=20)
+        self.transaction_window.grid_rowconfigure(0, weight = 1)
+        window = customtkinter.CTkFrame(master=self.transaction_window, width = 960, height = 460)
+        window.grid(row = 0, column = 0, padx = 20, pady = 20)
 
         # create title
-        title=customtkinter.CTkLabel(window,text="Transaction Entry", corner_radius =10)
-        title.configure(font=("Arial Bold", 17))
-        title.place(relx=0,rely=0,relwidth=1,relheight=0.1)
+        title=customtkinter.CTkLabel(window,text = "Transaction Entry", corner_radius = 10)
+        title.configure(font = ("Arial Bold", 17))
+        title.place(relx = 0, rely = 0, relwidth = 1, relheight = 0.1)
 
         # labels: name, ticker, institution_name, time of transaction, amount, price_USD
-        LABEL_RELY=0.1
-        labels=["Name of Security", "Ticker", "Institution Name", "Time of Transaction", "Amount of Shares", "Price in USD", "Transaction Type"]
+        label_rely = 0.1
+        labels = ["Name of Security", "Ticker", "Institution Name", "Time of Transaction", "Amount of Shares", "Price in USD", "Transaction Type"]
         for i in labels:
-          my_label=customtkinter.CTkLabel(window,text=i,anchor=W)
+          my_label=customtkinter.CTkLabel(window, text = i, anchor = tk.W)
           my_label.configure(font=('Arial Bold',13))
-          my_label.place(relx=0.01,rely=LABEL_RELY,relwidth=0.2,relheight=0.1)
-          LABEL_RELY=LABEL_RELY+0.1
+          my_label.place(relx = 0.01, rely = label_rely, relwidth = 0.2, relheight = 0.1)
+          label_rely = label_rely + 0.1
 
         # all entries but it is in combo box style
-        name_of_security_entry = customtkinter.CTkComboBox(window, values=self.db.get_table_value("security_name"))
-        name_of_security_entry.set(value="")
-        name_of_security_entry.place(relx=0.16,rely=0.125,relwidth=0.82,relheight=0.05)
+        name_of_security_entry = customtkinter.CTkComboBox(window, values = self.db.get_table_value("security_name"))
+        name_of_security_entry.set(value = "")
+        name_of_security_entry.place(relx = 0.16,rely = 0.125,relwidth = 0.82, relheight = 0.05)
 
-        ticker_entry = customtkinter.CTkComboBox(window, values=self.db.get_table_value("security_ticker"))
-        ticker_entry.set(value="")
-        ticker_entry.place(relx=0.16,rely=0.225,relwidth=0.82,relheight=0.05)
+        ticker_entry = customtkinter.CTkComboBox(window, values = self.db.get_table_value("security_ticker"))
+        ticker_entry.set(value = "")
+        ticker_entry.place(relx = 0.16, rely = 0.225, relwidth = 0.82, relheight = 0.05)
 
-        institution_name_entry = customtkinter.CTkComboBox(window, values=self.db.get_table_value("institution"))
-        institution_name_entry.set(value="")
-        institution_name_entry.place(relx=0.16,rely=0.325,relwidth=0.82,relheight=0.05)
+        institution_name_entry = customtkinter.CTkComboBox(window, values = self.db.get_table_value("institution"))
+        institution_name_entry.set(value = "")
+        institution_name_entry.place(relx = 0.16, rely = 0.325, relwidth = 0.82, relheight = 0.05)
 
-        time_of_transaction_entry = customtkinter.CTkEntry(window, placeholder_text="Input in the format \"YYYY-MM-DD\" with each character being an integer or leave this field empty for current date and time.")
-        time_of_transaction_entry.place(relx=0.16,rely=0.425,relwidth=0.82,relheight=0.05)
+        tot_text = "Input in the format \"YYYY-MM-DD\" with each character being an integer or leave this field empty for current date and time."
+        time_of_transaction_entry = customtkinter.CTkEntry(window, placeholder_text=tot_text)
+        time_of_transaction_entry.place(relx = 0.16,rely = 0.425, relwidth = 0.82, relheight = 0.05)
 
-        amount_of_shares_entry = customtkinter.CTkEntry(window, placeholder_text="Input only a number.")
-        amount_of_shares_entry.place(relx=0.16,rely=0.525,relwidth=0.82,relheight=0.05)
+        amount_of_shares_entry = customtkinter.CTkEntry(window, placeholder_text = "Input only a number.")
+        amount_of_shares_entry.place(relx = 0.16, rely = 0.525, relwidth = 0.82, relheight = 0.05)
 
-        price_USD_entry = customtkinter.CTkEntry(window, placeholder_text="Input only a number. Do not input the currency.")
-        price_USD_entry.place(relx=0.16,rely=0.625,relwidth=0.82,relheight=0.05)
+        price_USD_entry = customtkinter.CTkEntry(window, placeholder_text = "Input only a number. Do not input the currency.")
+        price_USD_entry.place(relx = 0.16, rely = 0.625, relwidth = 0.82, relheight = 0.05)
 
-        transaction_type_entry = customtkinter.CTkOptionMenu(window, values=["Acquire", "Dispose"], fg_color =("#F9F9FA", "#343638"),
+        transaction_type_entry = customtkinter.CTkOptionMenu(window, values = ["Acquire", "Dispose"], fg_color = ("#F9F9FA", "#343638"),
         button_color = ("#979DA2", "#565B5E"),
         button_hover_color = ("#6E7174", "#7A848D"))
-        transaction_type_entry.set(value="Acquire")
-        transaction_type_entry.place(relx=0.16,rely=0.725,relwidth=0.82,relheight=0.05)
+        transaction_type_entry.set(value = "Acquire")
+        transaction_type_entry.place(relx = 0.16, rely = 0.725, relwidth = 0.82, relheight = 0.05)
 
         # dictionary of entries
         entry_dic = {"name": name_of_security_entry, "ticker": ticker_entry,
@@ -746,15 +747,15 @@ class App(customtkinter.CTk):
         }
 
         # entry button
-        entry_button=customtkinter.CTkButton(window, text="Enter", command=lambda: self.gb.insert_transaction_into_database(entry_dic))
-        entry_button.place(relx=0,rely=0.825,relwidth=1,relheight=0.05)
+        entry_button = customtkinter.CTkButton(window, text = "Enter", command = lambda: self.gb.insert_transaction_into_database(entry_dic))
+        entry_button.place(relx = 0,rely = 0.825, relwidth = 1,relheight = 0.05)
 
         # return to main menu and exit button
-        return_main_button=customtkinter.CTkButton(window, text="Close Window", command=self.transaction_window.destroy)
-        exit_button=customtkinter.CTkButton(window, text="Exit Program", command=self.on_closing)
+        return_main_button = customtkinter.CTkButton(window, text = "Close Window", command = self.transaction_window.destroy)
+        exit_button=customtkinter.CTkButton(window, text = "Exit Program", command = self.on_closing)
 
-        return_main_button.place(relx=0,rely=0.924,relwidth=0.2,relheight=0.075)
-        exit_button.place(relx=0.8,rely=0.924,relwidth=0.2,relheight=0.075)
+        return_main_button.place(relx = 0,rely = 0.924, relwidth = 0.2, relheight = 0.075)
+        exit_button.place(relx = 0.8, rely = 0.924, relwidth = 0.2, relheight = 0.075)
 
 
 
@@ -769,37 +770,37 @@ class App(customtkinter.CTk):
         self.tranfer_window_pop.minsize(width,height)
         self.tranfer_window_pop.maxsize(width,height)
 
-        self.tranfer_window_pop.grid_rowconfigure(0,weight=1)
-        window = customtkinter.CTkFrame(master=self.tranfer_window_pop, width=960, height=460)
-        window.grid(row=0,column=0, padx=20, pady=20)
+        self.tranfer_window_pop.grid_rowconfigure(0, weight = 1)
+        window = customtkinter.CTkFrame(master = self.tranfer_window_pop, width = 960, height = 460)
+        window.grid(row = 0,column = 0, padx = 20, pady = 20)
 
         # create title
-        title=customtkinter.CTkLabel(window,text="Transfer Institution Entry", corner_radius =10)
-        title.configure(font=("Arial Bold", 17))
-        title.place(relx=0,rely=0,relwidth=1,relheight=0.1)
+        title = customtkinter.CTkLabel(window,text = "Transfer Institution Entry", corner_radius = 10)
+        title.configure(font = ("Arial Bold", 17))
+        title.place(relx = 0, rely = 0, relwidth = 1, relheight = 0.1)
 
         # labels: name, ticker, institution_name, time of transaction, amount, price_USD
-        LABEL_RELY=0.1
-        labels=["Name of Security", "Ticker", "From Institution Name", "Time of Transaction", "Amount of Shares", "To Institution Name", "Transaction Type"]
+        label_rely = 0.1
+        labels = ["Name of Security", "Ticker", "From Institution Name", "Time of Transaction", "Amount of Shares", "To Institution Name", "Transaction Type"]
         for i in labels:
-            my_label=customtkinter.CTkLabel(window,text=i,anchor=W)
-            my_label.configure(font=('Arial Bold',13))
-            my_label.place(relx=0.01,rely=LABEL_RELY,relwidth=0.2,relheight=0.1)
-            LABEL_RELY=LABEL_RELY+0.1
+            my_label=customtkinter.CTkLabel(window, text = i , anchor = tk.W)
+            my_label.configure(font = ('Arial Bold',13))
+            my_label.place(relx = 0.01, rely = label_rely, relwidth = 0.2, relheight = 0.1)
+            label_rely = label_rely + 0.1
 
         # all entries but it is in combo box style
         
-        name_of_security_entry = customtkinter.CTkComboBox(window, values=self.db.get_table_value("name"))
+        name_of_security_entry = customtkinter.CTkComboBox(window, values = self.db.get_table_value("name"))
         name_of_security_entry.set(value="")
-        name_of_security_entry.place(relx=0.16,rely=0.125,relwidth=0.82,relheight=0.05)
+        name_of_security_entry.place(relx = 0.16, rely = 0.125, relwidth = 0.82, relheight = 0.05)
 
-        ticker_entry = customtkinter.CTkComboBox(window, values=self.db.get_table_value("ticker"))
-        ticker_entry.set(value="")
-        ticker_entry.place(relx=0.16,rely=0.225,relwidth=0.82,relheight=0.05)
+        ticker_entry = customtkinter.CTkComboBox(window, values = self.db.get_table_value("ticker"))
+        ticker_entry.set(value = "")
+        ticker_entry.place(relx = 0.16, rely = 0.225, relwidth = 0.82, relheight = 0.05)
 
-        from_institution_name_entry = customtkinter.CTkComboBox(window, values=self.db.get_table_value("institution"))
-        from_institution_name_entry.set(value="")
-        from_institution_name_entry.place(relx=0.16,rely=0.325,relwidth=0.82,relheight=0.05)
+        from_institution_name_entry = customtkinter.CTkComboBox(window, values = self.db.get_table_value("institution"))
+        from_institution_name_entry.set(value = "")
+        from_institution_name_entry.place(relx = 0.16, rely = 0.325, relwidth = 0.82, relheight = 0.05)
 
         time_of_transaction_entry = customtkinter.CTkEntry(window, placeholder_text="Input in the format \"YYYY-MM-DD\" with each character being an integer or leave this field empty for current date and time.")
         time_of_transaction_entry.place(relx=0.16,rely=0.425,relwidth=0.82,relheight=0.05)
@@ -865,7 +866,7 @@ class App(customtkinter.CTk):
         LABEL_RELY=0.1
         labels=["Name of Security", "Ticker", "Time of Split", "Split Amount", "Transaction Type"]
         for i in labels:
-            my_label=customtkinter.CTkLabel(window,text=i,anchor=W)
+            my_label=customtkinter.CTkLabel(window,text=i,anchor=tk.W)
             my_label.configure(font=('Arial Bold',13))
             my_label.place(relx=0.01,rely=LABEL_RELY,relwidth=0.2,relheight=0.175)
             LABEL_RELY=LABEL_RELY+0.13
@@ -958,7 +959,7 @@ class App(customtkinter.CTk):
         # change to normal state in case of later bind
         for entry in entry_dic.values():
             entry.configure(state="normal")
-            entry.delete(0,END)
+            entry.delete(0,tk.END)
               
         # grab records
         selected=self.my_tree.focus()
@@ -999,18 +1000,18 @@ class App(customtkinter.CTk):
             self.my_tree.delete(x)
 
 
-            id_entry.delete(0,END)
-            entry_dic["n_entry"].delete(0,END)
-            entry_dic["ticker_entry"].delete(0,END)
-            entry_dic["institution_entry"].delete(0,END)
-            entry_dic["date_entry"].delete(0,END)
-            entry_dic["type_entry"].delete(0,END)
-            entry_dic["from_entry"].delete(0,END)
-            entry_dic["to_entry"].delete(0,END)
-            entry_dic["price_entry"].delete(0,END)
-            entry_dic["amount_entry"].delete(0,END)
-            entry_dic["age_entry"].delete(0,END)
-            entry_dic["long_entry"].delete(0,END)
+            id_entry.delete(0, tk.END)
+            entry_dic["n_entry"].delete(0, tk.END)
+            entry_dic["ticker_entry"].delete(0, tk.END)
+            entry_dic["institution_entry"].delete(0, tk.END)
+            entry_dic["date_entry"].delete(0, tk.END)
+            entry_dic["type_entry"].delete(0, tk.END)
+            entry_dic["from_entry"].delete(0, tk.END)
+            entry_dic["to_entry"].delete(0, tk.END)
+            entry_dic["price_entry"].delete(0, tk.END)
+            entry_dic["amount_entry"].delete(0, tk.END)
+            entry_dic["age_entry"].delete(0, tk.END)
+            entry_dic["long_entry"].delete(0, tk.END)
           
             Database().delete_row(id_value)
             messagebox.showinfo("Deleted!", "Your record has been deleted.")
@@ -1069,18 +1070,18 @@ class App(customtkinter.CTk):
         ))
 
 
-        id_entry.delete(0,END)
-        entry_dic["n_entry"].delete(0,END)
-        entry_dic["ticker_entry"].delete(0,END)
-        entry_dic["institution_entry"].delete(0,END)
-        entry_dic["date_entry"].delete(0,END)
-        entry_dic["type_entry"].delete(0,END)
-        entry_dic["from_entry"].delete(0,END)
-        entry_dic["to_entry"].delete(0,END)
-        entry_dic["price_entry"].delete(0,END)
-        entry_dic["amount_entry"].delete(0,END)
-        entry_dic["age_entry"].delete(0,END)
-        entry_dic["long_entry"].delete(0,END)
+        id_entry.delete(0, tk.END)
+        entry_dic["n_entry"].delete(0, tk.END)
+        entry_dic["ticker_entry"].delete(0, tk.END)
+        entry_dic["institution_entry"].delete(0, tk.END)
+        entry_dic["date_entry"].delete(0, tk.END)
+        entry_dic["type_entry"].delete(0, tk.END)
+        entry_dic["from_entry"].delete(0, tk.END)
+        entry_dic["to_entry"].delete(0, tk.END)
+        entry_dic["price_entry"].delete(0, tk.END)
+        entry_dic["amount_entry"].delete(0, tk.END)
+        entry_dic["age_entry"].delete(0, tk.END)
+        entry_dic["long_entry"].delete(0, tk.END)
 
         to_update_or_not = messagebox.askyesno("Update Record", "Are you sure you would like to update this record?")
         if to_update_or_not == 1:

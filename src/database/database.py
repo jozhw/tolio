@@ -1,4 +1,5 @@
-import sqlite3, os
+import sqlite3
+import os
 
 from typing import List, Any
 
@@ -30,15 +31,15 @@ class Database:
                 print("Command skipped: ", msg)
         
   # ============================== insert ==============================
-    """
-    All of the following insert methods affects the all_shares table
-    """
+
+    "All of the following insert methods affects the all_shares table"
+
     # insert a acquire or dispose (add) transaction into transactions
-    def insert_acquire_or_dispose(self, value_dic: dict[Any]):
+    def insert_acquire_or_dispose(self, value_dic: dict[Any]) -> None:
         tolio.insert_acquire_or_dispose(self.db_path, value_dic)
         
     # insert a transfer transaction into transactions
-    def insert_transfer(self, value_dic:dict[Any]) -> None:
+    def insert_transfer(self, value_dic: dict[Any]) -> None:
         tolio.insert_transfer(self.db_path, value_dic)
 
   # insert a stock split transaction into transaction 
@@ -49,7 +50,7 @@ class Database:
 
   # update transaction age
     def update_transaction_age(self) -> None:
-      tolio.update_transaction_age(self.db_path)
+        tolio.update_transaction_age(self.db_path)
 
   # update securities - this dependent on the all_shares table
     def update_securities(self) -> None:
@@ -65,7 +66,7 @@ class Database:
             
             (sum_amount, sum_price, cost_basis, amount_disposed) = amount
 
-            get_data_2=self.cur.execute("SELECT (SELECT SUM(amount) FROM all_shares WHERE long_counter='+' AND age_transaction > 0 AND security_id=?), SUM(sold_price) FROM all_shares WHERE security_id=?;", (security_id, security_id)).fetchall()[0]
+            get_data_2 = self.cur.execute("""SELECT (SELECT SUM(amount) FROM all_shares WHERE long_counter='+' AND age_transaction > 0 AND security_id=?), SUM(sold_price) FROM all_shares WHERE security_id=?;""", (security_id, security_id)).fetchall()[0]
           
             (_, total_price_sold) = get_data_2
             
@@ -86,7 +87,7 @@ class Database:
 
     # update institutions held: institution_id, security_id, amount_held, total_cost, cost_basis, number_long
     def update_institutions_held(self) -> None:
-        get_institution_id=self.cur.execute(f"SELECT DISTINCT institution_id, security_id FROM Transactions").fetchall()
+        get_institution_id = self.cur.execute(f"SELECT DISTINCT institution_id, security_id FROM Transactions").fetchall()
         for institution_id, security_id in get_institution_id:
           
             self.cur.execute("INSERT OR IGNORE INTO institutions_held (institution_id, security_id) VALUES (?,?);", (institution_id, security_id))

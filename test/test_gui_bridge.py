@@ -12,9 +12,8 @@ from src.gui_bridge import GuiBridge
 class TestGuiFunctionalities(unittest.TestCase):
     gb = GuiBridge()
 
-# ================================= tests: insert _ into database functionalities =================================
+    # ================================= tests: insert _ into database functionalities =================================
 
-  
     # check for the syntax of transaction entry
     def test_check_correct_values(self):
         entry_dic_pass = {

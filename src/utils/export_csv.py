@@ -24,8 +24,8 @@ def export_csv(db_path: str = "files/data/portfolio.db") -> None:
     """
 
     df = pd.read_sql(sql_query, conn)
-    df.rename({"price_USD":"price_usd"}, axis=1, inplace=True)
-    df.to_csv("transactions_data.csv", index=False)
+    df.rename({"price_USD":"price_usd"}, axis = 1, inplace = True)
+    df.to_csv("transactions_data.csv", index = False)
 
 
 

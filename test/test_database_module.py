@@ -1,7 +1,8 @@
 
 
 from pathlib import Path
-import sys, os
+import sys
+import os
 import sqlite3
 
 path = str(Path(".").parent.absolute())
@@ -66,9 +67,6 @@ class TestDatabaseModule(unittest.TestCase):
         FROM transactions
         WHERE transaction_id = (SELECT MAX(transaction_id) FROM transactions);""").fetchall()[0]
         self.assertEqual((4, 2, 2, '2014-07-03', 'A', 10.0, 2000.0), most_recent)
-
-
-
 
 if __name__ == "__main__":
     unittest.main()
