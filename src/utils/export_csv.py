@@ -2,6 +2,7 @@ import sqlite3
 import pandas as pd
 
 def export_csv(db_path: str = "files/data/portfolio.db") -> None:
+    '''takes the path of the current database and converts it to a .csv file'''
     conn = sqlite3.connect(db_path)
 
     # convert all of the null institution_ids to the institution_id for stock split

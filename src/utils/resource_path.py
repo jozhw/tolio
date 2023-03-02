@@ -5,6 +5,7 @@ class ResourcePath:
       self.relative_path = relative_path
 
   def resource_path(self, file_name: str) -> str:
+      '''return the path given the name of the file'''
       # import sys
       # if hasattr(sys, '_MEIPASS'):
       #   return os.path.join(sys._MEIPASS, self.relative_path + file_name)

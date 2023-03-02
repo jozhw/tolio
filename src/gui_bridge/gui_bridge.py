@@ -137,11 +137,11 @@ class GuiBridge:
         if transfer == False and split == False:
             # check price_USD
             try:
-                price_USD = float(entry_dic["price_USD"])
+                price_usd = float(entry_dic["price_USD"])
             except:
-                price_USD = entry_dic["price_USD"]
-                messagebox.showerror("Price Error", "Price in USD - {price_USD} - should be a float or able to be converted into a float.".format(price_USD=price_USD) )
-                raise TypeError(f"Price in USD - {price_USD} - should be a float or able to be converted into a float.".format(price_USD=price_USD))
+                price_usd = entry_dic["price_USD"]
+                messagebox.showerror("Price Error", "Price in USD - {price_usd} - should be a float or able to be converted into a float.".format(price_usd=price_usd) )
+                raise TypeError(f"Price in USD - {price_usd} - should be a float or able to be converted into a float.".format(price_usd=price_usd))
 
         else:
           if transfer == True:

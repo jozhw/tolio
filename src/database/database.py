@@ -7,7 +7,7 @@ import tolio
 
 
 class Database:
-    def __init__(self, db_path: str = "files/data/portfolio.db", sql_path: str = "src/database/init_db.sql") -> None:
+    def __init__(self, db_path: str="files/data/portfolio.db", sql_path: str="src/database/init_db.sql") -> None:
         # locate database
         self.db_path = os.path.expanduser(db_path)
         self.connection = sqlite3.connect(os.path.expanduser(self.db_path))
