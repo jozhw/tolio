@@ -7,7 +7,6 @@ from tkinter import messagebox
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
-import tolio
 from database import Database
 from utils import StandardizeEntry
 

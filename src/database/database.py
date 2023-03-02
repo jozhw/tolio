@@ -1,24 +1,22 @@
-import sqlite3, os, copy
+import sqlite3, os
 
-from typing import List, Tuple, Any
+from typing import List,Any
 
 import tolio
 
 
 class Database:
   def __init__(self, db_path: str = "files/data/portfolio.db", sql_path: str = "src/database/init_db.sql") -> None:
-      
     # locate database
     self.db_path = os.path.expanduser(db_path)
     self.connection = sqlite3.connect(os.path.expanduser(self.db_path))
     self.cur = self.connection.cursor()
 
-    # ============================== create tables ==============================
+  # ============================== create tables ==============================
 
     self.execute_sql_script(os.path.expanduser(sql_path))
     self.connection.commit()
     
-
   # create .sql file to create the tables
   def execute_sql_script(self, filename):
     file_open = open(filename, 'r')
@@ -31,13 +29,10 @@ class Database:
       except sqlite3.OperationalError as msg:
         print("Command skipped: ", msg)
         
-
   # ============================== insert ==============================
-
   """
   All of the following insert methods affects the all_shares table
   """
-
   # insert a acquire or dispose (add) transaction into transactions
   def insert_acquire_or_dispose(self, value_dic: dict[Any]):
     tolio.insert_acquire_or_dispose(self.db_path, value_dic)
@@ -50,33 +45,11 @@ class Database:
   def insert_stock_split(self, value_dic: dict[Any]) -> None:
     tolio.insert_stock_split(self.db_path, value_dic)
   
-   
-
   # ============================== update tables ================================
 
   # update transaction age
   def update_transaction_age(self) -> None:
-    age=self.cur.execute('''SELECT transaction_id, timestamp,
-    CASE
-      WHEN strftime('%m', date('now')) > strftime('%m', date(timestamp)) THEN strftime('%Y', date('now')) - strftime('%Y', date(timestamp))
-      WHEN strftime('%m', date('now')) = strftime('%m', date(timestamp)) THEN
-        CASE
-          WHEN strftime('%D', date('now')) >= strftime('%D', date(timestamp)) THEN strftime('%Y', date('now')) - strftime('%Y', date(timestamp))
-          ELSE strftime('%Y', date('now')) - strftime('%Y', date(timestamp)) - 1
-        END
-    WHEN strftime('%m', date('now')) < strftime('%m', date(timestamp)) THEN strftime('%Y', date('now')) - strftime('%Y', date(timestamp)) - 1
-    END AS 'age' FROM transactions''')
-    age=self.cur.fetchall()
-    for id, _, aage in age:
-      self.cur.execute("UPDATE transactions SET age_transaction=? WHERE transaction_id=?;", (aage, id))
-
-      # add the stocks that are long
-      self.cur.execute("UPDATE transactions SET long=(SELECT amount FROM Transactions WHERE age_transaction > 0 and transaction_abbreviation='A') WHERE transaction_id=? AND transaction_abbreviation='A' AND age_transaction > 0;", (id,))
-
-    # make sure negative age is gone
-    self.cur.execute("UPDATE transactions SET age_transaction=0 WHERE age_transaction < 0;")
-
-    self.connection.commit()
+   tolio.update_transaction_age(self.db_path)
 
 
   # update securities - this dependent on the all_shares table
@@ -161,8 +134,6 @@ class Database:
     name=args[1].capitalize()
     ticker=args[2].upper()
     institution=args[3].capitalize()
-
-
     security_id=self.cur.execute("SELECT security_id FROM securities WHERE security_ticker = ? AND security_name = ?;", (ticker, name)).fetchone()[0]
     institution_id=self.cur.execute("SELECT institution_id FROM institutions WHERE institution_name=?;", (institution,)).fetchone()[0]
 
@@ -187,19 +158,14 @@ class Database:
 
   # ================================= get =================================
 
-  def get_all_shares(self) -> None:
-    return self.cur.execute("SELECT * FROM all_shares;").fetchall()
-
   # get stock_split_history for tree view
   def get_stock_split_history(self) -> None:
     split_history_list = self.cur.execute("""SELECT ss.security_id, s.security_name, s.security_ticker, ss.split_amount, ss.timestamp FROM stock_split_history AS ss
     INNER JOIN securities AS s ON ss.security_id=s.security_id;
     
     """).fetchall()
-  
     return split_history_list
       
-
   # get transactions table for tree view
   def get_transactions_table(self) -> List[str]:
     return self.cur.execute("""SELECT
@@ -210,7 +176,6 @@ class Database:
       INNER JOIN transaction_names AS tn ON t.transaction_abbreviation=tn.transaction_abbreviation
       INNER JOIN securities AS s USING(security_id)""").fetchall()
 
-
   # get institutions_held table for treeview
   def get_institutions_held_table(self) -> List[str]:
     return self.cur.execute("""
@@ -220,7 +185,6 @@ class Database:
       INNER JOIN institutions AS i USING(institution_id)
       """).fetchall()
 
-
   # get the securities table for treeview
   def get_security_table(self) -> List[str]:
     return self.cur.execute("""
@@ -228,7 +192,6 @@ class Database:
       FROM securities;
       """).fetchall()
       
-
   # get list of x that exists
   def get_table_value(self,value:str) -> List[str]:
     edited_array = []
@@ -240,7 +203,6 @@ class Database:
       unedited_list = self.cur.execute("SELECT DISTINCT institution_name FROM institutions;").fetchall()
     else:
       unedited_list = []
-  
     if len(unedited_list) == 0:
       return [""]
     elif len(unedited_list) > 0:
@@ -248,26 +210,7 @@ class Database:
         edited_array.append(i[0])
       return edited_array
 
-
-  # get institution_id | institution_name or security_id | security_name and security_ticker
-  def get_specific_value(self, institution_id: int = None, institution_name: str = None, security_id: int = None, security_name: str = None, security_ticker: str = None) -> Any:
-    if bool(institution_name) == True:
-      return int(self.cur.execute("SELECT institution_id FROM institutions WHERE institution_name =?;",(institution_name,)).fetchone()[0])
-    elif bool(institution_id):
-      return self.cur.execute("SELECT institution_name FROM institutions WHERE institution_id =?;",(int(institution_id),)).fetchone()[0]
-    elif bool(security_id) == True:
-      return self.cur.execute("SELECT security_name, security_ticker FROM securities WHERE security_id =?;",(int(security_id),)).fetchone()
-    elif bool(security_name) == True and bool(security_ticker) == True:
-      return self.cur.execute("SELECT security_id FROM securities WHERE security_name = ? AND security_ticker = ?;", (security_name, security_ticker)).fetchone()[0]
-    
-
-  # get most recent transaction
-  def get_most_recent_transaction(self):
-    return self.cur.execute("SELECT transaction_id, security_id, institution_id, timestamp, transaction_abbreviation, amount, price_USD, transfer_from, transfer_to, age_transaction, long FROM transactions WHERE transaction_id = (SELECT MAX(transaction_id) FROM transactions);").fetchone()
-
-
   # ============================== delete ==============================
-
   # delete transaction row
   def delete_row(self,id:int) -> None:
     self.cur.execute(f"DELETE FROM transactions WHERE transaction_id=?;", (id,))
@@ -280,23 +223,10 @@ class Database:
     self.cur.execute("DELETE TABLE transactions;")
     self.connection.commit()
 
-
-
-  
-
   # ============================== Refresh individual shares ==============================
-
   def refresh_individual_shares(self) -> None:
     pass
   
-
-    
-
-
-
-        
-
-
 
 # test
 if __name__ =="__main__":

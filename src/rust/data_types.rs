@@ -85,6 +85,12 @@ pub struct UpdatedShare {
     pub date_disposed: Option<String>,
 }
 
+#[derive(Debug, Clone)]
+pub struct TransactionAge {
+    pub transaction_id: i8,
+    pub transaction_age: i8,
+}
+
 use pyo3::prelude::*;
 #[derive(FromPyObject)]
 pub enum Value {
