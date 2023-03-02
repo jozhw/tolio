@@ -29,7 +29,6 @@ class TestDatabaseModule(unittest.TestCase):
 
 # ============================== test: get methods ==============================
   
- 
   def test_get_table_values(self):
     security_name_list = self.Database.get_table_value("security_name")
     self.assertListEqual(security_name_list, ["S&P500", "Tesla"])
