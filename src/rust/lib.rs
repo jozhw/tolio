@@ -10,6 +10,7 @@ mod db_methods {
     pub mod bulk_insert_transactions;
     pub mod insert_csv;
     pub mod insert_into_transactions;
+    pub mod refresh;
     pub mod stock_split;
     pub mod update;
 }
@@ -22,11 +23,17 @@ mod dt_methods {
 
 //////////////////////////////////// Update Methods ////////////////////////////////////
 #[pyfunction]
-fn update_transaction_age(path:&str) -> PyResult<()> {
+fn update_transaction_age(path: &str) -> PyResult<()> {
     update::update_transaction_age(path).expect("Error: update_transaction_age failed in lib.rs");
     Ok(())
 }
 
+#[pyfunction]
+fn update_table(path: &str, value_dic: &PyDict) -> PyResult<()> {
+    let ex_value_dic: HashMap<String, Value> = value_dic.extract()?;
+    update::update_table(path, &ex_value_dic).expect("Error update_table failed in lib.rs");
+    Ok(())
+}
 
 //////////////////////////////////// Insert Methods ////////////////////////////////////
 #[pyfunction]
@@ -67,5 +74,6 @@ fn tolio(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(insert_acquire_or_dispose, m)?)?;
     m.add_function(wrap_pyfunction!(insert_transfer, m)?)?;
     m.add_function(wrap_pyfunction!(update_transaction_age, m)?)?;
+    m.add_function(wrap_pyfunction!(update_table, m)?)?;
     Ok(())
 }

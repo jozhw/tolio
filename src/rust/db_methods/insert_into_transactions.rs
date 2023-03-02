@@ -5,7 +5,7 @@ use std::error::Error;
 use crate::data_types::{RawTransaction, Transaction, Value};
 
 impl Value {
-    fn unwrap(&self) -> Either<f32, String> {
+    pub fn unwrap(&self) -> Either<f32, String> {
         match self {
             Value::Float(f32) => {
                 let value: f32 = *f32;

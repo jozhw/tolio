@@ -51,7 +51,6 @@ class Database:
   def update_transaction_age(self) -> None:
    tolio.update_transaction_age(self.db_path)
 
-
   # update securities - this dependent on the all_shares table
   def update_securities(self) -> None:
       # create list of securities
@@ -130,30 +129,9 @@ class Database:
 
 
   # update table from transactions table
-  def update_table(self,*args: Any) -> None:
-    name=args[1].capitalize()
-    ticker=args[2].upper()
-    institution=args[3].capitalize()
-    security_id=self.cur.execute("SELECT security_id FROM securities WHERE security_ticker = ? AND security_name = ?;", (ticker, name)).fetchone()[0]
-    institution_id=self.cur.execute("SELECT institution_id FROM institutions WHERE institution_name=?;", (institution,)).fetchone()[0]
-
-    self.cur.execute("""UPDATE transactions SET security_id = :sec_id, institution_id = :institution_id,
-    timestamp = :timestamp, transaction_abbreviation = :trans_abb, amount = :amount,
-    price_USD = :price, transfer_from = :trans_from ,transfer_to = :trans_to WHERE transaction_id = :trans_id
-    """,{
-    "sec_id": security_id,
-    "institution_id": institution_id,
-    "timestamp": args[4],
-    "trans_abb": args[5],
-    "amount": args[9],
-    "price": args[8],
-    "trans_from": args[6],
-    "trans_to": args[7],
-    "trans_id": args[0]
-
-    })
-    self.connection.commit()
-    self.refresh_individual_shares()
+  def update_table(self, value_dic: dict[Any]) -> None:
+    tolio.update_table(self.db_path, value_dic)
+    
 
 
   # ================================= get =================================

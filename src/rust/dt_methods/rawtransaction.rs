@@ -2,7 +2,7 @@ use std::error::Error;
 
 use rusqlite::{named_params, Connection};
 
-use crate::data_types::{EditedRawTransaction, PreparedStatement, RawTransaction, Transaction};
+use crate::data_types::{EditedRawTransaction, PreparedStatement, RawTransaction};
 
 impl RawTransaction {
     pub fn new_acquire_or_dispose(
@@ -187,5 +187,3 @@ impl RawTransaction {
         })
     }
 }
-
-impl EditedRawTransaction {}

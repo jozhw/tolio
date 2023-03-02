@@ -1,5 +1,5 @@
+use std::collections::HashMap;
 use std::error::Error;
-use std::{collections::HashMap, time};
 
 use rusqlite::{named_params, Connection};
 
@@ -135,13 +135,9 @@ impl Transaction {
 
     pub fn insert_into_all_shares(&self, db_path: &str) -> Result<(), Box<dyn Error>> {
         let conn = Connection::open(db_path)?;
-        let acquire = String::from("A");
-        let dispose = String::from("D");
-        let stock_split = String::from("SS");
-        let transfer = String::from("T");
 
-        match self.transaction_abbreviation.clone() {
-            acquire => {
+        match self.transaction_abbreviation.clone().as_str() {
+            "A" => {
                 let amount = self.amount;
                 let raw_price_usd = self.price_usd.unwrap();
                 let whole_share = 1.0;
@@ -200,7 +196,7 @@ impl Transaction {
                 }
             }
 
-            dispose => {
+            "D" => {
                 let shares = self.get_specific_all_shares(db_path)?;
 
                 // Error if there are more shares to be disposed than shares available
@@ -276,7 +272,7 @@ impl Transaction {
                 }
             }
 
-            stock_split => {
+            "SS" => {
                 self.split_all_shares(db_path).unwrap();
                 let conn = Connection::open(db_path)?;
                 let sql = "INSERT INTO stock_split_history (security_id, split_amount, timestamp) VALUES (:security_id,:split_amount,:timestamp);";
@@ -290,7 +286,7 @@ impl Transaction {
                 stock_split::main(db_path).unwrap();
             }
 
-            transfer => {
+            "T" => {
                 let conn = Connection::open(db_path)?;
                 for _ in 0..self.amount as i32 {
                     let sql = "UPDATE all_shares SET transaction_id = :transaction_id, institution_id = :transfer_to_institution_id

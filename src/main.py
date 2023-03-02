@@ -1170,34 +1170,50 @@ class App(customtkinter.CTk):
 
     id_entry=entry_dic["id_entry"]
     id_entry.configure(state="normal")
+    transaction_id=id_entry.get()
+    security_name=entry_dic["n_entry"].get()
+    security_ticker=entry_dic["ticker_entry"].get()
+    institution_name=entry_dic["institution_entry"].get()
+    timestamp=entry_dic["date_entry"].get()
+    # not transaction_abbreviation
+    transaction_type=entry_dic["type_entry"].get()
+    transfer_from=entry_dic["from_entry"].get()
+    transfer_to=entry_dic["to_entry"].get()
+    price_usd=entry_dic["price_entry"].get()
+    amount=entry_dic["amount_entry"].get()
+    age_transaction=entry_dic["age_entry"].get()
+    long=entry_dic["long_entry"].get()
 
-    id_value=id_entry.get()
-    n_value=entry_dic["n_entry"].get()
-    ticker_value=entry_dic["ticker_entry"].get()
-    institution_value=entry_dic["institution_entry"].get()
-    date_value=entry_dic["date_entry"].get()
-    type_value=entry_dic["type_entry"].get()
-    from_value=entry_dic["from_entry"].get()
-    to_value=entry_dic["to_entry"].get()
-    price_value=entry_dic["price_entry"].get()
-    amount_value=entry_dic["amount_entry"].get()
-    age_value=entry_dic["age_entry"].get()
-    long_value=entry_dic["long_entry"].get()
+    # define a dictionary to contain all of the values for the rust method
+    value_dic = {
+      "transaction_id": transaction_id,
+      "security_name": security_name, 
+      "security_ticker": security_ticker,
+      "institution_name": institution_name,
+      "timestamp": timestamp,
+      "transaction_type": transaction_type,
+      "transfer_from": transfer_from,
+      "transfer_to": transfer_to,
+      "price_usd": price_usd,
+      "amount": amount,
+      "age_transaction": age_transaction,
+      "long": long
+    }
 
 
     self.my_tree.item(selected,text="",values=(
-    id_value,
-    n_value,
-    ticker_value,
-    institution_value,
-    date_value,
-    type_value,
-    from_value,
-    to_value,
-    price_value,
-    amount_value,
-    age_value,
-    long_value
+    transaction_id,
+    security_name,
+    security_ticker,
+    institution_name,
+    timestamp,
+    transaction_type,
+    transfer_from,
+    transfer_to,
+    price_usd,
+    amount,
+    age_transaction,
+    long
     ))
 
 
@@ -1217,18 +1233,7 @@ class App(customtkinter.CTk):
     to_update_or_not = messagebox.askyesno("Update Record", "Are you sure you would like to update this record?")
     if to_update_or_not == 1:
       self.db.update_table(
-      id_value,
-      n_value,
-      ticker_value,
-      institution_value,
-      date_value,
-      type_value,
-      from_value,
-      to_value,
-      price_value,
-      amount_value,
-      age_value,
-     long_value
+      value_dic
     )
       messagebox.showinfo("Data Updated", "Your transaction has been updated.")
     else:

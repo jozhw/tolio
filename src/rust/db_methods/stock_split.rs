@@ -216,7 +216,6 @@ pub fn main(path: &str) -> Result<()> {
 
 #[cfg(test)]
 mod tests {
-    use std::result;
 
     use super::*;
     #[test]
@@ -234,8 +233,8 @@ mod tests {
         let split = contents.split(";");
         let vec: Vec<&str> = split.collect();
         for command in vec {
-            conn.execute(command, []);
-            conn.transaction().unwrap().commit();
+            conn.execute(command, []).unwrap();
+            conn.transaction().unwrap().commit().unwrap();
         }
 
         {

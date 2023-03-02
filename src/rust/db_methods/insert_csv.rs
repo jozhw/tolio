@@ -1,8 +1,6 @@
 use csv;
+use std::collections::HashMap;
 use std::error::Error;
-use std::{collections::HashMap, os::raw};
-
-use rusqlite::Connection;
 
 use crate::{
     data_types::{EditedRawTransaction, RawTransaction, Transaction},
