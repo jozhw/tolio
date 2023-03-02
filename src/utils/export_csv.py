@@ -8,9 +8,9 @@ def export_csv(db_path: str = "files/data/portfolio.db") -> None:
     # first must test to see if stock split is in the institutions table
     institution_id = conn.execute("SELECT institution_id FROM institutions WHERE institution_name = ?;", ("Stock Split",)).fetchone()
     if bool(institution_id) == False:
-      conn.execute("INSERT INTO institutions (institution_name) VALUES ('Stock Split');", )
-      institution_id = conn.execute("SELECT institution_id FROM institutions WHERE institution_name = ?", ("Stock Split",)).fetchone()
-      conn.commit()
+        conn.execute("INSERT INTO institutions (institution_name) VALUES ('Stock Split');", )
+        institution_id = conn.execute("SELECT institution_id FROM institutions WHERE institution_name = ?", ("Stock Split",)).fetchone()
+        conn.commit()
     
     conn.execute("UPDATE transactions SET institution_id =? WHERE institution_id IS NULL;", (institution_id[0],))
     conn.commit()
