@@ -95,7 +95,7 @@ class GuiBridge:
         # use get method to convert customtkinter obj to python obj
         edited_entry_dic = edit_entry_dic(entry_dic)
         # check correct values and modify for final insert
-        if not bool(self.check_correct_values(edit_entry_dic)):
+        if not bool(check_correct_values(edit_entry_dic)):
             raise Exception("There is/are value error(s).")
         # final insert
         self.db.insert_stock_split(edited_entry_dic)
@@ -152,4 +152,3 @@ class GuiBridge:
     # refresh the interal database every time the button associated with this function is clicked
     def refresh_database(self) -> None:
         '''method not yet developed'''
-        pass

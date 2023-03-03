@@ -7,10 +7,9 @@ sys.path.insert(0, path)
 
 import unittest
 
-from src.gui_bridge import GuiBridge
+from src.gui_bridge import check_correct_values
 
 class TestGuiFunctionalities(unittest.TestCase):
-    gb = GuiBridge()
 
     # ================================= tests: insert _ into database functionalities =================================
 
@@ -80,17 +79,17 @@ class TestGuiFunctionalities(unittest.TestCase):
         }
 
 
-        self.assertTrue(self.gb.check_correct_values(entry_dic_pass))
+        self.assertTrue(check_correct_values(entry_dic_pass))
 
-        self.assertRaises(ValueError, self.gb.check_correct_values, entry_dic_fail_timestamp)
+        self.assertRaises(ValueError, check_correct_values, entry_dic_fail_timestamp)
 
-        self.assertRaises((ValueError,TypeError), self.gb.check_correct_values, entry_dic_fail_amount)
+        self.assertRaises((ValueError,TypeError), check_correct_values, entry_dic_fail_amount)
 
-        self.assertRaises((ValueError,TypeError), self.gb.check_correct_values, entry_dic_fail_price)
+        self.assertRaises((ValueError,TypeError), check_correct_values, entry_dic_fail_price)
 
-        self.assertRaises(ValueError, self.gb.check_correct_values, entry_dic_fail_name)
+        self.assertRaises(ValueError, check_correct_values, entry_dic_fail_name)
 
-        self.assertRaises(ValueError, self.gb.check_correct_values, entry_dic_fail_to_institution)
+        self.assertRaises(ValueError, check_correct_values, entry_dic_fail_to_institution)
 
 
 if __name__ == "__main__":
