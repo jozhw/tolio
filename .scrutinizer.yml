@@ -7,5 +7,5 @@ build:
     dependencies:
         before:
             -
-                command: curl https://sh.rustup.rs -sSf | sh | 1
+                command: curl https://sh.rustup.rs -sSf | sh <input.txt>
 
