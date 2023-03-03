@@ -1,5 +1,5 @@
+'''style_settings.py - retrieve or insert .json style object for gui'''
 import json
-
 
 def get_previous_setting(json_path: str, transition_menu: bool = False, appearance_option: bool = False) -> str:
   '''takes the path to current json file and previous settings (transition menu or appearance)'''

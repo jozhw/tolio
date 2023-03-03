@@ -1,4 +1,4 @@
-
+'''main.py file'''
 import tkinter as tk
 from tkinter import messagebox, ttk, filedialog
 from typing import Dict, Any, Callable, List
@@ -10,7 +10,7 @@ from database import Database
 from gui_bridge import GuiBridge
 
 class App(customtkinter.CTk):
-    '''the gui'''
+    '''class for the gui of the application'''
 
     # aesthetics
     style_resource_path = ResourcePath("src/assets/styling/")
@@ -20,6 +20,7 @@ class App(customtkinter.CTk):
     customtkinter.set_default_color_theme(style_resource_path.resource_path("style.json"))
     WIDTH = 1300
     HEIGHT = 600
+
     # define class objects
     db = Database()
     gb = GuiBridge()
@@ -40,14 +41,10 @@ class App(customtkinter.CTk):
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
         
-        self.frame_left = customtkinter.CTkFrame(self,
-                                                width=180,
-                                                corner_radius=0)
+        self.frame_left = customtkinter.CTkFrame(self, width=180, corner_radius=0)
         self.frame_left.grid(row=0, column=0, sticky="nswe")
         
-        self.frame_right = customtkinter.CTkFrame(self,
-                                                corner_radius=10
-                                                )
+        self.frame_right = customtkinter.CTkFrame(self, corner_radius=10)
         self.frame_right.grid(row=0, column=1, sticky="nswe", padx=20, pady=20)
 
         # ================================= menu bar =================================
@@ -165,7 +162,6 @@ class App(customtkinter.CTk):
 
     # select tab for the following four menus
     def tab_selection(self, value:str) -> None:
-
         if value == "Transactions":
             self.show_transaction_window()
         elif value == "Institutions Held":
@@ -177,6 +173,7 @@ class App(customtkinter.CTk):
 
     # menu for showing all transactions in the database
     def show_transaction_window(self) -> None:
+        '''class method to show transactions treeview'''
 
         # ================================= Tree View =================================
 
@@ -290,13 +287,11 @@ class App(customtkinter.CTk):
         long_entry=customtkinter.CTkEntry(self.data_frame, height=25)
         long_entry.place(relx=0.85, rely=0.7, relwidth=0.145, anchor=tk.NW)
         
-
         # dictionary of entries
         transaction_entries={"id_entry":id_entry,"n_entry":n_entry,"ticker_entry":ticker_entry,
         "institution_entry":institution_entry,"date_entry":date_entry,"type_entry":type_entry,
         "from_entry":from_entry,"to_entry":to_entry,"price_entry":price_entry,"amount_entry":amount_entry,
         "age_entry":age_entry,"long_entry":long_entry}
-        
         
         # add buttons
         self.button_frame=customtkinter.CTkFrame(self.frame_right)
@@ -313,9 +308,7 @@ class App(customtkinter.CTk):
 
         ex_button=customtkinter.CTkButton(self.button_frame,text="Exit Program",command=self.on_closing)
         ex_button.place(relx=0.77,rely=0.25, relwidth=0.225)
-        # bind the treeview
-        # have to use <<TreeviewSelect>> because if I were to use <Key> then the button release gets overriden by the Key, which
-        # leads to a delay of one each time the ButtonRelease event is activated.
+      
         self.my_tree.bind("<<TreeviewSelect>>", lambda event: self.select_record(event,transaction_entries))
         self.my_tree.bind("<ButtonRelease-1>", lambda event: self.select_record(event,transaction_entries))
         
@@ -381,7 +374,6 @@ class App(customtkinter.CTk):
         security_entry.place(relx=0.085, rely=0.7, relwidth=0.145, anchor=tk.NW)
 
         # column 2
-
         amount_label = customtkinter.CTkLabel(self.data_frame, text="Amount", anchor='w')
         amount_label.place(relx=0.262, rely=0, relheight=0.4, relwidth=0.06, anchor='nw')
         amount_entry = customtkinter.CTkEntry(self.data_frame, height=25)
@@ -393,7 +385,6 @@ class App(customtkinter.CTk):
         number_long_entry.place(relx=0.342,rely=0.7,relwidth=0.145,anchor=tk.NW)
 
         # column 3
-
         cost_basis_label = customtkinter.CTkLabel(self.data_frame, text="Cost Basis", anchor='w')
         cost_basis_label.place(relx=0.519, rely=0,relheight=0.4, relwidth=0.06, anchor=tk.NW)
         cost_basis_entry = customtkinter.CTkEntry(self.data_frame, height=25)
@@ -405,7 +396,6 @@ class App(customtkinter.CTk):
         total_cost_entry.place(relx=0.599, rely=0.7, relwidth=0.145, anchor=tk.NW)
 
         # column 4
-
         average_price_sold_label = customtkinter.CTkLabel(self.data_frame, text="A.P. Sold", anchor='w')
         average_price_sold_label.place(relx=0.77, rely=0, relheight=0.4, relwidth=0.06, anchor=tk.NW)
         average_price_sold_entry = customtkinter.CTkEntry(self.data_frame, height=25)
@@ -425,15 +415,11 @@ class App(customtkinter.CTk):
         self.button_frame = customtkinter.CTkFrame(self.frame_right)
         self.button_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1, anchor=tk.NW)
 
-        # recalculate_button=customtkinter.CTkButton(self.button_frame,text="Recalculate Securities", command = self.db.refresh_individual_shares)
-        # recalculate_button.place(relx=0.005, rely=0.25, relwidth=0.225)
-
         ex_button=customtkinter.CTkButton(self.button_frame, text="Exit Program", command=self.on_closing)
         ex_button.place(relx=0.77, rely=0.25, relwidth=0.225)
         # bind the treeview
         self.my_tree.bind("<ButtonRelease-1>", lambda event: self.select_record(event,transaction_entries))
         self.my_tree.bind("<<TreeviewSelect>>", lambda event: self.select_record(event,transaction_entries))
-
 
     # menu for showing the summaries of the securities (does not include institutions)
     def show_securities_window(self) -> None:
@@ -452,7 +438,6 @@ class App(customtkinter.CTk):
         # configure scrollbar
         self.my_tree.configure(yscrollcommand=self.tree_scroll.set)
         
-
         # treeview styling 
         self.style = ttk.Style()
         self.style.theme_use('default')
@@ -497,7 +482,6 @@ class App(customtkinter.CTk):
         ticker_entry.place(relx=0.085, rely=0.7, relwidth=0.145, anchor='nw')
 
         # column 2
-
         amount_label=customtkinter.CTkLabel(self.data_frame,text="Amount", anchor='w')
         amount_label.place(relx=0.262,rely=0,relheight=0.4,relwidth=0.06,anchor='nw')
         amount_entry=customtkinter.CTkEntry(self.data_frame, height=25)
@@ -509,7 +493,6 @@ class App(customtkinter.CTk):
         number_long_entry.place(relx=0.342,rely=0.7,relwidth=0.145,anchor=tk.NW)
 
         # column 3
-
         total_cost_label = customtkinter.CTkLabel(self.data_frame,text="Total Cost", anchor='w')
         total_cost_label.place(relx=0.519,rely=0,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         total_cost_entry = customtkinter.CTkEntry(self.data_frame, height=25)
@@ -520,9 +503,7 @@ class App(customtkinter.CTk):
         cost_basis_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         cost_basis_entry.place(relx = 0.599, rely = 0.7, relwidth = 0.145, anchor = tk.NW)
 
-
         # column 4
-
         total_price_sold_label = customtkinter.CTkLabel(self.data_frame, text="T.P. Sold", anchor='w')
         total_price_sold_label.place(relx=0.77,rely=0,relheight=0.4,relwidth=0.06,anchor=tk.NW)
         total_price_sold_entry = customtkinter.CTkEntry(self.data_frame, height=25)
@@ -533,14 +514,10 @@ class App(customtkinter.CTk):
         average_price_sold_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         average_price_sold_entry.place(relx=0.85,rely=0.7,relwidth=0.145,anchor=tk.NW)
 
-
-
-
         # dictionary of entries
         transaction_entries={"security_entry":security_entry, "ticker_entry":ticker_entry,
         "amount_entry":amount_entry, "total_cost_entry":total_cost_entry, "cost_basis_entry":cost_basis_entry,
         "long_entry":number_long_entry, "total_price_sold":total_price_sold_entry,"average_price_sold":average_price_sold_entry}
-        
         
         # add buttons
         self.button_frame = customtkinter.CTkFrame(self.frame_right)
@@ -739,7 +716,6 @@ class App(customtkinter.CTk):
         exit_button.place(relx=0.8, rely=0.924, relwidth=0.2, relheight=0.075)
 
     def window_transfer_institution(self) -> None:
-
         self.tranfer_window_pop = customtkinter.CTkToplevel(self)
         self.tranfer_window_pop.title("Transfer Institution")
 
@@ -928,12 +904,10 @@ class App(customtkinter.CTk):
 
       # function to select record
     def select_record(self, event, entry_dic: Dict[str, Any], *args: List[str]) -> None:
-
         # change to normal state in case of later bind
         for entry in entry_dic.values():
             entry.configure(state="normal")
             entry.delete(0,tk.END)
-              
         # grab records
         selected=self.my_tree.focus()
         # grab record value
@@ -942,12 +916,10 @@ class App(customtkinter.CTk):
         
         # insert into entry box
         for name,entry in entry_dic.items():
-            
             if name == "id_entry" or name == "age_entry" or name == "long_entry" or name == "history_id":
                 entry.insert(count,values[count])
                 entry.configure(state="disabled") 
                 count+=1
-
             else:
                 entry.insert(count,values[count])
                 count+=1
@@ -959,14 +931,13 @@ class App(customtkinter.CTk):
             self.my_tree.delete(record)
 
     def delete_record(self,entry_dic: Dict[str, Any]) -> None:
-          
         to_delete_or_not = messagebox.askyesno("Delete Record", "Are you sure you would like to delete this record?")
         if to_delete_or_not == 1:
-            selected=self.my_tree.focus()
-            id_entry=entry_dic["id_entry"]
+            selected = self.my_tree.focus()
+            id_entry = entry_dic["id_entry"]
             id_entry.configure(state="normal")
-            id_value=id_entry.get()
-            x=self.my_tree.selection()[0]
+            id_value = id_entry.get()
+            x = self.my_tree.selection()[0]
             self.my_tree.delete(x)
             id_entry.delete(0, tk.END)
             entry_dic["n_entry"].delete(0, tk.END)
@@ -981,7 +952,7 @@ class App(customtkinter.CTk):
             entry_dic["age_entry"].delete(0, tk.END)
             entry_dic["long_entry"].delete(0, tk.END)
           
-            Database().delete_row(id_value)
+            self.db.delete_row(id_value)
             messagebox.showinfo("Deleted!", "Your record has been deleted.")
         else:
             messagebox.showinfo("Not Deleted.", "Your record was not deleted.")
@@ -989,21 +960,21 @@ class App(customtkinter.CTk):
     def update_record(self,entry_dic: Dict[str, Any]) -> None:
         selected=self.my_tree.focus()
 
-        id_entry=entry_dic["id_entry"]
+        id_entry = entry_dic["id_entry"]
         id_entry.configure(state="normal")
-        transaction_id=id_entry.get()
-        security_name=entry_dic["n_entry"].get()
-        security_ticker=entry_dic["ticker_entry"].get()
-        institution_name=entry_dic["institution_entry"].get()
-        timestamp=entry_dic["date_entry"].get()
+        transaction_id = id_entry.get()
+        security_name = entry_dic["n_entry"].get()
+        security_ticker = entry_dic["ticker_entry"].get()
+        institution_name = entry_dic["institution_entry"].get()
+        timestamp = entry_dic["date_entry"].get()
         # not transaction_abbreviation
-        transaction_type=entry_dic["type_entry"].get()
-        transfer_from=entry_dic["from_entry"].get()
-        transfer_to=entry_dic["to_entry"].get()
-        price_usd=entry_dic["price_entry"].get()
-        amount=entry_dic["amount_entry"].get()
+        transaction_type = entry_dic["type_entry"].get()
+        transfer_from = entry_dic["from_entry"].get()
+        transfer_to = entry_dic["to_entry"].get()
+        price_usd = entry_dic["price_entry"].get()
+        amount = entry_dic["amount_entry"].get()
         age_transaction=entry_dic["age_entry"].get()
-        long=entry_dic["long_entry"].get()
+        long = entry_dic["long_entry"].get()
 
         # define a dictionary to contain all of the values for the rust method
         value_dic = {
@@ -1070,7 +1041,7 @@ class App(customtkinter.CTk):
             self.my_tree.insert(parent='',index='end',text="",values=rec,tags=('evenrow',))
           else:
             self.my_tree.insert(parent='',index='end',text="",values=rec,tags=('oddrow',))
-          count+=1
+          count += 1
 
       # ================================= main functionalities =================================
 
@@ -1088,65 +1059,66 @@ class App(customtkinter.CTk):
 
     # ================================= appearance functionalities =================================
     def change_appearance_mode(self, new_appearance_mode: str) -> None:
-          
-      customtkinter.set_appearance_mode(new_appearance_mode)
-      
-      if new_appearance_mode == "System":
-        new_appearance_mode = darkdetect.theme()
-      
-      # for the widgets that are not affected by customtkinter
-      if new_appearance_mode == "Dark":
-        self.style.configure("Treeview",
-                          background="#2a2d2e",
-                          foreground="white",
-                          rowheight=25,
-                          fieldbackground="#515A5A",
-                          bordercolor="#343638",
-                          borderwidth=0)
-        self.style.map('Treeview', background=[('selected', '#AF7AC5')])
+        '''method that allows for treeview to style match setting'''
+        customtkinter.set_appearance_mode(new_appearance_mode)
+        
+        if new_appearance_mode == "System":
+            new_appearance_mode = darkdetect.theme()
+        
+        # for the widgets that are not affected by customtkinter
+        if new_appearance_mode == "Dark":
+            self.style.configure("Treeview",
+                            background="#2a2d2e",
+                            foreground="white",
+                            rowheight=25,
+                            fieldbackground="#515A5A",
+                            bordercolor="#343638",
+                            borderwidth=0)
+            self.style.map('Treeview', background=[('selected', '#AF7AC5')])
 
-        self.style.configure("Treeview.Heading",
-                          background="#424949",
-                          font=('Arial Bold', 12),
-                          foreground="white",
-                          relief="flat")
-        self.style.map("Treeview.Heading",
-                      background=[('active', '#515A5A')])
-          
-        self.style.configure("arrowless.Vertical.TScrollbar", troughcolor="#4A235A", bd=0,bg="#9B59B6")
+            self.style.configure("Treeview.Heading",
+                            background="#424949",
+                            font=('Arial Bold', 12),
+                            foreground="white",
+                            relief="flat")
+            self.style.map("Treeview.Heading",
+                        background=[('active', '#515A5A')])
+            
+            self.style.configure("arrowless.Vertical.TScrollbar", troughcolor="#4A235A", bd=0,bg="#9B59B6")
 
-        # create strip row tags
-        self.my_tree.tag_configure('oddrow',background='#565b5e')
-        self.my_tree.tag_configure('evenrow',background='#5B2C6F') # purple
-          
-      elif new_appearance_mode == "Light":
-        self.style.configure("Treeview",
-                          background="#2a2d2e",
-                          foreground="black",
-                          rowheight=25,
-                          fieldbackground="#343638",
-                          bordercolor="#343638",
-                          borderwidth=0)
-        self.style.map('Treeview', background=[('selected', '#F1948A')])
+            # create strip row tags
+            self.my_tree.tag_configure('oddrow',background='#565b5e')
+            self.my_tree.tag_configure('evenrow',background='#5B2C6F') # purple
+            
+        elif new_appearance_mode == "Light":
+            self.style.configure("Treeview",
+                            background="#2a2d2e",
+                            foreground="black",
+                            rowheight=25,
+                            fieldbackground="#343638",
+                            bordercolor="#343638",
+                            borderwidth=0)
+            self.style.map('Treeview', background=[('selected', '#F1948A')])
 
-        self.style.configure("Treeview.Heading",
-                          background="#F2F3F4",
-                          foreground="black",
-                          font=('Arial Bold', 12),
-                          relief="flat")
-        self.style.map("Treeview.Heading",
-                      background=[('active', '#3484F0')])
-          
-        self.style.configure("arrowless.Vertical.TScrollbar", troughcolor="#FDEDEC")
-        # create strip row tags
-        self.my_tree.tag_configure('oddrow',background='white')
-        self.my_tree.tag_configure('evenrow',background='#FADBD8')
+            self.style.configure("Treeview.Heading",
+                            background="#F2F3F4",
+                            foreground="black",
+                            font=('Arial Bold', 12),
+                            relief="flat")
+            self.style.map("Treeview.Heading",
+                        background=[('active', '#3484F0')])
+            
+            self.style.configure("arrowless.Vertical.TScrollbar", troughcolor="#FDEDEC")
+            # create strip row tags
+            self.my_tree.tag_configure('oddrow',background='white')
+            self.my_tree.tag_configure('evenrow',background='#FADBD8')
 
     # get it so that the appearance changes automatically on System for widgets that are not supported by custom tkinter
     def delay_appearance(self):    
-      self.after(500, self.delay_appearance)   
-      if self.appearance_options.get() == "System":  
-          self.change_appearance_mode(self.appearance_options.get())
+        '''method that allows treeview to auto-transition style on the system style setting'''
+        self.after(500, self.delay_appearance)   
+        if self.appearance_options.get() == "System":  
+            self.change_appearance_mode(self.appearance_options.get())
 
 if __name__ == "__main__":
     app = App()

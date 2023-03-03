@@ -1,3 +1,4 @@
+'''export_csv - export database table transactions into .csv file'''
 import sqlite3
 import pandas as pd
 
@@ -27,10 +28,3 @@ def export_csv(db_path: str = "files/data/portfolio.db") -> None:
     df = pd.read_sql(sql_query, conn)
     df.rename({"price_USD":"price_usd"}, axis = 1, inplace = True)
     df.to_csv("transactions_data.csv", index = False)
-
-
-
-
-  
-
-

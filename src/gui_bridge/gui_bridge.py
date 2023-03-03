@@ -1,4 +1,4 @@
-
+'''gui_bridge.py - gui_bridge class that houses methods that bridge main.py and database.py'''
 import re
 import sys
 import os
@@ -16,6 +16,8 @@ from utils import StandardizeEntry
 # ================================= general functionalities =================================
 # get the values from the customtkinter object
 def edit_entry_dic(entry_dic: Dict) -> Dict:
+    '''takes entry_dic and gets the value of the customtkinter object and implements
+     the standardize_entry.py regex_sub class method returns the edited object'''
     for key in entry_dic.keys():
         entry_dic[key] = entry_dic[key].get()
         edited_entry_dic = StandardizeEntry(entry_dic).regex_sub()
@@ -23,6 +25,7 @@ def edit_entry_dic(entry_dic: Dict) -> Dict:
 
 # define wrapper to carry out all of the messages for insert
 def insert_wrapper(method: Callable) -> None:
+    '''takes a insert method and wraps it with the gui message interface'''
     @wraps(method)
     def _impl(self, *method_args, **method_kwargs):
         inital_ask = messagebox.askyesno(title="Insert Transaction?", message="Would you like to insert this transaction into the database?")
@@ -40,16 +43,19 @@ def insert_wrapper(method: Callable) -> None:
 
 
 class GuiBridge:
+    '''This class serves as the bridge between main.py and database.py'''
     db = Database()
 
     @classmethod
     def alt__init__(cls, db_path: str):
+        '''alternative init in the case of testing or other similar reasons'''
         cls.db = Database(db_path)
         return cls()
 
     # ================================= database inserts functionalities =================================
     @insert_wrapper
     def stock_split(self, entry_dic: Dict) -> None:
+        '''implements database.py insert_stock_split class meethod and removes the values from gui'''
         # use get method to convert customtkinter obj to python obj
         edited_entry_dic = edit_entry_dic(entry_dic)
         # check correct values and modify for final insert
@@ -63,6 +69,7 @@ class GuiBridge:
 
     @insert_wrapper
     def insert_transaction_into_database(self, entry_dic: Dict) -> None:
+        '''edits the entry_dic values and implements database.py insert_acquire_or_dispose class method'''
         # use get method to convert customtkinter obj to python obj
         edit_entry_dic = edit_entry_dic(entry_dic)
         # check correct values and modify for final insert
@@ -77,6 +84,7 @@ class GuiBridge:
     
     @insert_wrapper
     def transfer_security(self, entry_dic: Dict) -> None:
+        '''edits the entry_dic values and implements database.py insert_transfer class method'''
         # use get method to convert customtkinter obj to python obj
         edit_entry_dic = edit_entry_dic(entry_dic)
         # check correct values and modify for final insert
@@ -101,68 +109,49 @@ class GuiBridge:
     # verify if the date and time syntax is correct
     def check_correct_values(self, entry_dic: Dict, transfer: bool = False, split: bool = False) -> bool:
         success = True
-
         timestamp = entry_dic["timestamp"]
-        date_regex=re.compile('\d\d\d\d-\d\d-\d\d')
+        date_regex = re.compile(r'\d\d\d\d-\d\d-\d\d')
 
         # timestamp
-        if bool(date_regex.search(timestamp)) == False:
-            success=False
-            messagebox.showerror("Date Error", "Date: {timestamp} must be in \"YYYY-MM-DD\" format consisting of all numbers except for the dash.".format(timestamp=timestamp))
-            raise ValueError("Date: {timestamp} must be in YYYY-MM-DD format consisting of all numbers except for the dash.".format(timestamp=timestamp))
-              
+        if bool(date_regex.search(timestamp)):
+            pass
+        else:
+            success = False
+            messagebox.showerror("Date Error", "Date must be in \"YYYY-MM-DD\" format consisting of all numbers except for the dash.")
+            raise ValueError("Date must be in YYYY-MM-DD format consisting of all numbers except for the dash.")
         # amount
         try:
-            amount = float(entry_dic["amount"])
+            float(entry_dic["amount"])
         except:
-            messagebox.showerror("Amount Error", "Amount - {amount} - should be a float or able to be converted into a float.".format(amount=entry_dic["amount"]) )
-            raise TypeError("Amount - {amount} - should be a float or able to be converted into a float.".format(amount=entry_dic["amount"]))
+            messagebox.showerror("Amount Error", "Amount should be a float or able to be converted into a float." )
+            raise TypeError("Amount should be a float or able to be converted into a float.")
           
-        if bool(entry_dic['name']) == False or bool(entry_dic["ticker"]) == False or bool(entry_dic["institution_name"]) == False:
-            if bool(entry_dic['name']) == True and bool(entry_dic["ticker"]) == True and split == True:
+        if bool(entry_dic['name']) and bool(entry_dic["ticker"]) and bool(entry_dic["institution_name"]):
+            pass
+        else:
+            if bool(entry_dic['name']) and bool(entry_dic["ticker"]) and split:
                 pass
             else:
                 success = False
-                messagebox.showerror("Name, Ticker, or Institution Error", f"""Name, ticker, or institution cannot be null. 
-                    \nName: {entry_dic['name']}
-                    \nTicker: {entry_dic["ticker"]}
-                    \nInstitution: {entry_dic["institution_name"]}""")
+                messagebox.showerror("Name, Ticker, or Institution Error", "Name, ticker, or institution cannot be null.")
+                raise ValueError("Name, ticker, or institution cannot be null.")
 
-                raise ValueError(f"""Name, ticker, or institution cannot be null. 
-                    \nName: {entry_dic['name']}
-                    \nTicker: {entry_dic["ticker"]}
-                    \nInstitution: {entry_dic["institution_name"]}""")
-        
-
-        if transfer == False and split == False:
+        if transfer or split:
+            if transfer:
+                if entry_dic["to_institution_name"] == entry_dic['institution_name']:
+                    messagebox.showerror("Institution Error", "The institutions transfer from and to cannot be the same institution.")
+                    success = False
+                    raise ValueError("""The Institution Transfer From and Institution Transfer To cannot be the same institution.""")        
+        else:
             # check price_USD
             try:
-                price_usd = float(entry_dic["price_USD"])
+                float(entry_dic["price_USD"])
             except:
-                price_usd = entry_dic["price_USD"]
-                messagebox.showerror("Price Error", "Price in USD - {price_usd} - should be a float or able to be converted into a float.".format(price_usd=price_usd) )
-                raise TypeError(f"Price in USD - {price_usd} - should be a float or able to be converted into a float.".format(price_usd=price_usd))
-
-        else:
-          if transfer == True:
-              if entry_dic["to_institution_name"] == entry_dic['institution_name']:
-                  messagebox.showerror("Institution Error", "The Institution Transfer From and Institution Transfer To cannot be the same institution.")
-                  success = False
-                  raise ValueError(f"""The Institution Transfer From and Institution Transfer To cannot be the same institution.
-                        \nInstitution: {entry_dic["institution_name"]}
-                        \nTransfer to Institution: {entry_dic["to_institution_name"]}"""
-                        )
-      
-                            
+                entry_dic["price_USD"]
+                messagebox.showerror("Price Error", "Price in USD should be a float or able to be converted into a float.")
+                raise TypeError(f"Price in USD should be a float or able to be converted into a float.")
         return success
 
     # refresh the interal database every time the button associated with this function is clicked
     def refresh_database(self) -> None:
         pass
-
-    
-  
-
-
-
-      

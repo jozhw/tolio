@@ -1,10 +1,10 @@
+'''database.py - interaction with database methods that includes tolio rust extension'''
 import sqlite3
 import os
 
 from typing import List, Any
 
 import tolio
-
 
 class Database:
     def __init__(self, db_path: str="files/data/portfolio.db", sql_path: str="src/database/init_db.sql") -> None:
@@ -55,14 +55,19 @@ class Database:
   # update securities - this dependent on the all_shares table
     def update_securities(self) -> None:
         # create list of securities
-        get_securities=self.cur.execute("SELECT DISTINCT security_id FROM transactions WHERE transaction_abbreviation IS NOT 'SS';").fetchall()
+        sql = "SELECT DISTINCT security_id FROM transactions WHERE transaction_abbreviation IS NOT 'SS';"
+        get_securities=self.cur.execute(sql).fetchall()
         
         for security_id in get_securities:
             security_id = security_id[0]
-            age=self.cur.execute("SELECT SUM(amount) FROM all_shares WHERE security_id=? AND age_transaction >= 1 AND long_counter = '+';", (security_id,)).fetchall()[0]
+
+            sql = "SELECT SUM(amount) FROM all_shares WHERE security_id=? AND age_transaction >= 1 AND long_counter = '+';"
+            age = self.cur.execute(sql, (security_id,)).fetchall()[0]
+
             self.cur.execute("UPDATE securities SET number_long=? WHERE security_id=?;", (age[0], security_id))
-            
-            amount=self.cur.execute("SELECT SUM(amount), SUM(price_USD), (SUM(price_USD)/SUM(amount)), (SELECT SUM(amount) FROM transactions WHERE transaction_abbreviation='D') FROM all_shares WHERE security_id=? AND long_counter = '+';", (security_id,)).fetchall()[0]
+
+            sql = "SELECT SUM(amount), SUM(price_USD), (SUM(price_USD)/SUM(amount)), (SELECT SUM(amount) FROM transactions WHERE transaction_abbreviation='D') FROM all_shares WHERE security_id=? AND long_counter = '+';"
+            amount=self.cur.execute(sql, (security_id,)).fetchall()[0]
             
             (sum_amount, sum_price, cost_basis, amount_disposed) = amount
 
@@ -80,14 +85,15 @@ class Database:
             except:
                 total_price_sold = 0
 
-            self.cur.execute("UPDATE securities SET amount_held=?, total_cost=?, cost_basis=?, total_price_sold=?, average_price_sold=? WHERE security_id=?;", 
+            sql = "UPDATE securities SET amount_held=?, total_cost=?, cost_basis=?, total_price_sold=?, average_price_sold=? WHERE security_id=?;"
+            self.cur.execute(sql, 
             (sum_amount, round(sum_price, 3), round(cost_basis, 3), total_price_sold, average_price_sold, security_id))
 
         self.connection.commit()
 
     # update institutions held: institution_id, security_id, amount_held, total_cost, cost_basis, number_long
     def update_institutions_held(self) -> None:
-        get_institution_id = self.cur.execute(f"SELECT DISTINCT institution_id, security_id FROM Transactions").fetchall()
+        get_institution_id = self.cur.execute("SELECT DISTINCT institution_id, security_id FROM Transactions").fetchall()
         for institution_id, security_id in get_institution_id:
           
             self.cur.execute("INSERT OR IGNORE INTO institutions_held (institution_id, security_id) VALUES (?,?);", (institution_id, security_id))
@@ -133,12 +139,11 @@ class Database:
     def update_table(self, value_dic: dict[Any]) -> None:
         tolio.update_table(self.db_path, value_dic)
     
-
-
     # ================================= get =================================
 
     # get stock_split_history for tree view
-    def get_stock_split_history(self) -> None:
+    def get_stock_split_history(self) -> List[Any]:
+        '''method to return stock_split_history'''
         split_history_list = self.cur.execute("""SELECT ss.security_id, s.security_name, s.security_ticker, ss.split_amount, ss.timestamp FROM stock_split_history AS ss
         INNER JOIN securities AS s ON ss.security_id=s.security_id;
         
@@ -147,6 +152,7 @@ class Database:
           
     # get transactions table for tree view
     def get_transactions_table(self) -> List[str]:
+        '''method to return all of the transactions in database'''
         return self.cur.execute("""SELECT
           t.transaction_id, s.security_name, s.security_ticker, i.institution_name, t.timestamp,
           tn.transaction_type, t.transfer_from, t.transfer_to, t.price_USD, t.amount,
@@ -157,6 +163,7 @@ class Database:
 
     # get institutions_held table for treeview
     def get_institutions_held_table(self) -> List[str]:
+        '''method to return all of the values in the institutions held table'''
         return self.cur.execute("""
           SELECT i.institution_name, s.security_name, ih.amount_held, ih.total_cost, ih.cost_basis,
           ih.number_long, ih.total_price_sold, ih.average_price_sold
@@ -166,6 +173,7 @@ class Database:
 
     # get the securities table for treeview
     def get_security_table(self) -> List[str]:
+        '''method to return all of the values in the securities table'''
         return self.cur.execute("""
           SELECT security_name, security_ticker, amount_held, total_cost, cost_basis, number_long, total_price_sold, average_price_sold
           FROM securities;
@@ -192,18 +200,15 @@ class Database:
     # ============================== delete ==============================
     # delete transaction row
     def delete_row(self, transaction_id:int) -> None:
+        '''method to delete row in the database form gui treeview deletion'''
         self.cur.execute("DELETE FROM transactions WHERE transaction_id=?;", (transaction_id,))
         self.connection.commit()
 
- 
-
-
     # delete all transactions records
     def delete_all_data(self) -> None:
+        '''method to delete all of the values from transactions table'''
         self.cur.execute("DELETE TABLE transactions;")
         self.connection.commit()
-
-
 
 # test
 if __name__ =="__main__":

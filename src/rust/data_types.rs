@@ -14,6 +14,7 @@ impl<'conn> PreparedStatement<'conn> {
 // For inserting CSV Transaction
 #[derive(Debug, serde::Deserialize)]
 pub struct RawTransaction {
+    /// The first object (raw) that receives the entry_values inputs from the gui for inserting into the database
     pub security_name: String,
     pub security_ticker: String,
     pub institution_name: String,
