@@ -15,7 +15,7 @@ class StandardizeEntry:
         try:
             self.entry_dic["transaction_type"] = self.transaction_type_dic[self.entry_dic["transaction_type"]]
         except:
-            raise ValueError("Incorrect transaction_type.")
+            raise ValueError("Incorrect transaction_type: {}.".format(self.entry_dic["transaction_type"]))
 
     def convert_case(self, match_obj: Any) -> str:
         '''Takes a match_obj and performs capitalize for the matches. This function operates

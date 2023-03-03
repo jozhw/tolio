@@ -22,13 +22,13 @@ correct_acquire_entry_dic = {
 }
 
 correct_dispose_entry_dic = {
-        "timestamp": "2014-07-03",
-        "amount": -10.0,
-        "price_USD": -10.00,
-        "name": "Tesla",
-        "ticker": "TSLA",
-        "institution_name": "Computershare",
-        "transaction_type": "D"
+    "timestamp": "2014-07-03",
+    "amount": -10.0,
+    "price_USD": -10.00,
+    "name": "Tesla",
+    "ticker": "TSLA",
+    "institution_name": "Computershare",
+    "transaction_type": "D"
     }
 
 correct_regex_entry_dic = {
@@ -55,13 +55,13 @@ acquire_entry_dic = {
 }
 
 dispose_entry_dic = {
-        "timestamp": "2014-07-03",
-        "amount": 10.00,
-        "price_USD": 10.00,
-        "name": "Tesla",
-        "ticker": "TSLA",
-        "institution_name": "Computershare",
-        "transaction_type": "Dispose"
+    "timestamp": "2014-07-03",
+    "amount": 10.00,
+    "price_USD": 10.00,
+    "name": "Tesla",
+    "ticker": "TSLA",
+    "institution_name": "Computershare",
+    "transaction_type": "Dispose"
 }
 
 regex_entry_dic = {
@@ -75,22 +75,23 @@ regex_entry_dic = {
 
 }
 
+acquire_standardize = StandardizeEntry(acquire_entry_dic)
+dispose_standardize = StandardizeEntry(dispose_entry_dic)
+regex_standardize = StandardizeEntry(regex_entry_dic)
+
 class TestStandardizedEntries(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         super(TestStandardizedEntries, self).__init__(*args, **kwargs)
 
         ###################### create class objects to be tested ########################
-        self.acquire_standardize = StandardizeEntry(acquire_entry_dic)
-        self.dispose_standardize = StandardizeEntry(dispose_entry_dic)
-        self.regex_standardize = StandardizeEntry(regex_entry_dic)
 
     def test_regex_sub(self):
-        self.assertEqual(self.regex_standardize.regex_sub(), correct_regex_entry_dic)
+        self.assertEqual(regex_standardize.regex_sub(), correct_regex_entry_dic)
 
 
     def test_change_value_sign(self):
-        self.assertEqual(self.acquire_standardize.change_value_sign(), correct_acquire_entry_dic)
-        self.assertEqual(self.dispose_standardize.change_value_sign(), correct_dispose_entry_dic)
+        self.assertEqual(acquire_standardize.change_value_sign(), correct_acquire_entry_dic)
+        self.assertEqual(dispose_standardize.change_value_sign(), correct_dispose_entry_dic)
 
 if __name__ == "__main__":
     unittest.main()

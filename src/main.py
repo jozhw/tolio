@@ -52,19 +52,18 @@ class App(customtkinter.CTk):
 
         # all image icons for menu
         self.add_icon = customtkinter.CTkImage(dark_image=Image.open(self.icon_resource_path.resource_path("add_dark.png")),
-                                                        light_image=Image.open(self.icon_resource_path.resource_path("add_light.png")))
+                                               light_image=Image.open(self.icon_resource_path.resource_path("add_light.png")))
 
         self.refresh_icon = customtkinter.CTkImage(dark_image=Image.open(self.icon_resource_path.resource_path("refresh_dark.png")),
-                                                        light_image=Image.open(self.icon_resource_path.resource_path("refresh_light.png")))
+                                                   light_image=Image.open(self.icon_resource_path.resource_path("refresh_light.png")))
 
         self.transfer_icon = customtkinter.CTkImage(dark_image=Image.open(self.icon_resource_path.resource_path("transfer_dark.png")),
-                                                        light_image=Image.open(self.icon_resource_path.resource_path("transfer_light.png"))
-                                                        )
+                                                    light_image=Image.open(self.icon_resource_path.resource_path("transfer_light.png")))
         self.ss_icon = customtkinter.CTkImage(dark_image = Image.open(self.icon_resource_path.resource_path("ss_dark.png")),
-                                                        light_image=Image.open(self.icon_resource_path.resource_path("ss_light.png")))
+                                              light_image=Image.open(self.icon_resource_path.resource_path("ss_light.png")))
 
         self.documentation_icon = customtkinter.CTkImage(dark_image=Image.open(self.icon_resource_path.resource_path("doc_dark.png")),
-                                                        light_image=Image.open(self.icon_resource_path.resource_path("doc_light.png")))
+                                                         light_image=Image.open(self.icon_resource_path.resource_path("doc_light.png")))
 
         # configure grid layout (1x11)
         self.frame_left.grid_rowconfigure(0, minsize=10)   # empty row with minsize as spacing
@@ -74,67 +73,61 @@ class App(customtkinter.CTk):
 
         # menu label
         self.menu_label = customtkinter.CTkLabel(self.frame_left,
-                                                text="Menu",
-                                                font=("Roboto Medium", -20))  # font name and size in px
+                                                 text="Menu",
+                                                 font=("Roboto Medium", -20))  # font name and size in px
         self.menu_label.grid(row=1, column=0, pady=10, padx=10)
 
         # refresh button
         self.refresh_button = customtkinter.CTkButton(self.frame_left,
-                                                text="Refresh",
-                                                border_color = "black",
-                                                command=self.refresh_page,
-                                                image=self.refresh_icon,
-                                                anchor="w")
+                                                      text="Refresh",
+                                                      border_color = "black",
+                                                      command=self.refresh_page,
+                                                      image=self.refresh_icon,
+                                                      anchor="w")
         self.refresh_button.grid(row=2, column=0, pady=15, padx=20)
 
         # add transaction button
         self.add_transaction_button = customtkinter.CTkButton(self.frame_left,
-                                                text="Add",
-                                                border_color="black",
-                                                command=self.window_add_transaction,
-                                                image=self.add_icon,
-                                                anchor="w"
-                                                )
+                                                              text="Add",
+                                                              border_color="black",
+                                                              command=self.window_add_transaction,
+                                                              image=self.add_icon,anchor="w")
         self.add_transaction_button.grid(row=3, column=0, pady=15, padx=20)
 
         # transfer institution button
         self.transfer_institution_button = customtkinter.CTkButton(self.frame_left,
-                                                text="Transfer",
-                                                border_color="black",
-                                                command=self.window_transfer_institution,
-                                                image=self.transfer_icon,
-                                                anchor="w"
-                                                )
+                                                                   text="Transfer",
+                                                                   border_color="black",
+                                                                   command=self.window_transfer_institution,
+                                                                   image=self.transfer_icon,
+                                                                   anchor="w")
         self.transfer_institution_button.grid(row=4, column=0, pady=15, padx=20)
 
         # stock split button
         self.stock_split_button = customtkinter.CTkButton(self.frame_left,
-                                                text="Stock Split",
-                                                border_color = "black",
-                                                image = self.ss_icon,
-                                                anchor="w",
-                                                command=self.window_stock_split
-                                                )
+                                                          text="Stock Split",
+                                                          border_color="black",
+                                                          image=self.ss_icon,
+                                                          anchor="w",
+                                                          command=self.window_stock_split)
         self.stock_split_button.grid(row=5, column=0, pady=15, padx=20)
 
         # upload csv button
         self.import_file_dial_button = customtkinter.CTkButton(self.frame_left,
-                                                text="Upload CSV",
-                                                border_color="black",
-                                                image=self.documentation_icon,
-                                                anchor="w",
-                                                command=self.window_import_filedialog
-                                                )
+                                                               text="Upload CSV",
+                                                               border_color="black",
+                                                               image=self.documentation_icon,
+                                                               anchor="w",
+                                                               command=self.window_import_filedialog)
         self.import_file_dial_button.grid(row=6, column=0, pady=15, padx=20)
 
         # export csv button
         self.export_file_dial_button = customtkinter.CTkButton(self.frame_left,
-                                                text="Export to CSV",
-                                                border_color="black",
-                                                image=self.documentation_icon,
-                                                anchor="w",
-                                                command=self.window_export_filedialog
-                                                )
+                                                               text="Export to CSV",
+                                                               border_color="black",
+                                                               image=self.documentation_icon,
+                                                               anchor="w",
+                                                               command=self.window_export_filedialog)
         self.export_file_dial_button.grid(row=7, column=0, pady=15, padx=20)
 
 
@@ -143,25 +136,28 @@ class App(customtkinter.CTk):
                                                 text="Appearance Mode:")
         self.appearance_mode.grid(row=10,column=0,pady=0,padx=20,sticky="w")
 
-        self.appearance_options_set = customtkinter.StringVar(value=get_previous_setting(self.set_settings_resource_path,appearance_option=True))  # set initial value
+        self.appearance_options_set = customtkinter.StringVar(value=get_previous_setting(self.set_settings_resource_path,
+                                                                                         appearance_option=True))  # set initial value
 
         self.appearance_options = customtkinter.CTkOptionMenu(self.frame_left,
-                                                            values=["System", "Dark", "Light"],
-                                                            command=self.change_appearance_mode,
-                                                            variable=self.appearance_options_set)
+                                                              values=["System", "Dark", "Light"],
+                                                              command=self.change_appearance_mode,
+                                                              variable=self.appearance_options_set)
         self.appearance_options.grid(row=11, column=0, pady=10, padx=20, sticky="w")
+
         # ================================= data section - right frame section =================================
         # create multibutton to select different data to display
-        self.transition_menu = customtkinter.CTkSegmentedButton(self.frame_right, values=["Transactions", "Institutions Held", "Securities", "Stock Split History"]) # to add for non-beta version "Individual Shares" tab
-        self.transition_menu.place(relx=0,rely=0,relwidth=1,anchor="nw")
-        self.transition_menu.set(get_previous_setting(self.set_settings_resource_path,transition_menu=True))
+        self.transition_menu = customtkinter.CTkSegmentedButton(self.frame_right,
+                                                                values=["Transactions", "Institutions Held", "Securities", "Stock Split History"]) # to add for non-beta version "Individual Shares" tab
+        self.transition_menu.place(relx=0, rely=0 ,relwidth=1, anchor="nw")
+        self.transition_menu.set(get_previous_setting(self.set_settings_resource_path, transition_menu=True))
         self.transition_menu.configure(command=self.tab_selection)
-        self.tab_selection(get_previous_setting(self.set_settings_resource_path,transition_menu=True))
+        self.tab_selection(get_previous_setting(self.set_settings_resource_path, transition_menu=True))
 
     # ================================= data section window displays =================================
 
     # select tab for the following four menus
-    def tab_selection(self, value:str) -> None:
+    def tab_selection(self, value: str) -> None:
         if value == "Transactions":
             self.show_transaction_window()
         elif value == "Institutions Held":
@@ -184,7 +180,9 @@ class App(customtkinter.CTk):
         self.my_tree = ttk.Treeview(self.main_view, selectmode="extended")
         self.my_tree.place(relx=0, rely=0, relheight=1, relwidth=1, anchor="nw")
         # scrollbar
-        self.tree_scroll = ttk.Scrollbar(self.main_view,orient="vertical", command=self.my_tree.yview, style='arrowless.Vertical.TScrollbar')
+        self.tree_scroll = ttk.Scrollbar(self.main_view,orient="vertical",
+                                         command=self.my_tree.yview,
+                                         style='arrowless.Vertical.TScrollbar')
         self.tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
         # configure scrollbar
         self.my_tree.configure(yscrollcommand=self.tree_scroll.set)
@@ -193,19 +191,24 @@ class App(customtkinter.CTk):
         self.style = ttk.Style()
         self.style.theme_use('default')
 
-        self.style.layout('arrowless.Vertical.TScrollbar', [('Vertical.Scrollbar.trough',
-        {'children': [('Vertical.Scrollbar.thumb', {'expand': '1', 'sticky': 'nswe'})], 'sticky': 'ns'})])
+        self.style.layout('arrowless.Vertical.TScrollbar',
+                          [('Vertical.Scrollbar.trough',
+                            {'children': [('Vertical.Scrollbar.thumb', {'expand': '1', 'sticky': 'nswe'})],
+                             'sticky': 'ns'})])
 
         # set style based upon style selection
         self.change_appearance_mode(self.appearance_options.get())
 
         # data
-        self.my_tree['columns']=("ID", "Name","Ticker", "Institution","Date","Type","From","To","Price","Amount","Age","Long" )
+        self.my_tree['columns'] = ("ID", "Name","Ticker", "Institution", "Date",
+                                   "Type", "From", "To", "Price", "Amount", "Age",
+                                   "Long" )
         # format columns
-        self.my_tree.column("#0", width=0,stretch='no')
-        columns = ["ID", "Name","Ticker", "Institution","Date","Type","From","To","Price","Amount","Age","Long" ]
+        self.my_tree.column("#0", width=0, stretch='no')
+        columns = ["ID", "Name", "Ticker", "Institution", "Date", "Type", "From",
+                   "To", "Price", "Amount", "Age", "Long" ]
         for i in columns:
-            self.my_tree.column(f"{i}", anchor='w' ,width=0)
+            self.my_tree.column(f"{i}", anchor='w', width=0)
         # create headings
         self.my_tree.heading("#0", text="", anchor='w')
         for i in columns:
@@ -297,16 +300,20 @@ class App(customtkinter.CTk):
         self.button_frame = customtkinter.CTkFrame(self.frame_right)
         self.button_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1, anchor=tk.NW)
 
-        update_button = customtkinter.CTkButton(self.button_frame, text="Update Record", command=lambda:self.update_record(transaction_entries))
+        update_button = customtkinter.CTkButton(self.button_frame, text="Update Record",
+                                                command=lambda:self.update_record(transaction_entries))
         update_button.place(relx=0.005, rely=0.25, relwidth=0.225)
 
-        rm_rec_button = customtkinter.CTkButton(self.button_frame, text="Remove Record", command=lambda:self.delete_record(transaction_entries))
+        rm_rec_button = customtkinter.CTkButton(self.button_frame, text="Remove Record",
+                                                command=lambda:self.delete_record(transaction_entries))
         rm_rec_button.place(relx=0.262, rely=0.25, relwidth=0.225)
 
-        mm_button = customtkinter.CTkButton(self.button_frame, text="Delete All Records", command=self.delete_all_data)
+        mm_button = customtkinter.CTkButton(self.button_frame, text="Delete All Records",
+                                            command=self.delete_all_data)
         mm_button.place(relx=0.519, rely=0.25, relwidth=0.225)
 
-        ex_button = customtkinter.CTkButton(self.button_frame, text="Exit Program", command=self.on_closing)
+        ex_button = customtkinter.CTkButton(self.button_frame, text="Exit Program",
+                                            command=self.on_closing)
         ex_button.place(relx=0.77, rely=0.25, relwidth=0.225)
 
         self.my_tree.bind("<<TreeviewSelect>>", lambda event: self.select_record(event,transaction_entries))
@@ -324,7 +331,9 @@ class App(customtkinter.CTk):
         self.my_tree = ttk.Treeview(self.main_view, selectmode="extended")
         self.my_tree.place(relx=0, rely=0, relheight=1, relwidth=1, anchor="nw")
         # scrollbar
-        self.tree_scroll = ttk.Scrollbar(self.main_view,orient="vertical", command=self.my_tree.yview, style='arrowless.Vertical.TScrollbar')
+        self.tree_scroll = ttk.Scrollbar(self.main_view,orient="vertical",
+                                         command=self.my_tree.yview,
+                                         style='arrowless.Vertical.TScrollbar')
         self.tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
         # configure scrollbar
         self.my_tree.configure(yscrollcommand=self.tree_scroll.set)
@@ -334,18 +343,23 @@ class App(customtkinter.CTk):
         self.style = ttk.Style()
         self.style.theme_use('default')
 
-        self.style.layout('arrowless.Vertical.TScrollbar', [('Vertical.Scrollbar.trough',
-        {'children': [('Vertical.Scrollbar.thumb', {'expand': '1', 'sticky': 'nswe'})], 'sticky': 'ns'})])
+        self.style.layout('arrowless.Vertical.TScrollbar',
+                          [('Vertical.Scrollbar.trough',
+                            {'children': [('Vertical.Scrollbar.thumb',
+                                           {'expand': '1', 'sticky': 'nswe'})], 'sticky': 'ns'})])
 
         # set style based upon style selection
         self.change_appearance_mode(self.appearance_options.get())
 
         # data
         # add columns for transactions
-        self.my_tree['columns'] = ("Institution", "Security", "Amount", "Total Cost", "Cost Basis", "Number Long", "Total Price Sold", "Average Price Sold" )
+        self.my_tree['columns'] = ("Institution", "Security", "Amount", "Total Cost",
+                                   "Cost Basis", "Number Long", "Total Price Sold",
+                                   "Average Price Sold" )
         # format columns
         self.my_tree.column("#0", width=0, stretch=tk.NO)
-        columns = ["Institution", "Security", "Amount", "Total Cost", "Cost Basis", "Number Long", "Total Price Sold", "Average Price Sold"]
+        columns = ["Institution", "Security", "Amount", "Total Cost", "Cost Basis",
+                   "Number Long", "Total Price Sold", "Average Price Sold"]
         for i in columns:
             self.my_tree.column(f"{i}", anchor='w' ,width=0)
         # create headings
@@ -379,14 +393,14 @@ class App(customtkinter.CTk):
         amount_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         amount_entry.place(relx=0.342, rely=0.1, relwidth=0.145, anchor=tk.NW)
 
-        number_long_label=customtkinter.CTkLabel(self.data_frame,text="Long", anchor='w')
-        number_long_label.place(relx=0.262,rely=0.6,relheight=0.4,relwidth=0.06,anchor=tk.NW)
-        number_long_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        number_long_entry.place(relx=0.342,rely=0.7,relwidth=0.145,anchor=tk.NW)
+        number_long_label = customtkinter.CTkLabel(self.data_frame, text="Long", anchor='w')
+        number_long_label.place(relx=0.262,rely=0.6,relheight=0.4, relwidth=0.06, anchor=tk.NW)
+        number_long_entry = customtkinter.CTkEntry(self.data_frame, height=25)
+        number_long_entry.place(relx=0.342, rely=0.7, relwidth=0.145, anchor=tk.NW)
 
         # column 3
         cost_basis_label = customtkinter.CTkLabel(self.data_frame, text="Cost Basis", anchor='w')
-        cost_basis_label.place(relx=0.519, rely=0,relheight=0.4, relwidth=0.06, anchor=tk.NW)
+        cost_basis_label.place(relx=0.519, rely=0, relheight=0.4, relwidth=0.06, anchor=tk.NW)
         cost_basis_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         cost_basis_entry.place(relx=0.599, rely=0.1, relwidth=0.145, anchor=tk.NW)
 
@@ -433,7 +447,8 @@ class App(customtkinter.CTk):
         self.my_tree = ttk.Treeview(self.main_view, selectmode="extended")
         self.my_tree.place(relx=0, rely=0, relheight=1, relwidth=1, anchor="nw")
         # scrollbar
-        self.tree_scroll = ttk.Scrollbar(self.main_view,orient="vertical", command=self.my_tree.yview, style='arrowless.Vertical.TScrollbar')
+        self.tree_scroll = ttk.Scrollbar(self.main_view,orient="vertical", command=self.my_tree.yview,
+                                         style='arrowless.Vertical.TScrollbar')
         self.tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
         # configure scrollbar
         self.my_tree.configure(yscrollcommand=self.tree_scroll.set)
@@ -450,14 +465,17 @@ class App(customtkinter.CTk):
 
         # data
         # add columns for transactions
-        self.my_tree['columns'] = ("Security", "Ticker", "Amount", "Total Cost", "Cost Basis", "Number Long", "Total Price Sold", "Average Price Sold")
+        self.my_tree['columns'] = ("Security", "Ticker", "Amount", "Total Cost",
+                                   "Cost Basis", "Number Long", "Total Price Sold",
+                                   "Average Price Sold")
         # format columns
         self.my_tree.column("#0", width=0, stretch=tk.NO)
-        columns=["Security", "Ticker", "Amount", "Total Cost", "Cost Basis", "Number Long", "Total Price Sold", "Average Price Sold"]
+        columns=["Security", "Ticker", "Amount", "Total Cost", "Cost Basis",
+                 "Number Long", "Total Price Sold", "Average Price Sold"]
         for i in columns:
-            self.my_tree.column(f"{i}", anchor='w' ,width=0)
+            self.my_tree.column(f"{i}", anchor='w', width=0)
         # create headings
-        self.my_tree.heading("#0",text="",anchor=tk.W)
+        self.my_tree.heading("#0", text="", anchor=tk.W)
         for i in columns:
             self.my_tree.heading(f"{i}", text=f"{i}", anchor='w')
 
@@ -483,36 +501,36 @@ class App(customtkinter.CTk):
 
         # column 2
         amount_label=customtkinter.CTkLabel(self.data_frame,text="Amount", anchor='w')
-        amount_label.place(relx=0.262,rely=0,relheight=0.4,relwidth=0.06,anchor='nw')
+        amount_label.place(relx=0.262, rely=0, relheight=0.4,relwidth=0.06,anchor='nw')
         amount_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        amount_entry.place(relx=0.342,rely=0.1,relwidth=0.145,anchor=tk.NW)
+        amount_entry.place(relx=0.342, rely=0.1, relwidth=0.145,anchor=tk.NW)
 
         number_long_label=customtkinter.CTkLabel(self.data_frame,text="Long", anchor='w')
-        number_long_label.place(relx=0.262,rely=0.6,relheight=0.4,relwidth=0.06,anchor=tk.NW)
+        number_long_label.place(relx=0.262, rely=0.6, relheight=0.4,relwidth=0.06,anchor=tk.NW)
         number_long_entry=customtkinter.CTkEntry(self.data_frame, height=25)
-        number_long_entry.place(relx=0.342,rely=0.7,relwidth=0.145,anchor=tk.NW)
+        number_long_entry.place(relx=0.342, rely=0.7, relwidth=0.145,anchor=tk.NW)
 
         # column 3
-        total_cost_label = customtkinter.CTkLabel(self.data_frame,text="Total Cost", anchor='w')
-        total_cost_label.place(relx=0.519,rely=0,relheight=0.4,relwidth=0.06,anchor=tk.NW)
+        total_cost_label = customtkinter.CTkLabel(self.data_frame, text="Total Cost", anchor='w')
+        total_cost_label.place(relx=0.519, rely=0, relheight=0.4, relwidth=0.06, anchor=tk.NW)
         total_cost_entry = customtkinter.CTkEntry(self.data_frame, height=25)
-        total_cost_entry.place(relx=0.599,rely=0.1,relwidth=0.145,anchor=tk.NW)
+        total_cost_entry.place(relx=0.599, rely=0.1, relwidth=0.145, anchor=tk.NW)
 
-        cost_basis_label = customtkinter.CTkLabel(self.data_frame,text="Cost Basis", anchor='w')
-        cost_basis_label.place(relx = 0.519,rely = 0.6, relheight=0.4, relwidth = 0.06, anchor = tk.NW)
+        cost_basis_label = customtkinter.CTkLabel(self.data_frame, text="Cost Basis", anchor='w')
+        cost_basis_label.place(relx = 0.519, rely = 0.6, relheight=0.4, relwidth = 0.06, anchor=tk.NW)
         cost_basis_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         cost_basis_entry.place(relx = 0.599, rely = 0.7, relwidth = 0.145, anchor = tk.NW)
 
         # column 4
         total_price_sold_label = customtkinter.CTkLabel(self.data_frame, text="T.P. Sold", anchor='w')
-        total_price_sold_label.place(relx=0.77,rely=0,relheight=0.4,relwidth=0.06,anchor=tk.NW)
+        total_price_sold_label.place(relx=0.77, rely=0, relheight=0.4, relwidth=0.06, anchor=tk.NW)
         total_price_sold_entry = customtkinter.CTkEntry(self.data_frame, height=25)
-        total_price_sold_entry.place(relx=0.85,rely=0.1,relwidth=0.145,anchor=tk.NW)
+        total_price_sold_entry.place(relx=0.85, rely=0.1, relwidth=0.145, anchor=tk.NW)
 
-        average_price_sold_label = customtkinter.CTkLabel(self.data_frame,text="A.P. Sold", anchor='w')
-        average_price_sold_label.place(relx=0.77,rely=0.6,relheight=0.4,relwidth=0.06,anchor=tk.NW)
+        average_price_sold_label = customtkinter.CTkLabel(self.data_frame, text="A.P. Sold", anchor='w')
+        average_price_sold_label.place(relx=0.77, rely=0.6, relheight=0.4, relwidth=0.06, anchor=tk.NW)
         average_price_sold_entry = customtkinter.CTkEntry(self.data_frame, height=25)
-        average_price_sold_entry.place(relx=0.85,rely=0.7,relwidth=0.145,anchor=tk.NW)
+        average_price_sold_entry.place(relx=0.85, rely=0.7, relwidth=0.145, anchor=tk.NW)
 
         # dictionary of entries
         transaction_entries={"security_entry":security_entry, "ticker_entry":ticker_entry,
@@ -521,13 +539,13 @@ class App(customtkinter.CTk):
 
         # add buttons
         self.button_frame = customtkinter.CTkFrame(self.frame_right)
-        self.button_frame.place(relx = 0, rely = 0.9, relheight = 0.1, relwidth = 1, anchor = tk.NW)
+        self.button_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1, anchor=tk.NW)
 
         # recalculate_button=customtkinter.CTkButton(self.button_frame,text="Recalculate Securities", command= Database().refresh_individual_shares)
         # recalculate_button.place(relx=0.005, rely=0.25, relwidth=0.225)
 
-        ex_button=customtkinter.CTkButton(self.button_frame,text="Exit Program",command=self.on_closing)
-        ex_button.place(relx=0.77,rely=0.25,relwidth=0.225)
+        ex_button = customtkinter.CTkButton(self.button_frame, text="Exit Program", command=self.on_closing)
+        ex_button.place(relx=0.77, rely=0.25, relwidth=0.225)
         # bind the treeview
         self.my_tree.bind("<ButtonRelease-1>", lambda event: self.select_record(event,transaction_entries))
         self.my_tree.bind("<<TreeviewSelect>>", lambda event: self.select_record(event,transaction_entries))
@@ -545,7 +563,9 @@ class App(customtkinter.CTk):
         self.my_tree = ttk.Treeview(self.main_view, selectmode="extended")
         self.my_tree.place(relx=0, rely=0, relheight=1, relwidth=1, anchor="nw")
         # scrollbar
-        self.tree_scroll = ttk.Scrollbar(self.main_view,orient="vertical",command=self.my_tree.yview, style='arrowless.Vertical.TScrollbar')
+        self.tree_scroll = ttk.Scrollbar(self.main_view, orient="vertical",
+                                         command=self.my_tree.yview,
+                                         style='arrowless.Vertical.TScrollbar')
         self.tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
         # configure scrollbar
         self.my_tree.configure(yscrollcommand=self.tree_scroll.set)
@@ -555,7 +575,7 @@ class App(customtkinter.CTk):
         self.style = ttk.Style()
         self.style.theme_use('default')
 
-        self.style.layout('arrowless.Vertical.TScrollbar', [('Vertical.Scrollbar.trough', 
+        self.style.layout('arrowless.Vertical.TScrollbar', [('Vertical.Scrollbar.trough',
         {'children': [('Vertical.Scrollbar.thumb', {'expand': '1', 'sticky': 'nswe'})], 'sticky': 'ns'})])
 
         # set style based upon style selection
@@ -586,7 +606,7 @@ class App(customtkinter.CTk):
         # column 1
         history_id_label = customtkinter.CTkLabel(self.data_frame, text="ID", anchor='w')
         history_id_label.place(relx=0.005, rely=0, relheight=0.4, relwidth=0.08, anchor=tk.NW)
-        history_id_entry=customtkinter.CTkEntry(self.data_frame, height=25)
+        history_id_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         history_id_entry.place(relx=0.087, rely=0.1, relwidth=0.145, anchor=tk.NW)
 
         split_amount_label = customtkinter.CTkLabel(self.data_frame, text="Split Amount", anchor='w')
@@ -621,16 +641,20 @@ class App(customtkinter.CTk):
         self.button_frame = customtkinter.CTkFrame(self.frame_right)
         self.button_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1, anchor=tk.NW)
 
-        update_button = customtkinter.CTkButton(self.button_frame,text="Update Record",command=lambda:self.update_record(history_entries))
+        update_button = customtkinter.CTkButton(self.button_frame,text="Update Record",
+                                                command=lambda:self.update_record(history_entries))
         update_button.place(relx=0.005, rely=0.25, relwidth=0.225)
 
-        rm_rec_button = customtkinter.CTkButton(self.button_frame, text="Remove Record", command=lambda:self.delete_record(history_entries))
+        rm_rec_button = customtkinter.CTkButton(self.button_frame, text="Remove Record",
+                                                command=lambda:self.delete_record(history_entries))
         rm_rec_button.place(relx=0.262, rely=0.25, relwidth=0.225)
 
-        mm_button = customtkinter.CTkButton(self.button_frame, text="Delete All Records", command=self.delete_all_data)
+        mm_button = customtkinter.CTkButton(self.button_frame, text="Delete All Records",
+                                            command=self.delete_all_data)
         mm_button.place(relx=0.519, rely=0.25, relwidth=0.225)
 
-        ex_button = customtkinter.CTkButton(self.button_frame, text="Exit Program", command=self.on_closing)
+        ex_button = customtkinter.CTkButton(self.button_frame, text="Exit Program",
+                                            command=self.on_closing)
         ex_button.place(relx=0.77, rely=0.25, relwidth=0.225)
         # bind the treeview
         self.my_tree.bind("<ButtonRelease-1>", lambda event: self.select_record(event,history_entries))
@@ -656,23 +680,25 @@ class App(customtkinter.CTk):
         window.grid(row=0, column=0, padx=20, pady=20)
 
         # create title
-        title=customtkinter.CTkLabel(window,text="Transaction Entry", corner_radius=10)
+        title = customtkinter.CTkLabel(window, text="Transaction Entry", corner_radius=10)
         title.configure(font=("Arial Bold", 17))
         title.place(relx=0, rely=0, relwidth=1, relheight=0.1)
 
         # labels: name, ticker, institution_name, time of transaction, amount, price_USD
         label_rely = 0.1
-        labels = ["Name of Security", "Ticker", "Institution Name", "Time of Transaction", "Amount of Shares", "Price in USD", "Transaction Type"]
+        labels = ["Name of Security", "Ticker", "Institution Name",
+                  "Time of Transaction", "Amount of Shares", "Price in USD",
+                  "Transaction Type"]
         for i in labels:
-          my_label=customtkinter.CTkLabel(window, text=i, anchor=tk.W)
+          my_label = customtkinter.CTkLabel(window, text=i, anchor=tk.W)
           my_label.configure(font=('Arial Bold',13))
           my_label.place(relx=0.01, rely=label_rely, relwidth=0.2, relheight=0.1)
           label_rely = label_rely + 0.1
 
         # all entries but it is in combo box style
         name_of_security_entry = customtkinter.CTkComboBox(window, values=self.db.get_table_value("security_name"))
-        name_of_security_entry.set(value = "")
-        name_of_security_entry.place(relx=0.16,rely=0.125,relwidth=0.82, relheight=0.05)
+        name_of_security_entry.set(value="")
+        name_of_security_entry.place(relx=0.16, rely=0.125, relwidth=0.82, relheight=0.05)
 
         ticker_entry = customtkinter.CTkComboBox(window, values=self.db.get_table_value("security_ticker"))
         ticker_entry.set(value="")
@@ -684,7 +710,7 @@ class App(customtkinter.CTk):
 
         tot_text = "Input in the format \"YYYY-MM-DD\" with each character being an integer or leave this field empty for current date and time."
         time_of_transaction_entry = customtkinter.CTkEntry(window, placeholder_text=tot_text)
-        time_of_transaction_entry.place(relx=0.16,rely=0.425, relwidth=0.82, relheight=0.05)
+        time_of_transaction_entry.place(relx=0.16, rely=0.425, relwidth=0.82, relheight=0.05)
 
         amount_of_shares_entry = customtkinter.CTkEntry(window, placeholder_text="Input only a number.")
         amount_of_shares_entry.place(relx=0.16, rely=0.525, relwidth=0.82, relheight=0.05)
@@ -741,7 +767,7 @@ class App(customtkinter.CTk):
         labels = ["Name of Security", "Ticker", "From Institution Name", "Time of Transaction", "Amount of Shares", "To Institution Name", "Transaction Type"]
         for i in labels:
             my_label=customtkinter.CTkLabel(window, text=i , anchor=tk.W)
-            my_label.configure(font = ('Arial Bold',13))
+            my_label.configure(font=('Arial Bold',13))
             my_label.place(relx=0.01, rely=label_rely, relwidth=0.2, relheight=0.1)
             label_rely = label_rely + 0.1
 
@@ -756,7 +782,7 @@ class App(customtkinter.CTk):
         ticker_entry.place(relx=0.16, rely=0.225, relwidth=0.82, relheight=0.05)
 
         from_institution_name_entry = customtkinter.CTkComboBox(window, values=self.db.get_table_value("institution"))
-        from_institution_name_entry.set(value = "")
+        from_institution_name_entry.set(value="")
         from_institution_name_entry.place(relx=0.16, rely=0.325, relwidth=0.82, relheight=0.05)
 
         time_of_transaction_entry = customtkinter.CTkEntry(window, placeholder_text="Input in the format \"YYYY-MM-DD\" with each character being an integer or leave this field empty for current date and time.")
@@ -787,12 +813,13 @@ class App(customtkinter.CTk):
         }
 
         # entry button
-        entry_button=customtkinter.CTkButton(window, text="Enter", command=lambda: self.gb.insert_transaction_into_database(entry_dic, transfer= True))
+        entry_button = customtkinter.CTkButton(window, text="Enter",
+                                             command=lambda: self.gb.insert_transaction_into_database(entry_dic, transfer= True))
         entry_button.place(relx=0, rely=0.825, relwidth=1, relheight=0.05)
 
         # return to main menu and exit button
-        return_main_button=customtkinter.CTkButton(window, text="Close Window", command=self.tranfer_window_pop.destroy)
-        exit_button=customtkinter.CTkButton(window, text="Exit Program", command=self.on_closing)
+        return_main_button = customtkinter.CTkButton(window, text="Close Window", command=self.tranfer_window_pop.destroy)
+        exit_button = customtkinter.CTkButton(window, text="Exit Program", command=self.on_closing)
 
         return_main_button.place(relx=0, rely=0.924, relwidth=0.2, relheight=0.075)
         exit_button.place(relx=0.8, rely=0.924, relwidth=0.2, relheight=0.075)
@@ -814,11 +841,11 @@ class App(customtkinter.CTk):
         window.grid(row=0,column=0, padx=15, pady=15)
 
         # create title
-        title=customtkinter.CTkLabel(window,text="Stock Split Adjustment", corner_radius=10)
+        title = customtkinter.CTkLabel(window,text="Stock Split Adjustment", corner_radius=10)
         title.configure(font=("Arial Bold", 17))
         title.place(relx=0, rely=0, relwidth=1, relheight=0.1)
 
-            # labels: name, ticker, institution_name, time of transaction, amount, price_USD
+        # labels: name, ticker, institution_name, time of transaction, amount, price_USD
         label_rely = 0.1
         labels=["Name of Security", "Ticker", "Time of Split", "Split Amount", "Transaction Type"]
         for i in labels:
@@ -829,20 +856,22 @@ class App(customtkinter.CTk):
 
         # all entries but it is in combo box style
 
-        name_of_security_entry = customtkinter.CTkOptionMenu(window, values=self.db.get_table_value("security_name"), 
-                                                             fg_color=("#F9F9FA", "#343638"), 
-                                                             button_color=("#979DA2", "#565B5E"), 
+        name_of_security_entry = customtkinter.CTkOptionMenu(window, values=self.db.get_table_value("security_name"),
+                                                             fg_color=("#F9F9FA", "#343638"),
+                                                             button_color=("#979DA2", "#565B5E"),
                                                              button_hover_color=("#6E7174", "#7A848D"))
 
         name_of_security_entry.set(value="")
         name_of_security_entry.place(relx=0.18, rely=0.155, relwidth=0.8, relheight=0.07)
 
-        ticker_entry = customtkinter.CTkOptionMenu(window, values=self.db.get_table_value("security_ticker"), fg_color=("#F9F9FA", "#343638"), button_color=("#979DA2", "#565B5E"), button_hover_color=("#6E7174", "#7A848D"))
+        ticker_entry = customtkinter.CTkOptionMenu(window, values=self.db.get_table_value("security_ticker"),
+                                                   fg_color=("#F9F9FA", "#343638"), button_color=("#979DA2", "#565B5E"),
+                                                   button_hover_color=("#6E7174", "#7A848D"))
 
         ticker_entry.set(value="")
         ticker_entry.place(relx=0.18, rely=0.285, relwidth=0.8, relheight=0.07)
 
-        time_of_transaction_entry = customtkinter.CTkEntry(window, placeholder_text="Leave empty or input in the format \"YYYY-MM-DD\" with each character being an integer.")
+        time_of_transaction_entry = customtkinter.CTkEntry(window, placeholder_text="Leave empty or input in the format \"YYYY-MM-DD\".")
         time_of_transaction_entry.place(relx=0.18, rely=0.415, relwidth=0.8, relheight=0.07)
 
         amount_of_shares_entry = customtkinter.CTkEntry(window, placeholder_text="Input only a whole number.")
@@ -861,12 +890,12 @@ class App(customtkinter.CTk):
             "transaction_type": transaction_type_entry
         }
         # entry button
-        entry_button=customtkinter.CTkButton(window, text="Enter", command=lambda: self.gb.insert_transaction_into_database(entry_dic, split=True))
+        entry_button = customtkinter.CTkButton(window, text="Enter", command=lambda: self.gb.insert_transaction_into_database(entry_dic, split=True))
         entry_button.place(relx=0, rely=0.8, relwidth=1, relheight=0.07)
 
         # return to main menu and exit button
-        return_main_button=customtkinter.CTkButton(window, text="Close Window", command=self.ss_window_pop.destroy)
-        exit_button=customtkinter.CTkButton(window, text="Exit Program", command=self.on_closing)
+        return_main_button = customtkinter.CTkButton(window, text="Close Window", command=self.ss_window_pop.destroy)
+        exit_button = customtkinter.CTkButton(window, text="Exit Program", command=self.on_closing)
 
         return_main_button.place(relx=0, rely=0.919, relwidth=0.2, relheight=0.08)
         exit_button.place(relx=0.8, rely=0.919, relwidth=0.2, relheight=0.08)
@@ -914,20 +943,20 @@ class App(customtkinter.CTk):
             entry.configure(state="normal")
             entry.delete(0,tk.END)
         # grab records
-        selected=self.my_tree.focus()
+        selected = self.my_tree.focus()
         # grab record value
-        values=self.my_tree.item(selected,'values')
-        count=0
+        values = self.my_tree.item(selected,'values')
+        count = 0
 
         # insert into entry box
         for name,entry in entry_dic.items():
             if name == "id_entry" or name == "age_entry" or name == "long_entry" or name == "history_id":
                 entry.insert(count,values[count])
                 entry.configure(state="disabled")
-                count+=1
+                count += 1
             else:
                 entry.insert(count,values[count])
-                count+=1
+                count += 1
 
   # remove all records from treeview
     def remove_all(self) -> None:
@@ -966,7 +995,7 @@ class App(customtkinter.CTk):
 
     def update_record(self,entry_dic: Dict[str, Any]) -> None:
         '''class method to update selected record on the database'''
-        selected=self.my_tree.focus()
+        selected = self.my_tree.focus()
 
         id_entry = entry_dic["id_entry"]
         id_entry.configure(state="normal")
@@ -1038,7 +1067,7 @@ class App(customtkinter.CTk):
     # standardized function to get database info
     def query_database(self,func: Callable) -> None:
       '''wraper function to standardize input data from database'''
-      count=0
+      count = 0
       records=func()
       for record in records:
           rec=[record[i] for i in range(len(record))]
