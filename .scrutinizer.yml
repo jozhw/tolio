@@ -8,4 +8,5 @@ build:
         before:
             -
                 command: curl https://sh.rustup.rs -sSf | sh
+            -
                 command: 1
