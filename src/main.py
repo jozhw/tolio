@@ -2,12 +2,17 @@
 import tkinter as tk
 from tkinter import messagebox, ttk, filedialog
 from typing import Dict, Any, Callable, List
+
 import customtkinter
 import darkdetect
+
 from PIL import Image
 from utils import ResourcePath, get_previous_setting, save_previous_setting, export_csv, insert_csv
 from database import Database
 from gui_bridge import GuiBridge
+from gui import window_add_transaction
+from gui import window_stock_split
+from gui import window_transfer
 
 class App(customtkinter.CTk):
     '''class for the gui of the application'''
@@ -98,7 +103,7 @@ class App(customtkinter.CTk):
         self.transfer_institution_button = customtkinter.CTkButton(self.frame_left,
                                                                    text="Transfer",
                                                                    border_color="black",
-                                                                   command=self.window_transfer_institution,
+                                                                   command=self.window_transfer,
                                                                    image=self.transfer_icon,
                                                                    anchor="w")
         self.transfer_institution_button.grid(row=4, column=0, pady=15, padx=20)
@@ -665,240 +670,15 @@ class App(customtkinter.CTk):
 
     # click for the add transaction window to pop up
     def window_add_transaction(self) -> None:
-        '''class method that opens a new window to input a transaction for acquiring or disposing a security'''
-        self.transaction_window = customtkinter.CTkToplevel(self)
-        self.transaction_window.title("Add Transaction")
+        window_add_transaction.WindowAddTransaction(self)
 
-        width = 1000
-        height = 500
-        self.transaction_window.geometry(f"{width}x{height}")
-        self.transaction_window.minsize(width,height)
-        self.transaction_window.maxsize(width,height)
-
-        self.transaction_window.grid_rowconfigure(0, weight=1)
-        window = customtkinter.CTkFrame(master=self.transaction_window, width=960, height=460)
-        window.grid(row=0, column=0, padx=20, pady=20)
-
-        # create title
-        title = customtkinter.CTkLabel(window, text="Transaction Entry", corner_radius=10)
-        title.configure(font=("Arial Bold", 17))
-        title.place(relx=0, rely=0, relwidth=1, relheight=0.1)
-
-        # labels: name, ticker, institution_name, time of transaction, amount, price_USD
-        label_rely = 0.1
-        labels = ["Name of Security", "Ticker", "Institution Name",
-                  "Time of Transaction", "Amount of Shares", "Price in USD",
-                  "Transaction Type"]
-        for i in labels:
-          my_label = customtkinter.CTkLabel(window, text=i, anchor=tk.W)
-          my_label.configure(font=('Arial Bold',13))
-          my_label.place(relx=0.01, rely=label_rely, relwidth=0.2, relheight=0.1)
-          label_rely = label_rely + 0.1
-
-        # all entries but it is in combo box style
-        name_of_security_entry = customtkinter.CTkComboBox(window, values=self.db.get_table_value("security_name"))
-        name_of_security_entry.set(value="")
-        name_of_security_entry.place(relx=0.16, rely=0.125, relwidth=0.82, relheight=0.05)
-
-        ticker_entry = customtkinter.CTkComboBox(window, values=self.db.get_table_value("security_ticker"))
-        ticker_entry.set(value="")
-        ticker_entry.place(relx=0.16, rely=0.225, relwidth=0.82, relheight=0.05)
-
-        institution_name_entry = customtkinter.CTkComboBox(window, values=self.db.get_table_value("institution"))
-        institution_name_entry.set(value="")
-        institution_name_entry.place(relx=0.16, rely=0.325, relwidth=0.82, relheight=0.05)
-
-        tot_text = "Input in the format \"YYYY-MM-DD\" with each character being an integer or leave this field empty for current date and time."
-        time_of_transaction_entry = customtkinter.CTkEntry(window, placeholder_text=tot_text)
-        time_of_transaction_entry.place(relx=0.16, rely=0.425, relwidth=0.82, relheight=0.05)
-
-        amount_of_shares_entry = customtkinter.CTkEntry(window, placeholder_text="Input only a number.")
-        amount_of_shares_entry.place(relx=0.16, rely=0.525, relwidth=0.82, relheight=0.05)
-
-        price_usd_entry = customtkinter.CTkEntry(window, placeholder_text="Input only a number. Do not input the currency.")
-        price_usd_entry.place(relx=0.16, rely=0.625, relwidth=0.82, relheight=0.05)
-
-        transaction_type_entry = customtkinter.CTkOptionMenu(window, values =["Acquire", "Dispose"], fg_color =("#F9F9FA", "#343638"),
-        button_color = ("#979DA2", "#565B5E"),
-        button_hover_color = ("#6E7174", "#7A848D"))
-        transaction_type_entry.set(value="Acquire")
-        transaction_type_entry.place(relx=0.16, rely=0.725, relwidth=0.82, relheight=0.05)
-
-        # dictionary of entries
-        entry_dic = {"name": name_of_security_entry, "ticker": ticker_entry,
-            "institution_name": institution_name_entry, "timestamp": time_of_transaction_entry,
-            "amount": amount_of_shares_entry, "price_USD": price_usd_entry,
-            "transaction_type": transaction_type_entry
-        }
-
-        # entry button
-        entry_button = customtkinter.CTkButton(window, text="Enter", command=lambda: self.gb.insert_transaction_into_database(entry_dic))
-        entry_button.place(relx=0, rely=0.825, relwidth=1, relheight=0.05)
-
-        # return to main menu and exit button
-        return_main_button = customtkinter.CTkButton(window, text="Close Window", command=self.transaction_window.destroy)
-        exit_button=customtkinter.CTkButton(window, text="Exit Program", command=self.on_closing)
-
-        return_main_button.place(relx=0, rely=0.924, relwidth=0.2, relheight=0.075)
-        exit_button.place(relx=0.8, rely=0.924, relwidth=0.2, relheight=0.075)
-
-    def window_transfer_institution(self) -> None:
+    def window_transfer(self) -> None:
         '''class method that opens a new window for inputing a transfer transaction'''
-        self.tranfer_window_pop = customtkinter.CTkToplevel(self)
-        self.tranfer_window_pop.title("Transfer Institution")
-
-        width = 1000
-        height = 500
-        self.tranfer_window_pop.geometry(f"{width}x{height}")
-        self.tranfer_window_pop.minsize(width,height)
-        self.tranfer_window_pop.maxsize(width,height)
-
-        self.tranfer_window_pop.grid_rowconfigure(0, weight=1)
-        window = customtkinter.CTkFrame(master=self.tranfer_window_pop, width=960, height=460)
-        window.grid(row=0,column=0, padx=20, pady=20)
-
-        # create title
-        title = customtkinter.CTkLabel(window,text="Transfer Institution Entry", corner_radius=10)
-        title.configure(font = ("Arial Bold", 17))
-        title.place(relx=0, rely=0, relwidth=1, relheight=0.1)
-
-        # labels: name, ticker, institution_name, time of transaction, amount, price_usd
-        label_rely = 0.1
-        labels = ["Name of Security", "Ticker", "From Institution Name", "Time of Transaction", "Amount of Shares", "To Institution Name", "Transaction Type"]
-        for i in labels:
-            my_label=customtkinter.CTkLabel(window, text=i , anchor=tk.W)
-            my_label.configure(font=('Arial Bold',13))
-            my_label.place(relx=0.01, rely=label_rely, relwidth=0.2, relheight=0.1)
-            label_rely = label_rely + 0.1
-
-        # all entries but it is in combo box style
-
-        name_of_security_entry = customtkinter.CTkComboBox(window, values=self.db.get_table_value("name"))
-        name_of_security_entry.set(value="")
-        name_of_security_entry.place(relx=0.16, rely=0.125, relwidth=0.82, relheight=0.05)
-
-        ticker_entry = customtkinter.CTkComboBox(window, values=self.db.get_table_value("ticker"))
-        ticker_entry.set(value="")
-        ticker_entry.place(relx=0.16, rely=0.225, relwidth=0.82, relheight=0.05)
-
-        from_institution_name_entry = customtkinter.CTkComboBox(window, values=self.db.get_table_value("institution"))
-        from_institution_name_entry.set(value="")
-        from_institution_name_entry.place(relx=0.16, rely=0.325, relwidth=0.82, relheight=0.05)
-
-        time_of_transaction_entry = customtkinter.CTkEntry(window, placeholder_text="Input in the format \"YYYY-MM-DD\" with each character being an integer or leave this field empty for current date and time.")
-        time_of_transaction_entry.place(relx=0.16, rely=0.425, relwidth=0.82, relheight=0.05)
-
-        amount_of_shares_entry = customtkinter.CTkEntry(window, placeholder_text="Input only a number.")
-        amount_of_shares_entry.place(relx=0.16, rely=0.525, relwidth=0.82, relheight=0.05)
-
-        to_institution_name_entry = customtkinter.CTkComboBox(window, values=self.db.get_table_value("institution"))
-        to_institution_name_entry.set(value="")
-        to_institution_name_entry.place(relx=0.16, rely=0.625, relwidth=0.82, relheight=0.05)
-
-        set_transaction_type_entry = customtkinter.StringVar(value="Transfer")
-        transaction_type_entry = customtkinter.CTkEntry(window, textvariable=set_transaction_type_entry)
-        transaction_type_entry.configure(state="disabled")
-
-        transaction_type_entry.place(relx=0.16, rely=0.725, relwidth=0.82, relheight=0.05)
-
-        set_price_usd_entry = customtkinter.StringVar(value=0)
-        price_usd_entry = customtkinter.CTkEntry(window, textvariable=set_price_usd_entry)
-
-
-        # dictionary of entries
-        entry_dic = {"name": name_of_security_entry, "ticker": ticker_entry,
-            "institution_name": from_institution_name_entry, "timestamp": time_of_transaction_entry,
-            "amount": amount_of_shares_entry, "to_institution_name": to_institution_name_entry,
-            "transaction_type": transaction_type_entry, "price_USD": price_usd_entry
-        }
-
-        # entry button
-        entry_button = customtkinter.CTkButton(window, text="Enter",
-                                             command=lambda: self.gb.insert_transaction_into_database(entry_dic, transfer= True))
-        entry_button.place(relx=0, rely=0.825, relwidth=1, relheight=0.05)
-
-        # return to main menu and exit button
-        return_main_button = customtkinter.CTkButton(window, text="Close Window", command=self.tranfer_window_pop.destroy)
-        exit_button = customtkinter.CTkButton(window, text="Exit Program", command=self.on_closing)
-
-        return_main_button.place(relx=0, rely=0.924, relwidth=0.2, relheight=0.075)
-        exit_button.place(relx=0.8, rely=0.924, relwidth=0.2, relheight=0.075)
+        window_transfer.WindowTransfer(self)
 
     def window_stock_split(self) -> None:
         '''class method that opens a new window to input a stock split transaction'''
-        self.ss_window_pop = customtkinter.CTkToplevel(self)
-        self.ss_window_pop.title("Stock Split")
-
-        width = 750
-        height = 400
-        self.ss_window_pop.geometry(f"{width}x{height}")
-        self.ss_window_pop.minsize(width, height)
-        self.ss_window_pop.maxsize(width, height)
-
-
-        self.ss_window_pop.grid_rowconfigure(0,weight=1)
-        window = customtkinter.CTkFrame(master=self.ss_window_pop, width=720, height=360)
-        window.grid(row=0,column=0, padx=15, pady=15)
-
-        # create title
-        title = customtkinter.CTkLabel(window,text="Stock Split Adjustment", corner_radius=10)
-        title.configure(font=("Arial Bold", 17))
-        title.place(relx=0, rely=0, relwidth=1, relheight=0.1)
-
-        # labels: name, ticker, institution_name, time of transaction, amount, price_USD
-        label_rely = 0.1
-        labels=["Name of Security", "Ticker", "Time of Split", "Split Amount", "Transaction Type"]
-        for i in labels:
-            my_label=customtkinter.CTkLabel(window, text=i, anchor=tk.W)
-            my_label.configure(font=('Arial Bold',13))
-            my_label.place(relx=0.01, rely=label_rely, relwidth=0.2, relheight=0.175)
-            label_rely = label_rely + 0.13
-
-        # all entries but it is in combo box style
-
-        name_of_security_entry = customtkinter.CTkOptionMenu(window, values=self.db.get_table_value("security_name"),
-                                                             fg_color=("#F9F9FA", "#343638"),
-                                                             button_color=("#979DA2", "#565B5E"),
-                                                             button_hover_color=("#6E7174", "#7A848D"))
-
-        name_of_security_entry.set(value="")
-        name_of_security_entry.place(relx=0.18, rely=0.155, relwidth=0.8, relheight=0.07)
-
-        ticker_entry = customtkinter.CTkOptionMenu(window, values=self.db.get_table_value("security_ticker"),
-                                                   fg_color=("#F9F9FA", "#343638"), button_color=("#979DA2", "#565B5E"),
-                                                   button_hover_color=("#6E7174", "#7A848D"))
-
-        ticker_entry.set(value="")
-        ticker_entry.place(relx=0.18, rely=0.285, relwidth=0.8, relheight=0.07)
-
-        time_of_transaction_entry = customtkinter.CTkEntry(window, placeholder_text="Leave empty or input in the format \"YYYY-MM-DD\".")
-        time_of_transaction_entry.place(relx=0.18, rely=0.415, relwidth=0.8, relheight=0.07)
-
-        amount_of_shares_entry = customtkinter.CTkEntry(window, placeholder_text="Input only a whole number.")
-        amount_of_shares_entry.place(relx=0.18, rely=0.545, relwidth=0.8, relheight=0.07)
-
-        set_transaction_type_entry = customtkinter.StringVar(value="Stock Split")
-        transaction_type_entry = customtkinter.CTkEntry(window, textvariable=set_transaction_type_entry)
-        transaction_type_entry.configure(state="disabled")
-
-        transaction_type_entry.place(relx=0.18, rely=0.675, relwidth=0.8, relheight=0.07)
-
-        # dictionary of entries
-        entry_dic = {"name": name_of_security_entry, "ticker": ticker_entry,
-            "timestamp": time_of_transaction_entry,
-            "amount": amount_of_shares_entry,
-            "transaction_type": transaction_type_entry
-        }
-        # entry button
-        entry_button = customtkinter.CTkButton(window, text="Enter", command=lambda: self.gb.insert_transaction_into_database(entry_dic, split=True))
-        entry_button.place(relx=0, rely=0.8, relwidth=1, relheight=0.07)
-
-        # return to main menu and exit button
-        return_main_button = customtkinter.CTkButton(window, text="Close Window", command=self.ss_window_pop.destroy)
-        exit_button = customtkinter.CTkButton(window, text="Exit Program", command=self.on_closing)
-
-        return_main_button.place(relx=0, rely=0.919, relwidth=0.2, relheight=0.08)
-        exit_button.place(relx=0.8, rely=0.919, relwidth=0.2, relheight=0.08)
+        window_stock_split.WindowStockSplit(self)
 
     def window_import_filedialog(self) -> None:
         '''class method that opens a filedialog to select a .csv to import'''
