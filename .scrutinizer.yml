@@ -4,7 +4,3 @@ build:
         python:
             version: 3.9.9
             virtualenv: true
-
-filter:
-    excluded_paths:
-        - "test/"
