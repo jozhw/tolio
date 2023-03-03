@@ -2,7 +2,7 @@
 import tkinter as tk
 from tkinter import messagebox, ttk, filedialog
 from typing import Dict, Any, Callable, List
-import customtkinter 
+import customtkinter
 import darkdetect
 from PIL import Image
 from utils import ResourcePath, get_previous_setting, save_previous_setting, export_csv, insert_csv
@@ -16,7 +16,8 @@ class App(customtkinter.CTk):
     style_resource_path = ResourcePath("src/assets/styling/")
     icon_resource_path = ResourcePath("src/assets/icons/")
     set_settings_resource_path = style_resource_path.resource_path("set_settings.json")
-    customtkinter.set_appearance_mode(get_previous_setting(set_settings_resource_path, appearance_option = True))
+    pre_set = get_previous_setting(set_settings_resource_path, appearance_option = True)
+    customtkinter.set_appearance_mode(pre_set)
     customtkinter.set_default_color_theme(style_resource_path.resource_path("style.json"))
     WIDTH = 1300
     HEIGHT = 600
@@ -29,11 +30,11 @@ class App(customtkinter.CTk):
         super().__init__()
         self.title("Tolio - Portfolio Tracker")
         logo_path = tk.PhotoImage(file=self.icon_resource_path.resource_path("tolio_icon.png"))
-        self.iconphoto(False,logo_path)
+        self.iconphoto(False, logo_path)
         self.geometry(f"{App.WIDTH}x{App.HEIGHT}")
         # not resizable
-        self.minsize(App.WIDTH,App.HEIGHT)
-        self.maxsize(App.WIDTH,App.HEIGHT)
+        self.minsize(App.WIDTH, App.HEIGHT)
+        self.maxsize(App.WIDTH, App.HEIGHT)
         self.protocol("WM_DELETE_WINDOW", self.on_closing) # call .on_closing() when app gets closed
 
         # ================================= create two frames (menu bar & activity bar) ===============================
@@ -313,6 +314,7 @@ class App(customtkinter.CTk):
 
     # menu for showing all securities held for each particular institution
     def show_institutions_held_window(self) -> None:
+        '''class method to show securities held at institutions on treeview'''
         # ================================= Tree View =================================
 
         # create treeview
@@ -421,7 +423,7 @@ class App(customtkinter.CTk):
 
     # menu for showing the summaries of the securities (does not include institutions)
     def show_securities_window(self) -> None:
-
+        '''class method to show the data for all the particular securities'''
         # ================================= Tree View =================================
 
         # create treeview
@@ -533,7 +535,7 @@ class App(customtkinter.CTk):
 
     # menu for showing the stock split history
     def show_stock_split_data_window(self) -> None:
-
+        '''class method to show the stock split history on treeview'''
         # ================================= Tree View =================================
 
         # create treeview
@@ -549,7 +551,7 @@ class App(customtkinter.CTk):
         self.my_tree.configure(yscrollcommand=self.tree_scroll.set)
 
 
-        # treeview styling 
+        # treeview styling
         self.style = ttk.Style()
         self.style.theme_use('default')
 
@@ -639,6 +641,7 @@ class App(customtkinter.CTk):
 
     # click for the add transaction window to pop up
     def window_add_transaction(self) -> None:
+        '''class method that opens a new window to input a transaction for acquiring or disposing a security'''
         self.transaction_window = customtkinter.CTkToplevel(self)
         self.transaction_window.title("Add Transaction")
 
@@ -714,6 +717,7 @@ class App(customtkinter.CTk):
         exit_button.place(relx=0.8, rely=0.924, relwidth=0.2, relheight=0.075)
 
     def window_transfer_institution(self) -> None:
+        '''class method that opens a new window for inputing a transfer transaction'''
         self.tranfer_window_pop = customtkinter.CTkToplevel(self)
         self.tranfer_window_pop.title("Transfer Institution")
 
@@ -794,6 +798,7 @@ class App(customtkinter.CTk):
         exit_button.place(relx=0.8, rely=0.924, relwidth=0.2, relheight=0.075)
 
     def window_stock_split(self) -> None:
+        '''class method that opens a new window to input a stock split transaction'''
         self.ss_window_pop = customtkinter.CTkToplevel(self)
         self.ss_window_pop.title("Stock Split")
 
@@ -867,11 +872,12 @@ class App(customtkinter.CTk):
         exit_button.place(relx=0.8, rely=0.919, relwidth=0.2, relheight=0.08)
 
     def window_import_filedialog(self) -> None:
-
+        '''class method that opens a filedialog to select a .csv to import'''
         self.import_file_name = filedialog.askopenfilename(title="Select A CSV File", filetypes=(("csv files", "*.csv"),))
         insert_csv(self.import_file_name)
 
     def window_export_filedialog(self) -> None:
+        '''class method that opens a filedialog to select where to export .csv'''
         answer = messagebox.askyesno(title="Export Database",
                                     message="Would you like to export the database to a .csv file?")
         if answer == True:
@@ -884,6 +890,7 @@ class App(customtkinter.CTk):
 
       # delete all data from database
     def delete_all_data(self) -> None:
+        '''class method to delete all data in database'''
         answer = messagebox.askyesno(title="Delete All Records",
                                   message="""Would you like to delete all of your records?
                                   """)
@@ -901,6 +908,7 @@ class App(customtkinter.CTk):
 
       # function to select record
     def select_record(self, event, entry_dic: Dict[str, Any], *args: List[str]) -> None:
+        '''class method to bind record for treeview entry boxes'''
         # change to normal state in case of later bind
         for entry in entry_dic.values():
             entry.configure(state="normal")
@@ -923,11 +931,13 @@ class App(customtkinter.CTk):
 
   # remove all records from treeview
     def remove_all(self) -> None:
+        '''class method to remove records from treeview'''
         for record in self.my_tree.get_children():
             print(record)
             self.my_tree.delete(record)
 
     def delete_record(self,entry_dic: Dict[str, Any]) -> None:
+        '''class method to remove selected record from the database'''
         to_delete_or_not = messagebox.askyesno("Delete Record", "Are you sure you would like to delete this record?")
         if to_delete_or_not == 1:
             selected = self.my_tree.focus()
@@ -955,6 +965,7 @@ class App(customtkinter.CTk):
             messagebox.showinfo("Not Deleted.", "Your record was not deleted.")
 
     def update_record(self,entry_dic: Dict[str, Any]) -> None:
+        '''class method to update selected record on the database'''
         selected=self.my_tree.focus()
 
         id_entry = entry_dic["id_entry"]
@@ -1026,6 +1037,7 @@ class App(customtkinter.CTk):
 
     # standardized function to get database info
     def query_database(self,func: Callable) -> None:
+      '''wraper function to standardize input data from database'''
       count=0
       records=func()
       for record in records:
@@ -1041,10 +1053,12 @@ class App(customtkinter.CTk):
       # ================================= main functionalities =================================
 
     def on_closing(self) -> None:
+        '''class method that is called at closing of gui that will save style settings'''
         save_previous_setting(self.set_settings_resource_path, self.transition_menu.get(), self.appearance_options.get())
         self.destroy()
 
     def refresh_page(self) -> None:
+        '''needs development'''
         value = self.transition_menu.get()
         self.main_view.destroy()
         self.data_frame.destroy()

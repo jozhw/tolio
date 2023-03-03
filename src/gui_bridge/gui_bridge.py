@@ -26,9 +26,7 @@ def check_correct_values(entry_dic: Dict) -> bool:
     institution_name = bool(entry_dic["institution_name"])
 
     # timestamp
-    if bool(date_regex.search(timestamp)) or not bool(timestamp):
-        pass
-    else:
+    if not bool(date_regex.search(timestamp)) and bool(timestamp):
         messagebox.showerror("Error", "Date must be in \"YYYY-MM-DD\"")
         raise ValueError("Date must be in YYYY-MM-DD format")
 
@@ -36,7 +34,6 @@ def check_correct_values(entry_dic: Dict) -> bool:
     try:
         float(entry_dic["amount"])
         float(entry_dic["price_USD"])
-
     except:
         messagebox.showerror("Error", "Amount/Price should be float convertable" )
         raise TypeError("Amount/Price should be float convertable.")
@@ -45,10 +42,10 @@ def check_correct_values(entry_dic: Dict) -> bool:
         messagebox.showerror("Error", "Name, ticker, or institution cannot be null.")
         raise ValueError("Name, ticker, or institution cannot be null.")
 
-    if entry_dic["transaction_type"] == "Transfer":
-        if entry_dic["to_institution_name"] == entry_dic['institution_name']:
-            messagebox.showerror("Error", "The institutions are the same.")
-            raise ValueError("The institutions are the same.")
+    if entry_dic["transaction_type"] == "Transfer" and entry_dic["to_institution_name"] == entry_dic['institution_name']:
+        messagebox.showerror("Error", "The institutions are the same.")
+        raise ValueError("The institutions are the same.")
+
     return success
 
 # get the values from the customtkinter object

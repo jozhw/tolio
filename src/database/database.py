@@ -7,7 +7,9 @@ from typing import List, Any
 import tolio
 
 class Database:
+    '''Class that contains all database methods'''
     def __init__(self, db_path: str="files/data/portfolio.db", sql_path: str="src/database/init_db.sql") -> None:
+        '''initialize with preset paths to db and sql'''
         # locate database
         self.db_path = os.path.expanduser(db_path)
         self.connection = sqlite3.connect(os.path.expanduser(self.db_path))
@@ -20,6 +22,7 @@ class Database:
 
     # create .sql file to create the tables
     def execute_sql_script(self, filename):
+        '''method to execute sql'''
         file_open = open(filename, 'r')
         sql_file = file_open.read()
         file_open.close()
@@ -32,28 +35,33 @@ class Database:
 
   # ============================== insert ==============================
 
-    "All of the following insert methods affects the all_shares table"
+    #All of the following insert methods affects the all_shares table
 
     # insert a acquire or dispose (add) transaction into transactions
     def insert_acquire_or_dispose(self, value_dic: dict[Any]) -> None:
+        '''method to insert an acquire or dipose transaction'''
         tolio.insert_acquire_or_dispose(self.db_path, value_dic)
 
     # insert a transfer transaction into transactions
     def insert_transfer(self, value_dic: dict[Any]) -> None:
+        '''method to insert a transfer transaction'''
         tolio.insert_transfer(self.db_path, value_dic)
 
   # insert a stock split transaction into transaction
     def insert_stock_split(self, value_dic: dict[Any]) -> None:
+        '''method to insert a stock split transaction'''
         tolio.insert_stock_split(self.db_path, value_dic)
 
   # ============================== update tables ================================
 
   # update transaction age
     def update_transaction_age(self) -> None:
+        '''method to update transaction age'''
         tolio.update_transaction_age(self.db_path)
 
   # update securities - this dependent on the all_shares table
     def update_securities(self) -> None:
+        '''method to update securities table'''
         # create list of securities
         sql = "SELECT DISTINCT security_id FROM transactions WHERE transaction_abbreviation IS NOT 'SS';"
         get_securities=self.cur.execute(sql).fetchall()
@@ -98,6 +106,7 @@ class Database:
 
     # update institutions held: institution_id, security_id, amount_held, total_cost, cost_basis, number_long
     def update_institutions_held(self) -> None:
+        '''method to update institutions held table'''
         get_institution_id = self.cur.execute("SELECT DISTINCT institution_id, security_id FROM Transactions").fetchall()
         for institution_id, security_id in get_institution_id:
 
@@ -140,6 +149,7 @@ class Database:
 
     # update table from transactions table
     def update_table(self, value_dic: dict[Any]) -> None:
+        '''method to update transaction table'''
         tolio.update_table(self.db_path, value_dic)
 
     # ================================= get =================================
@@ -182,6 +192,7 @@ class Database:
 
     # get list of x that exists
     def get_table_value(self,value:str) -> List[str]:
+        '''method to get a list of preexisting values to help auto-complete input in entry box'''
         edited_array = []
         if value == "security_name":
           unedited_list = self.cur.execute("SELECT DISTINCT security_name FROM securities;").fetchall()

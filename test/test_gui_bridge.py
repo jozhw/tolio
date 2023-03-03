@@ -1,13 +1,11 @@
+from src.gui_bridge import check_correct_values
 from pathlib import Path
 import sys
 # add path to so python can retrieve packages
 path = str(Path(".").parent.absolute())
 sys.path.insert(0, path)
 
-
 import unittest
-
-from src.gui_bridge import check_correct_values
 
 class TestGuiFunctionalities(unittest.TestCase):
 
