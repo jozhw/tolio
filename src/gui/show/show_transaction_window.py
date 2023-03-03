@@ -3,8 +3,8 @@ import tkinter as tk
 import customtkinter
 
 from tkinter import ttk
-from .records import Records
-from .appearance import Appearance
+from ..gui_utils.records import Records
+from ..gui_utils.appearance import Appearance
 
 class ShowTransactionWindow(customtkinter.CTkFrame):
     '''class that shows the list of transactions on treeview'''
@@ -65,6 +65,8 @@ class ShowTransactionWindow(customtkinter.CTkFrame):
         self.rc.query_database(self.master.db.get_transactions_table)
 
         self.window_menu()
+
+        # audo change appearance
         self.after(500, self.ap.delay_appearance)
 
     def window_menu(self):

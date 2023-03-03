@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 import customtkinter
-from .records import Records
-from .appearance import Appearance
+from ..gui_utils.records import Records
+from ..gui_utils.appearance import Appearance
 
 class ShowStockSplitDataWindow(customtkinter.CTkFrame):
     '''class to show the stock split history on treeview'''
@@ -62,6 +62,9 @@ class ShowStockSplitDataWindow(customtkinter.CTkFrame):
         self.rc.query_database(self.master.db.get_stock_split_history)
 
         self.window_menu()
+
+        # auto change appearance
+        self.after(500, self.ap.delay_appearance)
 
     def window_menu(self):
         # ================================= Tree View Menu =================================

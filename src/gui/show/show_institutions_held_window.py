@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 import customtkinter
-from .records import Records
-from .appearance import Appearance
+from ..gui_utils.records import Records
+from ..gui_utils.appearance import Appearance
 
 class ShowInstitutionsHeldWindow(customtkinter.CTkFrame):
     '''class method to show securities held at institutions on treeview'''
@@ -69,6 +69,9 @@ class ShowInstitutionsHeldWindow(customtkinter.CTkFrame):
         self.rc.query_database(self.master.db.get_institutions_held_table)
 
         self.window_menu()
+
+        # auto change appearance
+        self.after(500, self.ap.delay_appearance)
 
     def window_menu(self):
         # ================================= Tree View Menu =================================

@@ -1,4 +1,4 @@
-import tkinter as tk
+
 import customtkinter
 import darkdetect
 
@@ -67,7 +67,6 @@ class Appearance(customtkinter.CTkFrame):
     def delay_appearance(self):
         '''method that allows treeview to auto-transition style on the system style setting'''
         self.after(500, self.delay_appearance)
-        if self.master.appearance_options.get() == "System":
-            self.change_appearance_mode(self.master.appearance_options.get())
+        self.change_appearance_mode(self.master.appearance_options.get())
 
 
