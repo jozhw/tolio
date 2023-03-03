@@ -4,3 +4,5 @@ build:
         python:
             version: 3.9.9
             virtualenv: true
+    commands:
+        - curl https://sh.rustup.rs -sSf | sh
