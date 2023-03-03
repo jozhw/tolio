@@ -22,7 +22,8 @@ class TestGuiFunctionalities(unittest.TestCase):
             "price_USD": 10.00,
             "name": "S&P500",
             "ticker": "SPY",
-            "institution_name": "Computershare"
+            "institution_name": "Computershare",
+            "transaction_type": "Acquire"
         }
 
         entry_dic_fail_timestamp = {
@@ -31,7 +32,8 @@ class TestGuiFunctionalities(unittest.TestCase):
             "price_USD": 10.00,
             "name": "S&P500",
             "ticker": "SPY",
-            "institution_name": "Computershare"
+            "institution_name": "Computershare",
+            "transaction_type": "Acquire"
         }
 
         entry_dic_fail_amount = {
@@ -40,7 +42,8 @@ class TestGuiFunctionalities(unittest.TestCase):
             "price_USD": 10.00,
             "name": "S&P500",
             "ticker": "SPY",
-            "institution_name": "Computershare"
+            "institution_name": "Computershare",
+            "transaction_type": "Acquire"
         }
 
         entry_dic_fail_price = {
@@ -49,8 +52,10 @@ class TestGuiFunctionalities(unittest.TestCase):
             "price_USD": "C",
             "name": "S&P500",
             "ticker": "SPY",
-            "institution_name": "Computershare"
+            "institution_name": "Computershare",
+            "transaction_type": "Acquire"
         }
+
 
         entry_dic_fail_name = {
             "timestamp": "2014-07-03",
@@ -58,7 +63,8 @@ class TestGuiFunctionalities(unittest.TestCase):
             "price_USD": 10,
             "name": "",
             "ticker": "SPY",
-            "institution_name": "Computershare"
+            "institution_name": "Computershare",
+            "transaction_type": "Acquire"
         }
 
         entry_dic_fail_to_institution = {
@@ -68,7 +74,9 @@ class TestGuiFunctionalities(unittest.TestCase):
             "name": "S&P500",
             "ticker": "SPY",
             "institution_name": "Computershare",
+            "from_institution": "Computershare",
             "to_institution_name": "Computershare",
+            "transaction_type": "Transfer"
         }
 
 
@@ -82,7 +90,7 @@ class TestGuiFunctionalities(unittest.TestCase):
 
         self.assertRaises(ValueError, self.gb.check_correct_values, entry_dic_fail_name)
 
-        self.assertRaises(ValueError, self.gb.check_correct_values, entry_dic_fail_to_institution, transfer = True)
+        self.assertRaises(ValueError, self.gb.check_correct_values, entry_dic_fail_to_institution)
 
 
 if __name__ == "__main__":

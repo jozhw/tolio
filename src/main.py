@@ -181,16 +181,16 @@ class App(customtkinter.CTk):
         self.main_view = customtkinter.CTkFrame(self.frame_right)
         self.main_view.place(relx=0,rely=0.05,relheight=0.65,relwidth=1, anchor="nw")
         # create tree
-        self.my_tree=ttk.Treeview(self.main_view, selectmode="extended")
+        self.my_tree = ttk.Treeview(self.main_view, selectmode="extended")
         self.my_tree.place(relx=0, rely=0, relheight=1, relwidth=1, anchor="nw")
         # scrollbar
-        self.tree_scroll=ttk.Scrollbar(self.main_view,orient="vertical", command=self.my_tree.yview, style='arrowless.Vertical.TScrollbar')
+        self.tree_scroll = ttk.Scrollbar(self.main_view,orient="vertical", command=self.my_tree.yview, style='arrowless.Vertical.TScrollbar')
         self.tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
         # configure scrollbar
         self.my_tree.configure(yscrollcommand=self.tree_scroll.set)
         
         # treeview styling 
-        self.style=ttk.Style()
+        self.style = ttk.Style()
         self.style.theme_use('default')
 
         self.style.layout('arrowless.Vertical.TScrollbar', [('Vertical.Scrollbar.trough', 
@@ -203,7 +203,7 @@ class App(customtkinter.CTk):
         self.my_tree['columns']=("ID", "Name","Ticker", "Institution","Date","Type","From","To","Price","Amount","Age","Long" )
         # format columns
         self.my_tree.column("#0", width=0,stretch='no')
-        columns=["ID", "Name","Ticker", "Institution","Date","Type","From","To","Price","Amount","Age","Long" ]
+        columns = ["ID", "Name","Ticker", "Institution","Date","Type","From","To","Price","Amount","Age","Long" ]
         for i in columns:
             self.my_tree.column(f"{i}", anchor='w' ,width=0)
         # create headings
@@ -217,74 +217,74 @@ class App(customtkinter.CTk):
         # ================================== Tree View Menu =================================
 
         # add record entry boxes
-        self.data_frame=customtkinter.CTkFrame(master=self.frame_right)
+        self.data_frame = customtkinter.CTkFrame(master=self.frame_right)
         self.data_frame.place(relx=0, rely=0.7, relheight=0.20, relwidth=1, anchor='nw')
 
         # column 1
-        id_label=customtkinter.CTkLabel(self.data_frame,text="ID", anchor='w')
+        id_label = customtkinter.CTkLabel(self.data_frame,text="ID", anchor='w')
         id_label.place(relx=0.005, rely=0, relheight=0.4, relwidth=0.06, anchor='nw')
-        id_entry=customtkinter.CTkEntry(self.data_frame, height=25)
+        id_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         id_entry.place(relx=0.085, rely=0.1, relwidth=0.145, anchor='nw')
 
-        date_label=customtkinter.CTkLabel(self.data_frame, text="Date", anchor='w')
+        date_label = customtkinter.CTkLabel(self.data_frame, text="Date", anchor='w')
         date_label.place(relx=0.005, rely=0.3, relheight=0.4, relwidth=0.06, anchor=tk.NW)
-        date_entry=customtkinter.CTkEntry(self.data_frame, height=25)
+        date_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         date_entry.place(relx=0.085, rely=0.4, relwidth=0.145, anchor=tk.NW)
 
-        price_label=customtkinter.CTkLabel(self.data_frame,text="Price", anchor='w')
+        price_label = customtkinter.CTkLabel(self.data_frame,text="Price", anchor='w')
         price_label.place(relx=0.005, rely=0.6, relheight=0.4, relwidth=0.06, anchor=tk.NW)
-        price_entry=customtkinter.CTkEntry(self.data_frame, height=25)
+        price_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         price_entry.place(relx=0.085, rely=0.7, relwidth=0.145, anchor=tk.NW)
 
         # column 2
 
-        n_label=customtkinter.CTkLabel(self.data_frame, text="Name", anchor='w')
+        n_label = customtkinter.CTkLabel(self.data_frame, text="Name", anchor='w')
         n_label.place(relx=0.262,rely=0,relheight=0.4, relwidth=0.06, anchor=tk.NW)
-        n_entry=customtkinter.CTkEntry(self.data_frame, height=25)
+        n_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         n_entry.place(relx=0.342, rely=0.1, relwidth=0.145, anchor=tk.NW)
 
-        type_label=customtkinter.CTkLabel(self.data_frame, text="Type", anchor='w')
+        type_label = customtkinter.CTkLabel(self.data_frame, text="Type", anchor='w')
         type_label.place(relx=0.262, rely=0.3, relheight=0.4, relwidth=0.06, anchor=tk.NW)
-        type_entry=customtkinter.CTkEntry(self.data_frame, height=25)
+        type_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         type_entry.place(relx=0.342, rely=0.4, relwidth=0.145, anchor=tk.NW)
 
-        amount_label=customtkinter.CTkLabel(self.data_frame, text="Amount", anchor='w')
+        amount_label = customtkinter.CTkLabel(self.data_frame, text="Amount", anchor='w')
         amount_label.place(relx=0.262, rely=0.6, relheight=0.4, relwidth=0.06, anchor='nw')
-        amount_entry=customtkinter.CTkEntry(self.data_frame, height=25)
+        amount_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         amount_entry.place(relx=0.342, rely=0.7, relwidth=0.145, anchor=tk.NW)
 
         # column 3
 
-        ticker_label=customtkinter.CTkLabel(self.data_frame, text="Ticker", anchor='w')
+        ticker_label = customtkinter.CTkLabel(self.data_frame, text="Ticker", anchor='w')
         ticker_label.place(relx=0.519, rely=0, relheight=0.4, relwidth=0.06, anchor=tk.NW)
-        ticker_entry=customtkinter.CTkEntry(self.data_frame, height=25)
+        ticker_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         ticker_entry.place(relx=0.599, rely=0.1, relwidth=0.145, anchor=tk.NW)
 
-        from_label=customtkinter.CTkLabel(self.data_frame,text="From", anchor='w')
+        from_label = customtkinter.CTkLabel(self.data_frame,text="From", anchor='w')
         from_label.place(relx=0.519, rely=0.3, relheight=0.4, relwidth=0.06, anchor=tk.NW)
-        from_entry=customtkinter.CTkEntry(self.data_frame, height=25)
+        from_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         from_entry.place(relx=0.599, rely=0.4, relwidth=0.145, anchor=tk.NW)
 
-        age_label=customtkinter.CTkLabel(self.data_frame, text="Age", anchor='w')
+        age_label = customtkinter.CTkLabel(self.data_frame, text="Age", anchor='w')
         age_label.place(relx=0.519, rely=0.6, relheight=0.4, relwidth=0.06, anchor=tk.NW)
-        age_entry=customtkinter.CTkEntry(self.data_frame, height=25)
+        age_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         age_entry.place(relx=0.599, rely=0.7, relwidth=0.145, anchor=tk.NW)
 
         # column 4
 
-        institution_label=customtkinter.CTkLabel(self.data_frame,text="Institution", anchor='w')
+        institution_label = customtkinter.CTkLabel(self.data_frame,text="Institution", anchor='w')
         institution_label.place(relx=0.77, rely=0, relheight=0.4, relwidth=0.06, anchor=tk.NW)
-        institution_entry=customtkinter.CTkEntry(self.data_frame, height=25)
+        institution_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         institution_entry.place(relx=0.85, rely=0.1, relwidth=0.145, anchor=tk.NW)
 
-        to_label=customtkinter.CTkLabel(self.data_frame,text="To", anchor='w')
+        to_label = customtkinter.CTkLabel(self.data_frame,text="To", anchor='w')
         to_label.place(relx=0.77, rely=0.3, relheight=0.4, relwidth=0.06, anchor=tk.NW)
-        to_entry=customtkinter.CTkEntry(self.data_frame, height=25)
+        to_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         to_entry.place(relx=0.85, rely=0.4, relwidth=0.145, anchor=tk.NW)
 
-        long_label=customtkinter.CTkLabel(self.data_frame, text="Long", anchor='w')
+        long_label = customtkinter.CTkLabel(self.data_frame, text="Long", anchor='w')
         long_label.place(relx=0.77, rely=0.6, relheight=0.4, relwidth=0.06, anchor=tk.NW)
-        long_entry=customtkinter.CTkEntry(self.data_frame, height=25)
+        long_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         long_entry.place(relx=0.85, rely=0.7, relwidth=0.145, anchor=tk.NW)
         
         # dictionary of entries
@@ -294,20 +294,20 @@ class App(customtkinter.CTk):
         "age_entry":age_entry,"long_entry":long_entry}
         
         # add buttons
-        self.button_frame=customtkinter.CTkFrame(self.frame_right)
-        self.button_frame.place(relx=0,rely=0.9,relheight=0.1,relwidth=1,anchor=tk.NW)
+        self.button_frame = customtkinter.CTkFrame(self.frame_right)
+        self.button_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1, anchor=tk.NW)
 
-        update_button=customtkinter.CTkButton(self.button_frame,text="Update Record",command=lambda:self.update_record(transaction_entries))
+        update_button = customtkinter.CTkButton(self.button_frame, text="Update Record", command=lambda:self.update_record(transaction_entries))
         update_button.place(relx=0.005, rely=0.25, relwidth=0.225)
 
-        rm_rec_button=customtkinter.CTkButton(self.button_frame,text="Remove Record",command=lambda:self.delete_record(transaction_entries))
+        rm_rec_button = customtkinter.CTkButton(self.button_frame, text="Remove Record", command=lambda:self.delete_record(transaction_entries))
         rm_rec_button.place(relx=0.262, rely=0.25, relwidth=0.225)
 
-        mm_button=customtkinter.CTkButton(self.button_frame,text="Delete All Records", command=self.delete_all_data)
+        mm_button = customtkinter.CTkButton(self.button_frame, text="Delete All Records", command=self.delete_all_data)
         mm_button.place(relx=0.519, rely=0.25, relwidth=0.225)
 
-        ex_button=customtkinter.CTkButton(self.button_frame,text="Exit Program",command=self.on_closing)
-        ex_button.place(relx=0.77,rely=0.25, relwidth=0.225)
+        ex_button = customtkinter.CTkButton(self.button_frame, text="Exit Program", command=self.on_closing)
+        ex_button.place(relx=0.77, rely=0.25, relwidth=0.225)
       
         self.my_tree.bind("<<TreeviewSelect>>", lambda event: self.select_record(event,transaction_entries))
         self.my_tree.bind("<ButtonRelease-1>", lambda event: self.select_record(event,transaction_entries))
@@ -324,14 +324,14 @@ class App(customtkinter.CTk):
         self.my_tree = ttk.Treeview(self.main_view, selectmode="extended")
         self.my_tree.place(relx=0, rely=0, relheight=1, relwidth=1, anchor="nw")
         # scrollbar
-        self.tree_scroll = ttk.Scrollbar(self.main_view,orient="vertical",command=self.my_tree.yview, style='arrowless.Vertical.TScrollbar')
+        self.tree_scroll = ttk.Scrollbar(self.main_view,orient="vertical", command=self.my_tree.yview, style='arrowless.Vertical.TScrollbar')
         self.tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
         # configure scrollbar
         self.my_tree.configure(yscrollcommand=self.tree_scroll.set)
         
 
         # treeview styling 
-        self.style=ttk.Style()
+        self.style = ttk.Style()
         self.style.theme_use('default')
 
         self.style.layout('arrowless.Vertical.TScrollbar', [('Vertical.Scrollbar.trough', 
@@ -342,16 +342,16 @@ class App(customtkinter.CTk):
 
         # data
         # add columns for transactions
-        self.my_tree['columns']=("Institution", "Security", "Amount", "Total Cost", "Cost Basis", "Number Long", "Total Price Sold", "Average Price Sold" )
+        self.my_tree['columns'] = ("Institution", "Security", "Amount", "Total Cost", "Cost Basis", "Number Long", "Total Price Sold", "Average Price Sold" )
         # format columns
-        self.my_tree.column("#0", width=0,stretch=tk.NO)
+        self.my_tree.column("#0", width=0, stretch=tk.NO)
         columns = ["Institution", "Security", "Amount", "Total Cost", "Cost Basis", "Number Long", "Total Price Sold", "Average Price Sold"]
         for i in columns:
             self.my_tree.column(f"{i}", anchor='w' ,width=0)
         # create headings
         self.my_tree.heading("#0",text="",anchor=tk.W)
         for i in columns:
-            self.my_tree.heading(f"{i}",text=f"{i}",anchor='w')
+            self.my_tree.heading(f"{i}", text=f"{i}", anchor='w')
 
         # insert transactions
         self.query_database(self.db.get_institutions_held_table)
@@ -363,7 +363,7 @@ class App(customtkinter.CTk):
         self.data_frame.place(relx=0, rely=0.7, relheight=0.20, relwidth=1, anchor='nw')
 
         # column 1
-        institution_label = customtkinter.CTkLabel(self.data_frame,text="Institution", anchor='w')
+        institution_label = customtkinter.CTkLabel(self.data_frame, text="Institution", anchor='w')
         institution_label.place(relx=0.005, rely=0, relheight=0.4, relwidth=0.06, anchor='nw')
         institution_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         institution_entry.place(relx=0.085, rely=0.1, relwidth=0.145, anchor='nw')
@@ -802,8 +802,8 @@ class App(customtkinter.CTk):
         width = 750
         height = 400
         self.ss_window_pop.geometry(f"{width}x{height}")
-        self.ss_window_pop.minsize(width,height)
-        self.ss_window_pop.maxsize(width,height)
+        self.ss_window_pop.minsize(width, height)
+        self.ss_window_pop.maxsize(width, height)
 
 
         self.ss_window_pop.grid_rowconfigure(0,weight=1)
@@ -816,26 +816,25 @@ class App(customtkinter.CTk):
         title.place(relx=0, rely=0, relwidth=1, relheight=0.1)
 
             # labels: name, ticker, institution_name, time of transaction, amount, price_USD
-        label_rely=0.1
+        label_rely = 0.1
         labels=["Name of Security", "Ticker", "Time of Split", "Split Amount", "Transaction Type"]
         for i in labels:
             my_label=customtkinter.CTkLabel(window, text=i, anchor=tk.W)
             my_label.configure(font=('Arial Bold',13))
-            my_label.place(relx=0.01,rely=label_rely, relwidth=0.2, relheight=0.175)
-            label_rely=label_rely+0.13
+            my_label.place(relx=0.01, rely=label_rely, relwidth=0.2, relheight=0.175)
+            label_rely = label_rely + 0.13
 
         # all entries but it is in combo box style
         
-        name_of_security_entry = customtkinter.CTkOptionMenu(window, values=self.db.get_table_value("security_name"), fg_color=("#F9F9FA", "#343638"),
-        button_color=("#979DA2", "#565B5E"),
-        button_hover_color=("#6E7174", "#7A848D"))
+        name_of_security_entry = customtkinter.CTkOptionMenu(window, values=self.db.get_table_value("security_name"), 
+                                                             fg_color=("#F9F9FA", "#343638"), 
+                                                             button_color=("#979DA2", "#565B5E"), 
+                                                             button_hover_color=("#6E7174", "#7A848D"))
 
         name_of_security_entry.set(value="")
-        name_of_security_entry.place(relx=0.18,rely=0.155,relwidth=0.8,relheight=0.07)
+        name_of_security_entry.place(relx=0.18, rely=0.155, relwidth=0.8, relheight=0.07)
 
-        ticker_entry = customtkinter.CTkOptionMenu(window, values=self.db.get_table_value("security_ticker"), fg_color=("#F9F9FA", "#343638"),
-        button_color=("#979DA2", "#565B5E"),
-        button_hover_color=("#6E7174", "#7A848D"))
+        ticker_entry = customtkinter.CTkOptionMenu(window, values=self.db.get_table_value("security_ticker"), fg_color=("#F9F9FA", "#343638"), button_color=("#979DA2", "#565B5E"), button_hover_color=("#6E7174", "#7A848D"))
 
         ticker_entry.set(value="")
         ticker_entry.place(relx=0.18, rely=0.285, relwidth=0.8, relheight=0.07)
@@ -860,7 +859,7 @@ class App(customtkinter.CTk):
         }
         # entry button
         entry_button=customtkinter.CTkButton(window, text="Enter", command=lambda: self.gb.insert_transaction_into_database(entry_dic, split=True))
-        entry_button.place(relx=0,rely=0.8,relwidth=1,relheight=0.07)
+        entry_button.place(relx=0, rely=0.8, relwidth=1, relheight=0.07)
 
         # return to main menu and exit button
         return_main_button=customtkinter.CTkButton(window, text="Close Window", command=self.ss_window_pop.destroy)
@@ -1067,51 +1066,53 @@ class App(customtkinter.CTk):
         
         # for the widgets that are not affected by customtkinter
         if new_appearance_mode == "Dark":
-            self.style.configure("Treeview",
-                            background="#2a2d2e",
-                            foreground="white",
-                            rowheight=25,
-                            fieldbackground="#515A5A",
-                            bordercolor="#343638",
-                            borderwidth=0)
+            self.style.configure("Treeview", 
+                                 background="#2a2d2e", 
+                                 foreground="white", 
+                                 rowheight=25, 
+                                 fieldbackground="#515A5A", 
+                                 bordercolor="#343638", 
+                                 borderwidth=0)
             self.style.map('Treeview', background=[('selected', '#AF7AC5')])
 
-            self.style.configure("Treeview.Heading",
-                            background="#424949",
-                            font=('Arial Bold', 12),
-                            foreground="white",
-                            relief="flat")
-            self.style.map("Treeview.Heading",
-                        background=[('active', '#515A5A')])
+            self.style.configure("Treeview.Heading", 
+                                 background="#424949", 
+                                 font=('Arial Bold', 12), 
+                                 foreground="white", 
+                                 relief="flat")
+            self.style.map("Treeview.Heading", background=[('active', '#515A5A')])
             
-            self.style.configure("arrowless.Vertical.TScrollbar", troughcolor="#4A235A", bd=0,bg="#9B59B6")
+            self.style.configure("arrowless.Vertical.TScrollbar", 
+                                 troughcolor="#4A235A", 
+                                 bd=0, 
+                                 bg="#9B59B6")
 
             # create strip row tags
-            self.my_tree.tag_configure('oddrow',background='#565b5e')
-            self.my_tree.tag_configure('evenrow',background='#5B2C6F') # purple
+            self.my_tree.tag_configure('oddrow', background='#565b5e')
+            self.my_tree.tag_configure('evenrow', background='#5B2C6F') # purple
             
         elif new_appearance_mode == "Light":
-            self.style.configure("Treeview",
-                            background="#2a2d2e",
-                            foreground="black",
-                            rowheight=25,
-                            fieldbackground="#343638",
-                            bordercolor="#343638",
-                            borderwidth=0)
+            self.style.configure("Treeview", 
+                                 background="#2a2d2e", 
+                                 foreground="black", 
+                                 rowheight=25, 
+                                 fieldbackground="#343638", 
+                                 bordercolor="#343638", 
+                                 borderwidth=0)
             self.style.map('Treeview', background=[('selected', '#F1948A')])
 
-            self.style.configure("Treeview.Heading",
-                            background="#F2F3F4",
-                            foreground="black",
-                            font=('Arial Bold', 12),
-                            relief="flat")
-            self.style.map("Treeview.Heading",
-                        background=[('active', '#3484F0')])
+            self.style.configure("Treeview.Heading", 
+                                 background="#F2F3F4", 
+                                 foreground="black", 
+                                 font=('Arial Bold', 12), 
+                                 relief="flat")
+            self.style.map("Treeview.Heading", 
+                           background=[('active', '#3484F0')])
             
             self.style.configure("arrowless.Vertical.TScrollbar", troughcolor="#FDEDEC")
             # create strip row tags
-            self.my_tree.tag_configure('oddrow',background='white')
-            self.my_tree.tag_configure('evenrow',background='#FADBD8')
+            self.my_tree.tag_configure('oddrow', background='white')
+            self.my_tree.tag_configure('evenrow', background='#FADBD8')
 
     # get it so that the appearance changes automatically on System for widgets that are not supported by custom tkinter
     def delay_appearance(self):    
