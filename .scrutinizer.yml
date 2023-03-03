@@ -7,5 +7,5 @@ build:
     dependencies:
         before:
             -
-                command: curl https://sh.rustup.rs -sSf ; sh -s -- -y
+                command: export PATH="$HOME/.cargo/envbin:$PATH" ; curl https://sh.rustup.rs -sSf | sh -s -- -y
 
