@@ -45,7 +45,7 @@ class WindowTransfer(customtkinter.CTkFrame):
         name_of_security_entry.place(relx=0.16, rely=0.125, relwidth=0.82, relheight=0.05)
 
         ticker_entry = customtkinter.CTkComboBox(self.transfer_window,
-                                                 values=self.db.get_table_value("ticker"))
+                                                 values=self.master.db.get_table_value("ticker"))
         ticker_entry.set(value="")
         ticker_entry.place(relx=0.16, rely=0.225, relwidth=0.82, relheight=0.05)
 

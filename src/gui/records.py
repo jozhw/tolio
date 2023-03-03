@@ -152,7 +152,7 @@ class Records(customtkinter.CTkFrame):
 
         to_update = messagebox.askyesno("Update Record", "Are you sure you would like to update this record?")
         if to_update == 1:
-            self.db.update_table(value_dic)
+            self.master.db.update_table(value_dic)
             messagebox.showinfo("Data Updated", "Your transaction has been updated.")
         else:
             messagebox.showinfo("Not Updated.", "Your record was not updated.")
