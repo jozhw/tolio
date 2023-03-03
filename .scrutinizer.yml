@@ -7,6 +7,5 @@ build:
     dependencies:
         before:
             -
-                command: curl https://sh.rustup.rs -sSf | sh
-            -
-                command: 1
+                command: curl https://sh.rustup.rs -sSf | sudo sh
+
