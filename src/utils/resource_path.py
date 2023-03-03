@@ -3,7 +3,7 @@ import os
 
 class ResourcePath:
     '''This class takes a file name and returns the path'''
-  
+
     def __init__(self, relative_path: str):
         '''Initialize the classes with relative_path of the file of interest'''
         self.relative_path = relative_path

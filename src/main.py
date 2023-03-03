@@ -24,7 +24,7 @@ class App(customtkinter.CTk):
     # define class objects
     db = Database()
     gb = GuiBridge()
-    
+
     def __init__(self):
         super().__init__()
         self.title("Tolio - Portfolio Tracker")
@@ -40,10 +40,10 @@ class App(customtkinter.CTk):
 
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        
+
         self.frame_left = customtkinter.CTkFrame(self, width=180, corner_radius=0)
         self.frame_left.grid(row=0, column=0, sticky="nswe")
-        
+
         self.frame_right = customtkinter.CTkFrame(self, corner_radius=10)
         self.frame_right.grid(row=0, column=1, sticky="nswe", padx=20, pady=20)
 
@@ -149,7 +149,6 @@ class App(customtkinter.CTk):
                                                             command=self.change_appearance_mode,
                                                             variable=self.appearance_options_set)
         self.appearance_options.grid(row=11, column=0, pady=10, padx=20, sticky="w")
-      
         # ================================= data section - right frame section =================================
         # create multibutton to select different data to display
         self.transition_menu = customtkinter.CTkSegmentedButton(self.frame_right, values=["Transactions", "Institutions Held", "Securities", "Stock Split History"]) # to add for non-beta version "Individual Shares" tab
@@ -157,7 +156,7 @@ class App(customtkinter.CTk):
         self.transition_menu.set(get_previous_setting(self.set_settings_resource_path,transition_menu=True))
         self.transition_menu.configure(command=self.tab_selection)
         self.tab_selection(get_previous_setting(self.set_settings_resource_path,transition_menu=True))
-            
+
     # ================================= data section window displays =================================
 
     # select tab for the following four menus
@@ -188,12 +187,12 @@ class App(customtkinter.CTk):
         self.tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
         # configure scrollbar
         self.my_tree.configure(yscrollcommand=self.tree_scroll.set)
-        
-        # treeview styling 
+
+        # treeview styling
         self.style = ttk.Style()
         self.style.theme_use('default')
 
-        self.style.layout('arrowless.Vertical.TScrollbar', [('Vertical.Scrollbar.trough', 
+        self.style.layout('arrowless.Vertical.TScrollbar', [('Vertical.Scrollbar.trough',
         {'children': [('Vertical.Scrollbar.thumb', {'expand': '1', 'sticky': 'nswe'})], 'sticky': 'ns'})])
 
         # set style based upon style selection
@@ -286,13 +285,13 @@ class App(customtkinter.CTk):
         long_label.place(relx=0.77, rely=0.6, relheight=0.4, relwidth=0.06, anchor=tk.NW)
         long_entry = customtkinter.CTkEntry(self.data_frame, height=25)
         long_entry.place(relx=0.85, rely=0.7, relwidth=0.145, anchor=tk.NW)
-        
+
         # dictionary of entries
         transaction_entries={"id_entry":id_entry,"n_entry":n_entry,"ticker_entry":ticker_entry,
         "institution_entry":institution_entry,"date_entry":date_entry,"type_entry":type_entry,
         "from_entry":from_entry,"to_entry":to_entry,"price_entry":price_entry,"amount_entry":amount_entry,
         "age_entry":age_entry,"long_entry":long_entry}
-        
+
         # add buttons
         self.button_frame = customtkinter.CTkFrame(self.frame_right)
         self.button_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1, anchor=tk.NW)
@@ -308,10 +307,9 @@ class App(customtkinter.CTk):
 
         ex_button = customtkinter.CTkButton(self.button_frame, text="Exit Program", command=self.on_closing)
         ex_button.place(relx=0.77, rely=0.25, relwidth=0.225)
-      
+
         self.my_tree.bind("<<TreeviewSelect>>", lambda event: self.select_record(event,transaction_entries))
         self.my_tree.bind("<ButtonRelease-1>", lambda event: self.select_record(event,transaction_entries))
-        
 
     # menu for showing all securities held for each particular institution
     def show_institutions_held_window(self) -> None:
@@ -328,13 +326,13 @@ class App(customtkinter.CTk):
         self.tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
         # configure scrollbar
         self.my_tree.configure(yscrollcommand=self.tree_scroll.set)
-        
 
-        # treeview styling 
+
+        # treeview styling
         self.style = ttk.Style()
         self.style.theme_use('default')
 
-        self.style.layout('arrowless.Vertical.TScrollbar', [('Vertical.Scrollbar.trough', 
+        self.style.layout('arrowless.Vertical.TScrollbar', [('Vertical.Scrollbar.trough',
         {'children': [('Vertical.Scrollbar.thumb', {'expand': '1', 'sticky': 'nswe'})], 'sticky': 'ns'})])
 
         # set style based upon style selection
@@ -410,7 +408,7 @@ class App(customtkinter.CTk):
         transaction_entries={"institution_entry":institution_entry, "security_entry":security_entry, "amount_entry":amount_entry,
             "total_cost_entry":total_cost_entry,"cost_basis_entry":cost_basis_entry,"long_entry":number_long_entry,
             "total_price_sold":total_price_sold_entry,"average_price_sold":average_price_sold_entry}
-        
+
         # add buttons
         self.button_frame = customtkinter.CTkFrame(self.frame_right)
         self.button_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1, anchor=tk.NW)
@@ -437,12 +435,12 @@ class App(customtkinter.CTk):
         self.tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
         # configure scrollbar
         self.my_tree.configure(yscrollcommand=self.tree_scroll.set)
-        
-        # treeview styling 
+
+        # treeview styling
         self.style = ttk.Style()
         self.style.theme_use('default')
 
-        self.style.layout('arrowless.Vertical.TScrollbar', [('Vertical.Scrollbar.trough', 
+        self.style.layout('arrowless.Vertical.TScrollbar', [('Vertical.Scrollbar.trough',
         {'children': [('Vertical.Scrollbar.thumb', {'expand': '1', 'sticky': 'nswe'})], 'sticky': 'ns'})])
 
         # set style based upon style selection
@@ -450,7 +448,7 @@ class App(customtkinter.CTk):
 
         # data
         # add columns for transactions
-        self.my_tree['columns'] = ("Security", "Ticker", "Amount", "Total Cost", "Cost Basis", "Number Long", "Total Price Sold", "Average Price Sold" )
+        self.my_tree['columns'] = ("Security", "Ticker", "Amount", "Total Cost", "Cost Basis", "Number Long", "Total Price Sold", "Average Price Sold")
         # format columns
         self.my_tree.column("#0", width=0, stretch=tk.NO)
         columns=["Security", "Ticker", "Amount", "Total Cost", "Cost Basis", "Number Long", "Total Price Sold", "Average Price Sold"]
@@ -518,7 +516,7 @@ class App(customtkinter.CTk):
         transaction_entries={"security_entry":security_entry, "ticker_entry":ticker_entry,
         "amount_entry":amount_entry, "total_cost_entry":total_cost_entry, "cost_basis_entry":cost_basis_entry,
         "long_entry":number_long_entry, "total_price_sold":total_price_sold_entry,"average_price_sold":average_price_sold_entry}
-        
+
         # add buttons
         self.button_frame = customtkinter.CTkFrame(self.frame_right)
         self.button_frame.place(relx = 0, rely = 0.9, relheight = 0.1, relwidth = 1, anchor = tk.NW)
@@ -549,7 +547,7 @@ class App(customtkinter.CTk):
         self.tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
         # configure scrollbar
         self.my_tree.configure(yscrollcommand=self.tree_scroll.set)
-        
+
 
         # treeview styling 
         self.style = ttk.Style()
@@ -616,7 +614,7 @@ class App(customtkinter.CTk):
         # dictionary of entries
         history_entries={"security_entry":security_entry, "ticker_entry":ticker_entry,
         "history_id":history_id_entry, "timestamp": date_entry, "split_amount": split_amount_entry}
-        
+
         # add buttons
         self.button_frame = customtkinter.CTkFrame(self.frame_right)
         self.button_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1, anchor=tk.NW)
@@ -636,7 +634,7 @@ class App(customtkinter.CTk):
         self.my_tree.bind("<ButtonRelease-1>", lambda event: self.select_record(event,history_entries))
         self.my_tree.bind("<<TreeviewSelect>>", lambda event: self.select_record(event,history_entries))
 
-  
+
     # ================================= menu button functionalities =================================
 
     # click for the add transaction window to pop up
@@ -744,7 +742,7 @@ class App(customtkinter.CTk):
             label_rely = label_rely + 0.1
 
         # all entries but it is in combo box style
-        
+
         name_of_security_entry = customtkinter.CTkComboBox(window, values=self.db.get_table_value("name"))
         name_of_security_entry.set(value="")
         name_of_security_entry.place(relx=0.16, rely=0.125, relwidth=0.82, relheight=0.05)
@@ -770,7 +768,7 @@ class App(customtkinter.CTk):
         set_transaction_type_entry = customtkinter.StringVar(value="Transfer")
         transaction_type_entry = customtkinter.CTkEntry(window, textvariable=set_transaction_type_entry)
         transaction_type_entry.configure(state="disabled")
-        
+
         transaction_type_entry.place(relx=0.16, rely=0.725, relwidth=0.82, relheight=0.05)
 
         set_price_usd_entry = customtkinter.StringVar(value=0)
@@ -825,7 +823,7 @@ class App(customtkinter.CTk):
             label_rely = label_rely + 0.13
 
         # all entries but it is in combo box style
-        
+
         name_of_security_entry = customtkinter.CTkOptionMenu(window, values=self.db.get_table_value("security_name"), 
                                                              fg_color=("#F9F9FA", "#343638"), 
                                                              button_color=("#979DA2", "#565B5E"), 
@@ -848,7 +846,7 @@ class App(customtkinter.CTk):
         set_transaction_type_entry = customtkinter.StringVar(value="Stock Split")
         transaction_type_entry = customtkinter.CTkEntry(window, textvariable=set_transaction_type_entry)
         transaction_type_entry.configure(state="disabled")
-        
+
         transaction_type_entry.place(relx=0.18, rely=0.675, relwidth=0.8, relheight=0.07)
 
         # dictionary of entries
@@ -869,10 +867,10 @@ class App(customtkinter.CTk):
         exit_button.place(relx=0.8, rely=0.919, relwidth=0.2, relheight=0.08)
 
     def window_import_filedialog(self) -> None:
-    
+
         self.import_file_name = filedialog.askopenfilename(title="Select A CSV File", filetypes=(("csv files", "*.csv"),))
         insert_csv(self.import_file_name)
-    
+
     def window_export_filedialog(self) -> None:
         answer = messagebox.askyesno(title="Export Database",
                                     message="Would you like to export the database to a .csv file?")
@@ -886,8 +884,8 @@ class App(customtkinter.CTk):
 
       # delete all data from database
     def delete_all_data(self) -> None:
-        answer = messagebox.askyesno(title="Delete All Records", 
-                                  message="""Would you like to delete all of your records? 
+        answer = messagebox.askyesno(title="Delete All Records",
+                                  message="""Would you like to delete all of your records?
                                   """)
         if answer == True:
             answer_2 = messagebox.askyesno(title="Delete All Records",
@@ -912,17 +910,17 @@ class App(customtkinter.CTk):
         # grab record value
         values=self.my_tree.item(selected,'values')
         count=0
-        
+
         # insert into entry box
         for name,entry in entry_dic.items():
             if name == "id_entry" or name == "age_entry" or name == "long_entry" or name == "history_id":
                 entry.insert(count,values[count])
-                entry.configure(state="disabled") 
+                entry.configure(state="disabled")
                 count+=1
             else:
                 entry.insert(count,values[count])
                 count+=1
-                
+
   # remove all records from treeview
     def remove_all(self) -> None:
         for record in self.my_tree.get_children():
@@ -950,7 +948,7 @@ class App(customtkinter.CTk):
             entry_dic["amount_entry"].delete(0, tk.END)
             entry_dic["age_entry"].delete(0, tk.END)
             entry_dic["long_entry"].delete(0, tk.END)
-          
+
             self.db.delete_row(id_value)
             messagebox.showinfo("Deleted!", "Your record has been deleted.")
         else:
@@ -978,7 +976,7 @@ class App(customtkinter.CTk):
         # define a dictionary to contain all of the values for the rust method
         value_dic = {
           "transaction_id": transaction_id,
-          "security_name": security_name, 
+          "security_name": security_name,
           "security_ticker": security_ticker,
           "institution_name": institution_name,
           "timestamp": timestamp,
@@ -1021,9 +1019,7 @@ class App(customtkinter.CTk):
 
         to_update_or_not = messagebox.askyesno("Update Record", "Are you sure you would like to update this record?")
         if to_update_or_not == 1:
-            self.db.update_table(
-            value_dic
-          )
+            self.db.update_table(value_dic)
             messagebox.showinfo("Data Updated", "Your transaction has been updated.")
         else:
             messagebox.showinfo("Not Updated.", "Your record was not updated.")
@@ -1045,9 +1041,9 @@ class App(customtkinter.CTk):
       # ================================= main functionalities =================================
 
     def on_closing(self) -> None:
-        save_previous_setting(self.set_settings_resource_path, self.transition_menu.get(), self.appearance_options.get() )
+        save_previous_setting(self.set_settings_resource_path, self.transition_menu.get(), self.appearance_options.get())
         self.destroy()
-      
+
     def refresh_page(self) -> None:
         value = self.transition_menu.get()
         self.main_view.destroy()
@@ -1060,65 +1056,65 @@ class App(customtkinter.CTk):
     def change_appearance_mode(self, new_appearance_mode: str) -> None:
         '''method that allows for treeview to style match setting'''
         customtkinter.set_appearance_mode(new_appearance_mode)
-        
+
         if new_appearance_mode == "System":
             new_appearance_mode = darkdetect.theme()
-        
+
         # for the widgets that are not affected by customtkinter
         if new_appearance_mode == "Dark":
-            self.style.configure("Treeview", 
-                                 background="#2a2d2e", 
-                                 foreground="white", 
-                                 rowheight=25, 
-                                 fieldbackground="#515A5A", 
-                                 bordercolor="#343638", 
+            self.style.configure("Treeview",
+                                 background="#2a2d2e",
+                                 foreground="white",
+                                 rowheight=25,
+                                 fieldbackground="#515A5A",
+                                 bordercolor="#343638",
                                  borderwidth=0)
             self.style.map('Treeview', background=[('selected', '#AF7AC5')])
 
-            self.style.configure("Treeview.Heading", 
-                                 background="#424949", 
-                                 font=('Arial Bold', 12), 
-                                 foreground="white", 
+            self.style.configure("Treeview.Heading",
+                                 background="#424949",
+                                 font=('Arial Bold', 12),
+                                 foreground="white",
                                  relief="flat")
             self.style.map("Treeview.Heading", background=[('active', '#515A5A')])
-            
-            self.style.configure("arrowless.Vertical.TScrollbar", 
-                                 troughcolor="#4A235A", 
-                                 bd=0, 
+
+            self.style.configure("arrowless.Vertical.TScrollbar",
+                                 troughcolor="#4A235A",
+                                 bd=0,
                                  bg="#9B59B6")
 
             # create strip row tags
             self.my_tree.tag_configure('oddrow', background='#565b5e')
             self.my_tree.tag_configure('evenrow', background='#5B2C6F') # purple
-            
+
         elif new_appearance_mode == "Light":
-            self.style.configure("Treeview", 
-                                 background="#2a2d2e", 
-                                 foreground="black", 
-                                 rowheight=25, 
-                                 fieldbackground="#343638", 
-                                 bordercolor="#343638", 
+            self.style.configure("Treeview",
+                                 background="#2a2d2e",
+                                 foreground="black",
+                                 rowheight=25,
+                                 fieldbackground="#343638",
+                                 bordercolor="#343638",
                                  borderwidth=0)
             self.style.map('Treeview', background=[('selected', '#F1948A')])
 
-            self.style.configure("Treeview.Heading", 
-                                 background="#F2F3F4", 
-                                 foreground="black", 
-                                 font=('Arial Bold', 12), 
+            self.style.configure("Treeview.Heading",
+                                 background="#F2F3F4",
+                                 foreground="black",
+                                 font=('Arial Bold', 12),
                                  relief="flat")
-            self.style.map("Treeview.Heading", 
+            self.style.map("Treeview.Heading",
                            background=[('active', '#3484F0')])
-            
+
             self.style.configure("arrowless.Vertical.TScrollbar", troughcolor="#FDEDEC")
             # create strip row tags
             self.my_tree.tag_configure('oddrow', background='white')
             self.my_tree.tag_configure('evenrow', background='#FADBD8')
 
     # get it so that the appearance changes automatically on System for widgets that are not supported by custom tkinter
-    def delay_appearance(self):    
+    def delay_appearance(self):
         '''method that allows treeview to auto-transition style on the system style setting'''
-        self.after(500, self.delay_appearance)   
-        if self.appearance_options.get() == "System":  
+        self.after(500, self.delay_appearance)
+        if self.appearance_options.get() == "System":
             self.change_appearance_mode(self.appearance_options.get())
 
 if __name__ == "__main__":

@@ -13,10 +13,9 @@ def export_csv(db_path: str = "files/data/portfolio.db") -> None:
         conn.execute("INSERT INTO institutions (institution_name) VALUES ('Stock Split');", )
         institution_id = conn.execute("SELECT institution_id FROM institutions WHERE institution_name = ?", ("Stock Split",)).fetchone()
         conn.commit()
-    
+
     conn.execute("UPDATE transactions SET institution_id =? WHERE institution_id IS NULL;", (institution_id[0],))
     conn.commit()
-    
 
     sql_query = """
     SELECT s.security_name, s.security_ticker, i.institution_name, t.timestamp, t.transaction_abbreviation, t.amount, t.price_USD,

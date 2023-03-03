@@ -28,17 +28,17 @@ class TestDatabaseModule(unittest.TestCase):
 
         self.Database = Database(db_path = target_dir, sql_path="test/queries/test_py_db_query.sql")
 
-  
+
 # ============================== test: get methods ==============================
-  
+
     def test_get_table_values(self):
         security_name_list = self.Database.get_table_value("security_name")
         self.assertListEqual(security_name_list, ["S&P500", "Tesla"])
-    
+
     def test_get_transactions_table(self):
         get_transactions = self.Database.get_transactions_table()
         self.assertIn((1, "S&P500", "SPY", "Fidelity", "2022-01-01", "Acquire", None, None, 100, 10, 1, 10), get_transactions)
-      
+
     def test_get_institutions_held_table(self):
         get_institutions_held_table = self.Database.get_institutions_held_table()
         self.assertIn(("Fidelity", "Tesla", 10, 100, 10, 10, 0, 0 ), get_institutions_held_table)
@@ -46,11 +46,11 @@ class TestDatabaseModule(unittest.TestCase):
     def test_get_security_table(self):
         get_security_table = self.Database.get_security_table()
         self.assertIn(("Tesla", "TSLA", 20, 100, 5, 20, None, None), get_security_table)
-    
+
     def test_get_table_value(self):
         security_name = self.Database.get_table_value("security_name")
         self.assertIn("Tesla", security_name)
-      
+
   # ============================== test: insert methods ==============================
 
     def test_insert_acquire_or_dipose(self):

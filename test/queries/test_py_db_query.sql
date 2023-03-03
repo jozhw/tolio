@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS transactions(transaction_id INTEGER PRIMARY KEY AUTOI
         FOREIGN KEY(security_id) REFERENCES securities(security_id),
         FOREIGN KEY(transaction_abbreviation) REFERENCES transaction_names(transaction_abbreviation));
 
-INSERT OR IGNORE INTO transactions(security_id, institution_id, timestamp, transaction_abbreviation, 
-amount, price_USD, age_transaction, long) VALUES 
+INSERT OR IGNORE INTO transactions(security_id, institution_id, timestamp, transaction_abbreviation,
+amount, price_USD, age_transaction, long) VALUES
         (1, 1, "2022-01-01", "A", 10, 100, 1, 10),
         (2, 1, "2022-02-02", "A", 20, 100, 1, 20),
         (1, 2, "2022-03-03", "A", 10, 100, 1, 10);
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS institutions_held (institution_id INTEGER NOT NULL,
         FOREIGN KEY (security_id) REFERENCES securities(security_id));
 
 INSERT OR IGNORE INTO institutions_held(institution_id, security_id, amount_held, total_cost, cost_basis,
-number_long, total_price_sold, average_price_sold) VALUES 
+number_long, total_price_sold, average_price_sold) VALUES
         (1, 1, 10, 100, 10, 10, 0, 0),
         (2, 1, 20, 100, 5, 20, 0, 0),
         (1, 2, 10, 100, 10, 10, 0, 0);

@@ -10,7 +10,7 @@ INSERT OR IGNORE INTO transaction_names (transaction_type, transaction_abbreviat
 
 CREATE TABLE IF NOT EXISTS institutions (institution_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         institution_name TEXT UNIQUE NOT NULL);
-        
+
 INSERT OR IGNORE INTO institutions (institution_name) VALUES ("Fidelity"),
             ("Computershare");
 

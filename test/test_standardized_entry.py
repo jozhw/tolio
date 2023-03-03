@@ -32,7 +32,7 @@ class TestStandardizedEntries(unittest.TestCase):
                 "institution_name": "Computershare",
                 "transaction_type": "D"
             }
-        
+
         self.correct_regex_entry_dic = {
             "timestamp": "2014-07-03",
             "amount": 10.0,
@@ -44,7 +44,7 @@ class TestStandardizedEntries(unittest.TestCase):
 
 
         }
-        
+
         ###################### incorrected values ########################
         self.acquire_entry_dic = {
             "timestamp": "2014-07-03",
@@ -81,11 +81,11 @@ class TestStandardizedEntries(unittest.TestCase):
         self.acquire_standardize = StandardizeEntry(self.acquire_entry_dic)
         self.dispose_standardize = StandardizeEntry(self.dispose_entry_dic)
         self.regex_standardize = StandardizeEntry(self.regex_entry_dic)
-        
+
     def test_regex_sub(self):
         self.assertEqual(self.regex_standardize.regex_sub(), self.correct_regex_entry_dic)
-      
-      
+
+
     def test_change_value_sign(self):
         self.assertEqual(self.acquire_standardize.change_value_sign(), self.correct_acquire_entry_dic)
         self.assertEqual(self.dispose_standardize.change_value_sign(), self.correct_dispose_entry_dic)

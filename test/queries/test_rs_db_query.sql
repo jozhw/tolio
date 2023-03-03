@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS transactions(transaction_id INTEGER PRIMARY KEY AUTOI
         FOREIGN KEY(security_id) REFERENCES securities(security_id),
         FOREIGN KEY(transaction_abbreviation) REFERENCES transaction_names(transaction_abbreviation));
 
-INSERT OR IGNORE INTO transactions(security_id, institution_id, timestamp, transaction_abbreviation) VALUES 
+INSERT OR IGNORE INTO transactions(security_id, institution_id, timestamp, transaction_abbreviation) VALUES
         (1, 1, "2022-01-01", "A"),
         (2, 1, "2022-02-02", "A"),
         (1, 1, "2022-03-03", "A");
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS all_shares (individual_share_id INTEGER PRIMARY KEY A
             FOREIGN KEY(transaction_id) REFERENCES transactions(transaction_id));
 
 INSERT OR IGNORE INTO all_shares (transaction_id, security_id, institution_id, timestamp, amount, price_USD, sold_price,
-age_transaction, long_counter, date_disposed) VALUES 
+age_transaction, long_counter, date_disposed) VALUES
         (1, 1, 1, "2022-01-01", 1, 100, 120, 1, "-", "2023-01-01"),
         (2, 2, 1, "2022-02-02", 10, 100, 0, 0, "+", NULL),
         (3, 1, 1, "2022-03-03", 5, 200, 0, 0, "+", NULL);

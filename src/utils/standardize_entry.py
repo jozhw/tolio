@@ -16,7 +16,7 @@ class StandardizeEntry:
             self.entry_dic["transaction_type"] = self.transaction_type_dic[self.entry_dic["transaction_type"]]
         except:
             raise ValueError("Incorrect transaction_type.")
-        
+
     def convert_case(self, match_obj: Any) -> str:
         '''Takes a match_obj and performs capitalize for the matches. This function operates
         within the regex_sub method'''
@@ -24,7 +24,7 @@ class StandardizeEntry:
             return match_obj.group().capitalize()
         else:
             raise Exception("There were no matches.")
-      
+
     def regex_sub(self) -> Dict:
         '''Takes self.entry_dic and modifies the value depending on key and returns
         the edited self.entry_dic'''
@@ -35,7 +35,7 @@ class StandardizeEntry:
                 self.entry_dic[key] = re.sub(r"[a-zA-z]+\s*", self.convert_case, value)
 
         return self.entry_dic
-      
+
     def change_value_sign(self) -> Dict:
         '''Takes self.entry_dic and changes the sign value of amount and price_usd depending on transaction type
         and returns the edited self.entry_dic'''
@@ -48,17 +48,17 @@ class StandardizeEntry:
             transaction_type = self.entry_dic["transaction_type"]
         except:
             raise ValueError("Shares or Price cannot be converted into a float.")
-        
+
         if self.entry_dic["transaction_type"] == "A":
             self.entry_dic["amount"] = abs(shares)
             self.entry_dic["price_USD"] = abs(price)
-           
+
         elif transaction_type == "D":
             self.entry_dic["amount"] = abs(shares) * -1
             self.entry_dic["price_USD"] = abs(price) * -1
-           
+
         return self.entry_dic
-    
+
     def return_entry_dic(self) -> Dict:
         '''Implements both change_value_sign and regex_sub and returns the final edited self.entry_dic'''
         self.entry_dic = self.regex_sub(self.entry_dic)

@@ -81,7 +81,7 @@ class TestGuiFunctionalities(unittest.TestCase):
 
 
         self.assertTrue(self.gb.check_correct_values(entry_dic_pass))
-        
+
         self.assertRaises(ValueError, self.gb.check_correct_values, entry_dic_fail_timestamp)
 
         self.assertRaises((ValueError,TypeError), self.gb.check_correct_values, entry_dic_fail_amount)
