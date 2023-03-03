@@ -4,5 +4,7 @@ build:
         python:
             version: 3.9.9
             virtualenv: true
-    commands:
-        - curl https://sh.rustup.rs -sSf | sh
+    dependencies:
+        before:
+            -
+                command: curl https://sh.rustup.rs -sSf | sh
