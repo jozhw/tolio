@@ -1,9 +1,10 @@
 build:
-    filter:
-        excluded_paths:
-            - "test/"
     root_path: './'
     environment:
         python:
             version: 3.9.9
             virtualenv: true
+
+filter:
+    excluded_paths:
+        - "test/"
