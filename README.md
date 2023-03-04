@@ -1,5 +1,4 @@
 <h1 align="center"> Tolio - Offline Portfolio Tracker </h1>
-
 <p align="center"><img
   src="/src/assets/icons/tolio_icon.png"
   alt="Alt text"
@@ -24,6 +23,7 @@ Supports: MacOS and Linux
 ```
 
 ### How to Run - MacOS(Python 3.10.0+) or Linux(3.8.0 > >= 3.7.1)
+---
 Create a virtual environment and make sure you are in the tolio directory in the terminal and run the following commands in the terminal.
 
 ```
@@ -45,6 +45,7 @@ pip install --upgrade tolio
 ```
 
 ### How to Run - Unsupported Python Versions
+---
 Must download the rust programing language along with cargo, rust's package manager. You also need to make sure that maturin is installed.
 
 ```
@@ -65,8 +66,16 @@ pip install maturin
 
 ```
 
-### Details
+### Appearance
+---
+With the help of using <a href="https://github.com/TomSchimansky/CustomTkinter">customtkinter</a> and some personal hacking, Tolio can sync with the operating system's appearance setting. To use this feature, on the appearance mode setting for the application, select "System".
 
+
+https://user-images.githubusercontent.com/112655410/222914413-a3dbf50e-550f-45b8-a88f-5a557488b88f.mp4
+
+
+### Details
+---
 * The data stored (portfolio.db) or exported (transactions_data.csv) will be in the tolio repository.
 
 * This application supports stock splits, fractional shares, and the recording of long securities.
