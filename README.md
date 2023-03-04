@@ -14,7 +14,7 @@
 ```
 VERSION 0.2.1
 
-Languages: Python 3.10.9 | Rust 1.66.0
+Languages: Python 3.7+ | Rust 1.66.0
 
 Tailored Dependency: tolio==0.2.3
 
