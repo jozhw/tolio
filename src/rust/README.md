@@ -1,7 +1,7 @@
 <h1 align="center"> Tolio - Rust Extension </h1>
 
 ```
-VERSION 0.2.1
+VERSION 0.2.2
 
 Using: Rust 1.66.0 | Maturin 0.14.7
 Supports: Python 3.10+
