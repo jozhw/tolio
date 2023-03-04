@@ -2,7 +2,7 @@ build:
     root_path: './'
     environment:
         python:
-            version: 3.9.9
+            version: 3.7.0
             virtualenv: true
     dependencies:
         before:
