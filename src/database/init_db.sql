@@ -15,8 +15,8 @@ INSERT OR IGNORE INTO institutions (institution_name) VALUES ("Fidelity"),
             ("Computershare");
 
 CREATE TABLE IF NOT EXISTS transactions(transaction_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, security_id INTEGER NOT NULL,
-        institution_id NOT NULL INTEGER, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, transaction_abbreviation TEXT NOT NULL,
-        amount REAL, price_USD REAL NOT NULL, transfer_from TEXT, transfer_to TEXT, age_transaction INTEGER, long REAL,
+        institution_id INTEGER NOT NULL, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, transaction_abbreviation TEXT NOT NULL,
+        amount REAL NOT NULL, price_USD REAL NOT NULL, transfer_from TEXT, transfer_to TEXT, age_transaction INTEGER, long REAL,
         FOREIGN KEY(institution_id) REFERENCES institutions(institution_id),
         FOREIGN KEY(security_id) REFERENCES securities(security_id),
         FOREIGN KEY(transaction_abbreviation) REFERENCES transaction_names(transaction_abbreviation));
