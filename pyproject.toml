@@ -4,11 +4,16 @@ build-backend = "maturin"
 
 [project]
 name = "tolio"
+description = "Tolio application rust extension"
+readme = "src/rust/README.md"
 requires-python = ">=3.7"
 classifiers = [
     "Programming Language :: Rust",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
-readme = "src/rust/README.md"
+
+
+[project.urls]
+repository = "https://github.com/jozhw/tolio"
 
