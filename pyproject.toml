@@ -10,5 +10,5 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
-
+readme = "src/rust/README.md"
 
