@@ -148,4 +148,8 @@ class GuiBridge:
 
     # refresh the interal database every time the button associated with this function is clicked
     def refresh_database(self) -> None:
-        '''method not yet developed'''
+        '''there may be some bugs'''
+        self.db.update_transaction_age
+        self.db.update_securities
+        self.db.update_institutions_held
+        self.db.update_table
