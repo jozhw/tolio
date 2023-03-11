@@ -10,7 +10,7 @@
 
 
 ```
-VERSION 0.2.2
+VERSION 0.2.3
 
 Languages: Python 3.10.9 | Rust 1.66.0
 
@@ -44,9 +44,11 @@ pip install --upgrade tolio
 
 ```
 
-### How to Run - Unsupported Python Versions
+### How to Run - Unsupported Python Versions & Windows
 ---
 Must download the rust programing language along with cargo, rust's package manager. You also need to make sure that maturin is installed.
+
+Note: This application has not been tested on windows. There may be instances where some of the functionalities may fail. Please let me know if this is the case for windows users.
 
 ```
 # Install rust with cargo for macos or linux and configure the path
@@ -58,8 +60,8 @@ https://forge.rust-lang.org/infra/other-installation-methods.html
 # Install maturin
 pip install maturin
 
-# run the requirements.txt
-./install_dependencies.sh
+# Install from requirements.txt
+pip install -r requirements.txt
 
 # run the program
 ./run.sh
