@@ -6,7 +6,7 @@
   style="display: inline-block; margin: 0 auto; max-width: 300px"></p>
 
 
-![GitHub](https://img.shields.io/github/license/jozhw/tolio) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/jozhw/tolio?include_prereleases) ![GitHub all releases](https://img.shields.io/github/downloads/jozhw/tolio/total?logo=Github) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/jozhw/tolio) ![GitHub commits since latest release (by date including pre-releases)](https://img.shields.io/github/commits-since/jozhw/tolio/v0.2.0) ![Scrutinizer code quality (GitHub/Bitbucket)](https://img.shields.io/scrutinizer/quality/g/jozhw/tolio) [![Downloads](https://static.pepy.tech/personalized-badge/tolio?period=total&units=international_system&left_color=black&right_color=orange&left_text=PyPI%20Downloads)](https://pepy.tech/project/tolio)
+![GitHub](https://img.shields.io/github/license/jozhw/tolio) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/jozhw/tolio?include_prereleases) ![GitHub all releases](https://img.shields.io/github/downloads/jozhw/tolio/total?logo=Github) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/jozhw/tolio) ![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/jozhw/tolio/v0.2.3) ![Scrutinizer code quality (GitHub/Bitbucket)](https://img.shields.io/scrutinizer/quality/g/jozhw/tolio) [![Downloads](https://static.pepy.tech/personalized-badge/tolio?period=total&units=international_system&left_color=black&right_color=orange&left_text=PyPI%20Downloads)](https://pepy.tech/project/tolio)
 
 
 ```
