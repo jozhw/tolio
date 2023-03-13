@@ -7,15 +7,14 @@ class StandardizeEntry:
     def __init__(self, entry_dic: Dict):
         '''Inititalize the class with entry_dic argument'''
         self.entry_dic = entry_dic
+
         self.transaction_type_dic = {
             "Acquire": "A",
             "Dispose": "D",
             "Transfer": "T"
         }
-        try:
-            self.entry_dic["transaction_type"] = self.transaction_type_dic[self.entry_dic["transaction_type"]]
-        except:
-            raise ValueError("Incorrect transaction_type: {}.".format(self.entry_dic["transaction_type"]))
+        if entry_dic["transaction_type"] in self.transaction_type_dic.keys():
+            self.entry_dic["transaction_abbreviation"] = self.transaction_type_dic[entry_dic["transaction_type"]]
 
     def convert_case(self, match_obj: Any) -> str:
         '''Takes a match_obj and performs capitalize for the matches. This function operates
@@ -28,11 +27,11 @@ class StandardizeEntry:
     def regex_sub(self) -> Dict:
         '''Takes self.entry_dic and modifies the value depending on key and returns
         the edited self.entry_dic'''
-        sub_key_list = ["name", "institution_name", "to_institution_name"]
-        self.entry_dic["ticker"] = self.entry_dic["ticker"].upper()
+        sub_key_list = ["security_name", "institution_name", "to_institution_name"]
+        self.entry_dic["security_ticker"] = self.entry_dic["security_ticker"].upper()
         for key, value in self.entry_dic.items():
             if key in sub_key_list:
-                self.entry_dic[key] = re.sub(r"[a-zA-z]+\s*", self.convert_case, value)
+                self.entry_dic[key] = re.sub(r"[a-zA-z0-9]+\s*", self.convert_case, value)
 
         return self.entry_dic
 
@@ -49,11 +48,11 @@ class StandardizeEntry:
         except:
             raise ValueError("Shares or Price cannot be converted into a float.")
 
-        if self.entry_dic["transaction_type"] == "A":
+        if self.entry_dic["transaction_type"] == "Acquire":
             self.entry_dic["amount"] = abs(shares)
             self.entry_dic["price_USD"] = abs(price)
 
-        elif transaction_type == "D":
+        elif transaction_type == "Dispose":
             self.entry_dic["amount"] = abs(shares) * -1
             self.entry_dic["price_USD"] = abs(price) * -1
 
@@ -61,6 +60,8 @@ class StandardizeEntry:
 
     def return_entry_dic(self) -> Dict:
         '''Implements both change_value_sign and regex_sub and returns the final edited self.entry_dic'''
-        self.entry_dic = self.regex_sub(self.entry_dic)
-        self.entry_dic = self.change_value_sign(self.entry_dic)
+        self.entry_dic = self.regex_sub()
+        self.entry_dic = self.change_value_sign()
+        # to prevent a len issue with rust extension
+        self.entry_dic.pop("transaction_type")
         return self.entry_dic
