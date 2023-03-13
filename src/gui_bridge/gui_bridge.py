@@ -21,8 +21,8 @@ def check_correct_values(entry_dic: Dict) -> bool:
     date_regex = re.compile(r'\d\d\d\d-\d\d-\d\d')
 
     timestamp = entry_dic["timestamp"]
-    name = bool(entry_dic["name"])
-    ticker = bool(entry_dic["ticker"])
+    name = bool(entry_dic["security_name"])
+    ticker = bool(entry_dic["security_ticker"])
     institution_name = bool(entry_dic["institution_name"])
 
     # timestamp
@@ -52,9 +52,13 @@ def check_correct_values(entry_dic: Dict) -> bool:
 def edit_entry_dic(entry_dic: Dict) -> Dict:
     '''takes entry_dic and gets the value of the customtkinter object and implements
      the standardize_entry.py regex_sub class method returns the edited object'''
+    # create variable to house all of the entries for standardization after customtkinter object is removed
+    edited_entry_dic = {}
     for key in entry_dic.keys():
-        entry_dic[key] = entry_dic[key].get()
-        edited_entry_dic = StandardizeEntry(entry_dic).regex_sub()
+        value = entry_dic[key].get()
+        edited_entry_dic[key] = value
+
+    edited_entry_dic = StandardizeEntry(edited_entry_dic).regex_sub()
     return edited_entry_dic
 
 # define wrapper to carry out all of the messages for insert
@@ -104,12 +108,13 @@ class GuiBridge:
     def insert_transaction_into_database(self, entry_dic: Dict) -> None:
         '''edits the entry_dic values and implements database.py insert_acquire_or_dispose class method'''
         # use get method to convert customtkinter obj to python obj
-        edit_entry_dic = edit_entry_dic(entry_dic)
+        edited_entry_dic = edit_entry_dic(entry_dic)
         # check correct values and modify for final insert
-        success = bool(check_correct_values(edit_entry_dic))
+        success = bool(check_correct_values(edited_entry_dic))
         if not success:
             raise Exception("There is/are value error(s).")
-        final_entry_dic = self.modify_insert_transaction_into_database(edit_entry_dic)
+        final_entry_dic = self.modify_insert_transaction_into_database(edited_entry_dic)
+        print(final_entry_dic)
         # final insert
         self.db.insert_acquire_or_dispose(final_entry_dic)
         # remove from gui entry_box
@@ -121,12 +126,12 @@ class GuiBridge:
     def transfer_security(self, entry_dic: Dict) -> None:
         '''edits the entry_dic values and implements database.py insert_transfer class method'''
         # use get method to convert customtkinter obj to python obj
-        edit_entry_dic = edit_entry_dic(entry_dic)
+        edited_entry_dic = edit_entry_dic(entry_dic)
         # check correct values and modify for final insert
-        success = bool(check_correct_values(edit_entry_dic))
+        success = bool(check_correct_values(edited_entry_dic))
         if not success:
             raise Exception("There is/are value error(s).")
-        self.modify_insert_transaction_into_database(edit_entry_dic)
+        self.modify_insert_transaction_into_database(edited_entry_dic)
         # final insert
         self.db.insert_transfer(entry_dic)
         # remove from gui entry_dox
@@ -140,8 +145,7 @@ class GuiBridge:
     def modify_insert_transaction_into_database(self, entry_dic: Dict) -> Dict:
         '''method to remove customtikinter obj and implement the StandardizeEntry.return_entry_dic method
         and return the edited entry_dic object'''
-        # remove the customtkinter obj
-        entry_dic = edit_entry_dic()
+
         # Standardize the entries
         return StandardizeEntry(entry_dic).return_entry_dic()
 
