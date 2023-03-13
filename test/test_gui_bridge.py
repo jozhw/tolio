@@ -11,8 +11,8 @@ entry_dic_pass = {
     "timestamp": "2014-07-03",
     "amount": 10,
     "price_USD": 10.00,
-    "name": "S&P500",
-    "ticker": "SPY",
+    "security_name": "S&P500",
+    "security_ticker": "SPY",
     "institution_name": "Computershare",
     "transaction_type": "Acquire"
 }
@@ -21,8 +21,8 @@ entry_dic_fail_timestamp = {
     "timestamp": "2014-0C-03",
     "amount": 10,
     "price_USD": 10.00,
-    "name": "S&P500",
-    "ticker": "SPY",
+    "security_name": "S&P500",
+    "security_ticker": "SPY",
     "institution_name": "Computershare",
     "transaction_type": "Acquire"
 }
@@ -31,8 +31,8 @@ entry_dic_fail_amount = {
     "timestamp": "2014-07-03",
     "amount": "C",
     "price_USD": 10.00,
-    "name": "S&P500",
-    "ticker": "SPY",
+    "security_name": "S&P500",
+    "security_ticker": "SPY",
     "institution_name": "Computershare",
     "transaction_type": "Acquire"
 }
@@ -41,8 +41,8 @@ entry_dic_fail_price = {
     "timestamp": "2014-07-03",
     "amount": 10,
     "price_USD": "C",
-    "name": "S&P500",
-    "ticker": "SPY",
+    "security_name": "S&P500",
+    "security_ticker": "SPY",
     "institution_name": "Computershare",
     "transaction_type": "Acquire"
 }
@@ -52,8 +52,8 @@ entry_dic_fail_name = {
     "timestamp": "2014-07-03",
     "amount": 10,
     "price_USD": 10,
-    "name": "",
-    "ticker": "SPY",
+    "security_name": "",
+    "security_ticker": "SPY",
     "institution_name": "Computershare",
     "transaction_type": "Acquire"
 }
@@ -62,8 +62,8 @@ entry_dic_fail_to_institution = {
     "timestamp": "2014-07-03",
     "amount": 10,
     "price_USD": 10,
-    "name": "S&P500",
-    "ticker": "SPY",
+    "security_name": "S&P500",
+    "security_ticker": "SPY",
     "institution_name": "Computershare",
     "from_institution": "Computershare",
     "to_institution_name": "Computershare",

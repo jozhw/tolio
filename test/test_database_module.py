@@ -3,8 +3,8 @@ import sys
 import os
 import sqlite3
 
-# path = str(Path(".").parent.absolute())
-# sys.path.insert(0, path)
+path = str(Path(".").parent.absolute())
+sys.path.insert(0, path)
 
 
 import unittest

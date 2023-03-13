@@ -46,6 +46,4 @@ CREATE TABLE IF NOT EXISTS all_shares_split (individual_share_id INTEGER PRIMARY
             institution_id INTEGER NOT NULL, timestamp DATETIME, amount REAL NOT NULL, price_USD REAL NOT NULL, sold_price REAL, age_transaction INTEGER, long_counter TEXT, date_disposed DATETIME,
             FOREIGN KEY(institution_id) REFERENCES institutions(institution_id),
             FOREIGN KEY(security_id) REFERENCES securities(security_id),
-            FOREIGN KEY(transaction_id) REFERENCES transactions(transaction_id)
-            );
-
+            FOREIGN KEY(transaction_id) REFERENCES transactions(transaction_id));

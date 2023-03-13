@@ -15,30 +15,33 @@ correct_acquire_entry_dic = {
     "timestamp": "2014-07-03",
     "amount": 10.0,
     "price_USD": 10.00,
-    "name": "Tesla Motors & S & P500",
-    "ticker": "TSLA",
+    "security_name": "Tesla Motors & S & P500",
+    "security_ticker": "TSLA",
     "institution_name": "Computershare",
-    "transaction_type": "A"
+    "transaction_type": "Acquire",
+    "transaction_abbreviation": "A"
 }
 
 correct_dispose_entry_dic = {
     "timestamp": "2014-07-03",
     "amount": -10.0,
     "price_USD": -10.00,
-    "name": "Tesla",
-    "ticker": "TSLA",
+    "security_name": "Tesla",
+    "security_ticker": "TSLA",
     "institution_name": "Computershare",
-    "transaction_type": "D"
+    "transaction_abbreviation": "D",
+    "transaction_type": "Dispose"
     }
 
 correct_regex_entry_dic = {
     "timestamp": "2014-07-03",
     "amount": 10.0,
     "price_USD": 10.00,
-    "name": "Tesla Motors & S & P500",
-    "ticker": "TSLA",
+    "security_name": "Tesla Motors & S & P500",
+    "security_ticker": "TSLA",
     "institution_name": "Computershare",
-    "transaction_type": "A"
+    "transaction_abbreviation": "A",
+    "transaction_type": "Acquire"
 
 
 }
@@ -48,8 +51,8 @@ acquire_entry_dic = {
     "timestamp": "2014-07-03",
     "amount": -10.00,
     "price_USD": -10.00,
-    "name": "Tesla Motors & S & P500",
-    "ticker": "TSLA",
+    "security_name": "Tesla Motors & S & P500",
+    "security_ticker": "TSLA",
     "institution_name": "Computershare",
     "transaction_type": "Acquire"
 }
@@ -58,8 +61,8 @@ dispose_entry_dic = {
     "timestamp": "2014-07-03",
     "amount": 10.00,
     "price_USD": 10.00,
-    "name": "Tesla",
-    "ticker": "TSLA",
+    "security_name": "Tesla",
+    "security_ticker": "TSLA",
     "institution_name": "Computershare",
     "transaction_type": "Dispose"
 }
@@ -68,8 +71,8 @@ regex_entry_dic = {
     "timestamp": "2014-07-03",
     "amount": 10.00,
     "price_USD": 10.00,
-    "name": "TEsla Motors & S & p500",
-    "ticker": "TsLA",
+    "security_name": "TEsla Motors & S & p500",
+    "security_ticker": "TsLA",
     "institution_name": "computerShare",
     "transaction_type": "Acquire"
 
