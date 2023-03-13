@@ -224,17 +224,31 @@ mod tests {
         use std::fs::File;
         use std::io::prelude::*;
 
+        // use env;
+        // env::set_var("RUST_BACKTRACE", "1");
+
         let conn = &mut Connection::open_in_memory().unwrap();
         let _ = conn.set_db_config(DbConfig::SQLITE_DBCONFIG_ENABLE_FKEY, true);
 
-        let mut file = File::open("test/test_rs_db_query.sql").unwrap();
+        let mut file =
+            File::open("test/queries/test_rs_db_query.sql").expect("Error: Cannot find sql query");
         let mut contents = String::new();
-        file.read_to_string(&mut contents).unwrap();
+        file.read_to_string(&mut contents)
+            .expect("Error: Failed to read_to_string of contents variable");
         let split = contents.split(";");
         let vec: Vec<&str> = split.collect();
+
+        // print out the resulting vector
+        // dbg!(&vec);
+
         for command in vec {
-            conn.execute(command, []).unwrap();
-            conn.transaction().unwrap().commit().unwrap();
+            if command == "" {
+                // prevent the trailing space from the split function from executing
+            } else {
+                conn.execute(command, [])
+                    .unwrap_or_else(|_| panic!("Error: Failed to execute command: {}", command));
+                conn.transaction().unwrap().commit().unwrap();
+            }
         }
 
         {
