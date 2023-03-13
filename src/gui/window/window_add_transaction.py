@@ -81,7 +81,7 @@ class WindowAddTransaction(customtkinter.CTkFrame):
         transaction_type_entry.place(relx=0.16, rely=0.725, relwidth=0.82, relheight=0.05)
 
         # dictionary of entries
-        entry_dic = {"name": name_of_security_entry, "ticker": ticker_entry,
+        entry_dic = {"security_name": name_of_security_entry, "security_ticker": ticker_entry,
             "institution_name": institution_name_entry, "timestamp": time_of_transaction_entry,
             "amount": amount_of_shares_entry, "price_USD": price_usd_entry,
             "transaction_type": transaction_type_entry

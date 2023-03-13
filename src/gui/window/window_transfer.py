@@ -80,7 +80,7 @@ class WindowTransfer(customtkinter.CTkFrame):
 
 
         # dictionary of entries
-        entry_dic = {"name": name_of_security_entry, "ticker": ticker_entry,
+        entry_dic = {"security_name": name_of_security_entry, "security_ticker": ticker_entry,
             "institution_name": from_institution_name_entry, "timestamp": time_of_transaction_entry,
             "amount": amount_of_shares_entry, "to_institution_name": to_institution_name_entry,
             "transaction_type": transaction_type_entry, "price_USD": price_usd_entry

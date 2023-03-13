@@ -74,7 +74,7 @@ class WindowStockSplit(customtkinter.CTkFrame):
         transaction_type_entry.place(relx=0.18, rely=0.675, relwidth=0.8, relheight=0.07)
 
         # dictionary of entries
-        entry_dic = {"name": name_of_security_entry, "ticker": ticker_entry,
+        entry_dic = {"security_name": name_of_security_entry, "security_ticker": ticker_entry,
             "timestamp": time_of_transaction_entry,
             "amount": amount_of_shares_entry,
             "transaction_type": transaction_type_entry
