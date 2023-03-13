@@ -60,9 +60,8 @@ impl RawTransaction {
         while let Some(row) = rows.next()? {
             vec.push(row.get(0)?);
         }
-        let institution_id = vec[0];
 
-        if institution_id == None {
+        if vec.len() == 0 {
             self.insert_institution(db_path)?;
             let mut prepared_sql = PreparedStatement::new(&conn, sql);
             let mut rows = prepared_sql
@@ -72,9 +71,10 @@ impl RawTransaction {
             while let Some(row) = rows.next()? {
                 vec.push(row.get(0)?);
             }
-            let institution_id = institution_id.unwrap();
+            let institution_id = vec[0].unwrap();
             Ok(institution_id)
         } else {
+            let institution_id = vec[0];
             let institution_id = institution_id.unwrap();
             Ok(institution_id)
         }
@@ -91,8 +91,9 @@ impl RawTransaction {
         while let Some(row) = rows.next()? {
             vec.push(row.get(0)?);
         }
-        let security_id = vec[0];
-        if security_id == None {
+
+        // if the result of the prepared statement is none, then the variable vec will contain no elements
+        if vec.len() == 0 {
             self.insert_security(db_path)?;
             let mut prepared_sql = PreparedStatement::new(&conn, sql);
             let mut rows = prepared_sql
@@ -105,6 +106,7 @@ impl RawTransaction {
             let security_id = vec[0].unwrap();
             Ok(security_id)
         } else {
+            let security_id = vec[0];
             let security_id = security_id.unwrap();
             Ok(security_id)
         }
@@ -185,5 +187,103 @@ impl RawTransaction {
             age_transaction,
             long,
         })
+    }
+}
+
+/// TESTS
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_insert_and_get_functions() {
+        use rusqlite::config::DbConfig;
+        use std::fs::remove_file;
+        use std::fs::File;
+        use std::io::prelude::*;
+
+        let db_path = "files/data/test_raw_transaction.db";
+        let conn = &mut Connection::open(db_path)
+            .unwrap_or_else(|_| panic!("Error: Failed to open database: {} ", db_path));
+        let _ = conn.set_db_config(DbConfig::SQLITE_DBCONFIG_ENABLE_FKEY, true);
+
+        let mut file = File::open("test/queries/test_rs_db_query.sql").unwrap();
+        let mut contents = String::new();
+        file.read_to_string(&mut contents).unwrap();
+        // Split each sql command and execute each
+        let split = contents.split(";");
+        let vec: Vec<&str> = split.collect();
+        for command in vec {
+            if command == "" {
+                // prevent the trailing space from the split function from executing
+            } else {
+                conn.execute(command, [])
+                    .unwrap_or_else(|_| panic!("Error: Failed to execute command: {}", command));
+                conn.transaction().unwrap().commit().unwrap();
+            }
+        }
+        // test exiting values
+        {
+            // with existing security and institution
+            let test_transaction = RawTransaction {
+                security_name: "Tesla".to_string(),
+                security_ticker: "TSLA".to_string(),
+                institution_name: "Computershare".to_string(),
+                timestamp: Some("2022-03-03".to_string()),
+                transaction_abbreviation: "A".to_string(),
+                amount: 10.0,
+                price_usd: Some(100.0),
+                transfer_from: None,
+                transfer_to: None,
+                age_transaction: 0,
+                long: 0.0,
+            };
+
+            // test to see if existing security can be get
+            let security_id = test_transaction.get_security_id(db_path).unwrap();
+            assert_eq!(security_id, 2);
+
+            // test to see if existing insitution can be get
+             let institution_id = test_transaction.get_institution_id(db_path).unwrap();
+             assert_eq!(institution_id, 2);
+
+            // insert existing into the transactions table
+            test_transaction.insert_into_transactions(db_path).unwrap();
+
+        }
+        // test new values
+        {
+            // with new security and institution
+            let test_transaction = RawTransaction {
+                security_name: "Microsoft".to_string(),
+                security_ticker: "MSFT".to_string(),
+                institution_name: "Charles Schwab".to_string(),
+                timestamp: Some("2022-03-03".to_string()),
+                transaction_abbreviation: "A".to_string(),
+                amount: 10.0,
+                price_usd: Some(100.0),
+                transfer_from: None,
+                transfer_to: None,
+                age_transaction: 0,
+                long: 0.0,
+            };
+
+            // get the security_id from a new security
+
+            let security_id = test_transaction.get_security_id(db_path).unwrap();
+            assert_eq!(security_id, 3);
+
+            // get the institution_id from new transaction
+            let institution_id = test_transaction.get_institution_id(db_path).unwrap();
+            assert_eq!(institution_id, 3);
+
+            // insert new into the transactions table
+            test_transaction.insert_into_transactions(db_path).unwrap();
+        }
+
+        remove_file(db_path).unwrap_or_else(|_| {
+            panic!("Error: remove_file function failed for file: {}", &db_path)
+        });
     }
 }

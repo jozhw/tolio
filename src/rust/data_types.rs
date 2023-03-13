@@ -6,7 +6,9 @@ pub struct PreparedStatement<'conn> {
 impl<'conn> PreparedStatement<'conn> {
     pub fn new<'a>(conn: &'a Connection, sql: &str) -> PreparedStatement<'a> {
         PreparedStatement {
-            statement: conn.prepare(sql).unwrap(),
+            statement: conn
+                .prepare(sql)
+                .unwrap_or_else(|_| panic!("Error: Failed to prepare statement: {}", &sql)),
         }
     }
 }
