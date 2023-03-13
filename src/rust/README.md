@@ -1,10 +1,10 @@
 <h1 align="center"> Tolio - Rust Extension </h1>
 
 ```
-VERSION 0.2.2
+VERSION 0.2.4
 
 Using: Rust 1.66.0 | Maturin 0.14.7
-Supports: Python 3.10+
+Supports: MacOS - Python 3.10+, Linux - Python 3.7X
 Source Code: src/rust/
 
 ```
@@ -16,5 +16,5 @@ with the database.
 
 
 ### Limitations
-This python package only supports database functionalities that are specific to the Tolio application. None of the functionalities 
-that this package offers will be usable for any other purpose. 
+This python package only supports database functionalities that are specific to the Tolio application. None of the functionalities
+that this package offers will be usable for any other purpose.
