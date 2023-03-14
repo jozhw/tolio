@@ -10,7 +10,7 @@
 
 
 ```
-VERSION 0.2.3
+VERSION 0.2.4
 
 Languages: Python 3.10.9 | Rust 1.66.0
 
