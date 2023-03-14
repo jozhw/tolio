@@ -4,7 +4,7 @@ use std::error::Error;
 use crate::data_types::EditedRawTransaction;
 
 pub fn batch_insert(
-    mut count: usize,
+    count: usize,
     tx: &Transaction,
     vector_proto: Vec<EditedRawTransaction>,
 ) -> Result<(), Box<dyn Error>> {
@@ -12,18 +12,22 @@ pub fn batch_insert(
     // Determine the batch size
     let mut min_batch_size = 50;
     let mut remainder: bool = false;
-    let remainder_amount = 0;
+    let mut remainder_amount = 0;
     let mut times_iter = 1;
 
-    if count < min_batch_size {
+    if count <= min_batch_size {
         min_batch_size = count;
-    } else if count / min_batch_size > 1 {
+    } else if count > min_batch_size {
         remainder = true;
-        let remainder_amount = count / min_batch_size;
+        // Must convert usize to integer for floor division
+        let count = count as i32;
+        let min_batch_size = min_batch_size as i32;
 
-        // Make sure that count is an integer that is divisible by min_batch_size
-        count = count - remainder_amount;
+        // integer divided by integer will give floor division
         times_iter = count / min_batch_size;
+
+        // change main scope remainder_amount
+        remainder_amount = count - (times_iter * min_batch_size);
     }
     // Create the parameters of insert for the sql query
     let mut insert_param = " (?,?,?,?,?,?,?,?,?,?),".repeat(min_batch_size as usize);
@@ -46,10 +50,10 @@ pub fn batch_insert(
             param_values.push(&batch.transaction_abbreviation as &dyn ToSql);
             param_values.push(&batch.amount as &dyn ToSql);
             param_values.push(&batch.price_usd as &dyn ToSql);
-            param_values.push(&batch.age_transaction as &dyn ToSql);
             param_values.push(&batch.transfer_from as &dyn ToSql);
             param_values.push(&batch.transfer_to as &dyn ToSql);
             param_values.push(&batch.age_transaction as &dyn ToSql);
+            param_values.push(&batch.long as &dyn ToSql);
         }
         sql_statement.execute(&*param_values).unwrap();
     }
@@ -63,29 +67,28 @@ pub fn batch_insert(
         let st = format!("INSERT INTO transactions(security_id, institution_id, timestamp, transaction_abbreviation, amount, price_USD, transfer_from, transfer_to, age_transaction, long)
         VALUES {};", insert_param);
         let mut sql_statement = tx.prepare_cached(st.as_str()).unwrap();
-        for _ in 0..(remainder_amount) {
-            let mut param_values: Vec<_> = Vec::new();
-            let push_vec: Vec<_> = vector.drain(0..).collect();
-            for batch in push_vec.iter() {
-                param_values.push(&batch.security_id as &dyn ToSql);
-                param_values.push(&batch.institution_id as &dyn ToSql);
-                param_values.push(&batch.timestamp as &dyn ToSql);
-                param_values.push(&batch.transaction_abbreviation as &dyn ToSql);
-                param_values.push(&batch.amount as &dyn ToSql);
-                param_values.push(&batch.price_usd as &dyn ToSql);
-                param_values.push(&batch.age_transaction as &dyn ToSql);
-                param_values.push(&batch.transfer_from as &dyn ToSql);
-                param_values.push(&batch.transfer_to as &dyn ToSql);
-                param_values.push(&batch.age_transaction as &dyn ToSql);
-            }
-            sql_statement.execute(&*param_values).unwrap();
+
+        let mut param_values: Vec<_> = Vec::new();
+        let push_vec: Vec<_> = vector.drain(0..).collect();
+        for batch in push_vec.iter() {
+            param_values.push(&batch.security_id as &dyn ToSql);
+            param_values.push(&batch.institution_id as &dyn ToSql);
+            param_values.push(&batch.timestamp as &dyn ToSql);
+            param_values.push(&batch.transaction_abbreviation as &dyn ToSql);
+            param_values.push(&batch.amount as &dyn ToSql);
+            param_values.push(&batch.price_usd as &dyn ToSql);
+            param_values.push(&batch.transfer_from as &dyn ToSql);
+            param_values.push(&batch.transfer_to as &dyn ToSql);
+            param_values.push(&batch.age_transaction as &dyn ToSql);
+            param_values.push(&batch.long as &dyn ToSql);
         }
+        sql_statement.execute(&*param_values).unwrap();
     }
     Ok(())
 }
 
 pub fn insert(tx: &Transaction, vector: Vec<EditedRawTransaction>) {
-    let count: usize = vector.len();
+    let count = vector.len() as usize;
 
     batch_insert(count, tx, vector).expect("Error: batch insert error.");
 }

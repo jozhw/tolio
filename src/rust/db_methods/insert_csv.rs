@@ -14,7 +14,7 @@ fn read_from_file(path: &str) -> Result<Vec<RawTransaction>, Box<dyn Error>> {
     for result in reader.deserialize() {
         let transaction: RawTransaction = result?;
         vector.push(transaction);
-        eprintln!("{:?}", vector);
+        // eprintln!("{:?}", vector);
     }
 
     Ok(vector)
@@ -74,7 +74,9 @@ fn csvtransaction_to_transaction(
             transfer_to,
             age_transaction,
             long,
-        })
+        });
+
+        // dbg!(&transaction);
     }
 
     Ok(transaction)

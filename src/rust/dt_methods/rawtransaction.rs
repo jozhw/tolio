@@ -245,12 +245,11 @@ mod tests {
             assert_eq!(security_id, 2);
 
             // test to see if existing insitution can be get
-             let institution_id = test_transaction.get_institution_id(db_path).unwrap();
-             assert_eq!(institution_id, 2);
+            let institution_id = test_transaction.get_institution_id(db_path).unwrap();
+            assert_eq!(institution_id, 2);
 
             // insert existing into the transactions table
             test_transaction.insert_into_transactions(db_path).unwrap();
-
         }
         // test new values
         {

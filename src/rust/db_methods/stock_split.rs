@@ -60,23 +60,22 @@ pub fn batch_insert(mut count: usize, tx: &Transaction, vector_proto: Vec<Share>
         let st = format!("INSERT INTO all_shares_split(transaction_id, security_id, institution_id, timestamp, amount, price_USD, sold_price, age_transaction, long_counter, date_disposed)
         VALUES {}", insert_param);
         let mut sql_statement = tx.prepare_cached(st.as_str()).unwrap();
-        for _ in 0..(remainder_amount) {
-            let mut param_values: Vec<_> = Vec::new();
-            let push_vec: Vec<_> = vector.drain(0..).collect();
-            for batch in push_vec.iter() {
-                param_values.push(&batch.transaction_id as &dyn ToSql);
-                param_values.push(&batch.security_id as &dyn ToSql);
-                param_values.push(&batch.institution_id as &dyn ToSql);
-                param_values.push(&batch.timestamp as &dyn ToSql);
-                param_values.push(&batch.amount as &dyn ToSql);
-                param_values.push(&batch.price_usd as &dyn ToSql);
-                param_values.push(&batch.sold_price as &dyn ToSql);
-                param_values.push(&batch.age_transaction as &dyn ToSql);
-                param_values.push(&batch.long_counter as &dyn ToSql);
-                param_values.push(&batch.date_disposed as &dyn ToSql);
-            }
-            sql_statement.execute(&*param_values).unwrap();
+
+        let mut param_values: Vec<_> = Vec::new();
+        let push_vec: Vec<_> = vector.drain(0..).collect();
+        for batch in push_vec.iter() {
+            param_values.push(&batch.transaction_id as &dyn ToSql);
+            param_values.push(&batch.security_id as &dyn ToSql);
+            param_values.push(&batch.institution_id as &dyn ToSql);
+            param_values.push(&batch.timestamp as &dyn ToSql);
+            param_values.push(&batch.amount as &dyn ToSql);
+            param_values.push(&batch.price_usd as &dyn ToSql);
+            param_values.push(&batch.sold_price as &dyn ToSql);
+            param_values.push(&batch.age_transaction as &dyn ToSql);
+            param_values.push(&batch.long_counter as &dyn ToSql);
+            param_values.push(&batch.date_disposed as &dyn ToSql);
         }
+        sql_statement.execute(&*param_values).unwrap();
     }
 }
 
@@ -219,7 +218,7 @@ mod tests {
 
     use super::*;
     #[test]
-    fn inititate_db() {
+    fn test_stock_split() {
         use rusqlite::config::DbConfig;
         use std::fs::File;
         use std::io::prelude::*;

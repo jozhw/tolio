@@ -95,7 +95,7 @@ pub struct TransactionAge {
 }
 
 use pyo3::prelude::*;
-#[derive(FromPyObject)]
+#[derive(FromPyObject, Debug)]
 pub enum Value {
     #[pyo3(transparent, annotation = "float")]
     Float(f32),
