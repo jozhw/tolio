@@ -80,3 +80,6 @@ file:cachedb?mode=memory&cache=shared
 
 # Cargo.lock
 Cargo.lock
+
+# data
+transactions_data.csv
