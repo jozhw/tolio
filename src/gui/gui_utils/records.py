@@ -91,7 +91,7 @@ class Records(customtkinter.CTkFrame):
 
         id_entry = entry_dic["id_entry"]
         id_entry.configure(state="normal")
-        transaction_id = id_entry.get()
+        transaction_id = int(id_entry.get())
         security_name = entry_dic["n_entry"].get()
         security_ticker = entry_dic["ticker_entry"].get()
         institution_name = entry_dic["institution_entry"].get()
@@ -101,10 +101,13 @@ class Records(customtkinter.CTkFrame):
         transaction_type = entry_dic["type_entry"].get()
         transfer_from = entry_dic["from_entry"].get()
         transfer_to = entry_dic["to_entry"].get()
-        price_usd = entry_dic["price_entry"].get()
-        amount = entry_dic["amount_entry"].get()
-        age_transaction=entry_dic["age_entry"].get()
-        long = entry_dic["long_entry"].get()
+        if bool(entry_dic["price_entry"]):
+            price_usd = float(entry_dic["price_entry"].get())
+        else:
+            price_usd = entry_dic[price_usd].get()
+        amount = float(entry_dic["amount_entry"].get())
+        age_transaction = int(entry_dic["age_entry"].get())
+        long = float(entry_dic["long_entry"].get())
 
         # define a dictionary to contain all of the values for the rust method
         value_dic = {
@@ -121,6 +124,8 @@ class Records(customtkinter.CTkFrame):
           "age_transaction": age_transaction,
           "long": long
         }
+
+        print(value_dic)
 
         self.my_tree.item(selected,text="",values=(
         transaction_id,

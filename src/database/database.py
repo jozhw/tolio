@@ -65,7 +65,6 @@ class Database:
         # create list of securities
         sql = "SELECT DISTINCT security_id FROM transactions WHERE transaction_abbreviation IS NOT 'SS';"
         get_securities=self.cur.execute(sql).fetchall()
-
         for security_id in get_securities:
             security_id = security_id[0]
 

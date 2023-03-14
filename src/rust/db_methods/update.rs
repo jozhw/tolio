@@ -9,7 +9,7 @@ use crate::db_methods::refresh::refresh_db;
 // influences all_shares table
 pub fn update_transaction_age(db_path: &str) -> Result<(), Box<dyn Error>> {
     let conn = Connection::open(db_path)?;
-    let sql = "SELECT transaction_id, 
+    let sql = "SELECT transaction_id,
     CASE
       WHEN strftime('%m', date('now')) > strftime('%m', date(timestamp)) THEN strftime('%Y', date('now')) - strftime('%Y', date(timestamp))
       WHEN strftime('%m', date('now')) = strftime('%m', date(timestamp)) THEN
@@ -34,10 +34,10 @@ pub fn update_transaction_age(db_path: &str) -> Result<(), Box<dyn Error>> {
         let transaction_id = transaction.transaction_id;
 
         // Set the age of the transaction
-        let sql = "UPDATE transactions SET age_transaction=:transaction_age WHERE transaction_id=:transaction_id;";
+        let sql = "UPDATE transactions SET age_transaction = :transaction_age WHERE transaction_id = :transaction_id;";
         let mut prepare_sql = PreparedStatement::new(&conn, sql);
         prepare_sql.statement.execute(
-            named_params! {":transaction_age": transaction_age, ":transaction_id": transaction_id},
+            named_params! {":transaction_age": &transaction_age, ":transaction_id": &transaction_id},
         )?;
 
         // Set the amount that are long
@@ -45,21 +45,21 @@ pub fn update_transaction_age(db_path: &str) -> Result<(), Box<dyn Error>> {
         let mut prepare_sql = PreparedStatement::new(&conn, sql);
         prepare_sql
             .statement
-            .execute(named_params! {":transaction_id": transaction_id})?;
+            .execute(named_params! {":transaction_id": &transaction_id})?;
 
         // Set all_shares table
         // Since when a share is disposed, the transaction_id changes, you must check if that id exists
-        let sql = "UPDATE all_shares SET age_transaction=:age_transaction WHERE EXISTS (transaction_id=:transaction_id);";
+        let sql = "UPDATE all_shares SET age_transaction = :age_transaction WHERE EXISTS ( SELECT transaction_id FROM all_shares WHERE transaction_id = :transaction_id);";
         let mut prepare_sql = PreparedStatement::new(&conn, sql);
         prepare_sql
             .statement
-            .execute(named_params! {":transaction_id": transaction_id})?;
+            .execute(named_params! {":transaction_id": &transaction_id, ":age_transaction": &transaction_age})?;
 
-        let sql = "UPDATE all_shares SET long_counter='+' WHERE EXISTS (transaction_id=:transaction_id) AND amount=0 AND age_transaction >= 1 AND long_counter='-';";
+        let sql = "UPDATE all_shares SET long_counter='+' WHERE EXISTS (SELECT transaction_id FROM all_shares WHERE transaction_id = :transaction_id) AND amount=0 AND age_transaction >= 1 AND long_counter='-';";
         let mut prepare_sql = PreparedStatement::new(&conn, sql);
         prepare_sql
             .statement
-            .execute(named_params! {":transaction_id": transaction_id})?;
+            .execute(named_params! {":transaction_id": &transaction_id})?;
     }
 
     Ok(())
@@ -77,6 +77,8 @@ pub fn update_table(
         .clone()
         .unwrap()
         .unwrap_right();
+    // see specific types of each value of the hashmap
+    // dbg!(value_dic);
     let transaction_id = value_dic
         .get("transaction_id")
         .expect("Error: Failed to get transaction_id in update.rs")
@@ -164,19 +166,19 @@ pub fn update_table(
     let transaction_abbreviation;
 
     match transaction_type.as_str() {
-        "A" => {
+        "Acquire" => {
             transaction_abbreviation = "A".to_string();
         }
 
-        "D" => {
+        "Dispose" => {
             transaction_abbreviation = "D".to_string();
         }
 
-        "T" => {
+        "Transfer" => {
             transaction_abbreviation = "T".to_string();
         }
 
-        "SS" => {
+        "Stock Split" => {
             transaction_abbreviation = "SS".to_string();
         }
 
@@ -207,18 +209,60 @@ pub fn update_table(
     price_USD = :price, transfer_from = :trans_from ,transfer_to = :trans_to WHERE transaction_id = :trans_id;";
     let mut prepare_sql = PreparedStatement::new(&conn, sql);
     prepare_sql.statement.execute(named_params! {
-        "sec:id": edited_raw_transaction.security_id,
+        ":sec_id": edited_raw_transaction.security_id,
         ":institution_id": edited_raw_transaction.institution_id,
         ":timestamp": edited_raw_transaction.timestamp,
         ":trans_abb": edited_raw_transaction.transaction_abbreviation,
         ":amount": edited_raw_transaction.amount,
-        "price": edited_raw_transaction.price_usd,
-        "trans_from": edited_raw_transaction.transfer_from,
-        "trans_to": edited_raw_transaction.transfer_to,
-        "trans_id": transaction_id
+        ":price": edited_raw_transaction.price_usd,
+        ":trans_from": edited_raw_transaction.transfer_from,
+        ":trans_to": edited_raw_transaction.transfer_to,
+        ":trans_id": transaction_id
     })?;
 
     refresh_db(db_path)?;
 
     Ok(())
+}
+
+/// TESTS
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_update() {
+        use rusqlite::config::DbConfig;
+        use std::fs::remove_file;
+        use std::fs::File;
+        use std::io::prelude::*;
+
+        let db_path = "files/data/test_delete_all.db";
+        let conn = &mut Connection::open(db_path)
+            .unwrap_or_else(|_| panic!("Error: Failed to open database: {} ", db_path));
+        let _ = conn.set_db_config(DbConfig::SQLITE_DBCONFIG_ENABLE_FKEY, true);
+
+        let mut file = File::open("test/queries/test_rs_db_query.sql").unwrap();
+        let mut contents = String::new();
+        file.read_to_string(&mut contents).unwrap();
+        // Split each sql command and execute each
+        let split = contents.split(";");
+        let vec: Vec<&str> = split.collect();
+        for command in vec {
+            if command == "" {
+                // prevent the trailing space from the split function from executing
+            } else {
+                conn.execute(command, [])
+                    .unwrap_or_else(|_| panic!("Error: Failed to execute command: {}", command));
+                conn.transaction().unwrap().commit().unwrap();
+            }
+        }
+
+        update_transaction_age(db_path).unwrap();
+
+        remove_file(db_path).unwrap_or_else(|_| {
+            panic!("Error: remove_file function failed for file: {}", &db_path)
+        });
+    }
 }

@@ -119,7 +119,6 @@ class GuiBridge:
         self.db.insert_acquire_or_dispose(final_entry_dic)
         # remove from gui entry_box
         entry_dic["amount"].delete(0, tk.END)
-        entry_dic["timestamp"].delete(0, tk.END)
         entry_dic["price_USD"].delete(0, tk.END)
 
     @insert_wrapper
@@ -153,7 +152,6 @@ class GuiBridge:
     # refresh the interal database every time the button associated with this function is clicked
     def refresh_database(self) -> None:
         '''there may be some bugs'''
-        self.db.update_transaction_age
-        self.db.update_securities
-        self.db.update_institutions_held
-        self.db.update_table
+        self.db.update_transaction_age()
+        self.db.update_securities()
+        self.db.update_institutions_held()
