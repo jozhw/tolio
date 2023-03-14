@@ -14,7 +14,7 @@ VERSION 0.2.4
 
 Languages: Python 3.10.9 | Rust 1.66.0
 
-Tailored Dependency: tolio==0.2.3
+Tailored Dependency: tolio==0.2.4
   - Linux: Python 3.8.0 > supported version >= 3.7.1 support only
   - MacOS: supported version >= Python 3.10.0
 
